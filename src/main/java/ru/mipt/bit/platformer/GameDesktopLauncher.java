@@ -4,17 +4,14 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
+import ru.mipt.bit.platformer.util.Direction;
 import ru.mipt.bit.platformer.util.Obstacle;
 import ru.mipt.bit.platformer.util.Player;
 import ru.mipt.bit.platformer.util.TileMovement;
@@ -38,6 +35,8 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private Obstacle tree;
 
+    private Direction direction;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -52,6 +51,8 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         tree = new Obstacle("images/greenTree.png", 1, 3);
 
+        direction = new Direction(player, tree);
+
         moveRectangleAtTileCenter(groundLayer, tree.getRectangle(), tree.getCoordinates());
     }
 
@@ -65,41 +66,16 @@ public class GameDesktopLauncher implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         if (Gdx.input.isKeyPressed(UP) || Gdx.input.isKeyPressed(W)) {
-            if (isEqual(player.getMovementProgress(), 1f)) {
-                // check potential player destination for collision with obstacles
-                if (!tree.getCoordinates().equals(incrementedY(player.getCoordinates()))) {
-                    player.getDestinationCoordinates().y++;
-                    player.setMovementProgress(0f);
-                }
-                player.setRotation(90f);
-            }
+            direction.goUp();
         }
         if (Gdx.input.isKeyPressed(LEFT) || Gdx.input.isKeyPressed(A)) {
-            if (isEqual(player.getMovementProgress(), 1f)) {
-                if (!tree.getCoordinates().equals(decrementedX(player.getCoordinates()))) {
-                    player.getDestinationCoordinates().x--;
-                    player.setMovementProgress(0f);
-                }
-                player.setRotation(-180f);
-            }
+            direction.goLeft();
         }
         if (Gdx.input.isKeyPressed(DOWN) || Gdx.input.isKeyPressed(S)) {
-            if (isEqual(player.getMovementProgress(), 1f)) {
-                if (!tree.getCoordinates().equals(decrementedY(player.getCoordinates()))) {
-                    player.getDestinationCoordinates().y--;
-                    player.setMovementProgress(0f);
-                }
-                player.setRotation(-90f);
-            }
+            direction.goDown();
         }
         if (Gdx.input.isKeyPressed(RIGHT) || Gdx.input.isKeyPressed(D)) {
-            if (isEqual(player.getMovementProgress(), 1f)) {
-                if (!tree.getCoordinates().equals(incrementedX(player.getCoordinates()))) {
-                    player.getDestinationCoordinates().x++;
-                    player.setMovementProgress(0f);
-                }
-                player.setRotation(0f);
-            }
+            direction.goRight();
         }
 
         //calculate interpolated player screen coordinates
