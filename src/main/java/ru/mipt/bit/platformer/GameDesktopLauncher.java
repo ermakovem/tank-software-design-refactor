@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import ru.mipt.bit.platformer.util.Obstacle;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import static com.badlogic.gdx.Input.Keys.*;
@@ -42,10 +43,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     private float playerMovementProgress = 1f;
     private float playerRotation;
 
-    private Texture greenTreeTexture;
-    private TextureRegion treeObstacleGraphics;
-    private GridPoint2 treeObstacleCoordinates = new GridPoint2();
-    private Rectangle treeObstacleRectangle = new Rectangle();
+    private Obstacle tree;
 
     @Override
     public void create() {
@@ -67,11 +65,9 @@ public class GameDesktopLauncher implements ApplicationListener {
         playerCoordinates = new GridPoint2(playerDestinationCoordinates);
         playerRotation = 0f;
 
-        greenTreeTexture = new Texture("images/greenTree.png");
-        treeObstacleGraphics = new TextureRegion(greenTreeTexture);
-        treeObstacleCoordinates = new GridPoint2(1, 3);
-        treeObstacleRectangle = createBoundingRectangle(treeObstacleGraphics);
-        moveRectangleAtTileCenter(groundLayer, treeObstacleRectangle, treeObstacleCoordinates);
+        tree = new Obstacle("images/greenTree.png", 1, 3);
+
+        moveRectangleAtTileCenter(groundLayer, tree.getObstacleRectangle(), tree.getObstacleCoordinates());
     }
 
     @Override
@@ -86,7 +82,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         if (Gdx.input.isKeyPressed(UP) || Gdx.input.isKeyPressed(W)) {
             if (isEqual(playerMovementProgress, 1f)) {
                 // check potential player destination for collision with obstacles
-                if (!treeObstacleCoordinates.equals(incrementedY(playerCoordinates))) {
+                if (!tree.getObstacleCoordinates().equals(incrementedY(playerCoordinates))) {
                     playerDestinationCoordinates.y++;
                     playerMovementProgress = 0f;
                 }
@@ -95,7 +91,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         }
         if (Gdx.input.isKeyPressed(LEFT) || Gdx.input.isKeyPressed(A)) {
             if (isEqual(playerMovementProgress, 1f)) {
-                if (!treeObstacleCoordinates.equals(decrementedX(playerCoordinates))) {
+                if (!tree.getObstacleCoordinates().equals(decrementedX(playerCoordinates))) {
                     playerDestinationCoordinates.x--;
                     playerMovementProgress = 0f;
                 }
@@ -104,7 +100,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         }
         if (Gdx.input.isKeyPressed(DOWN) || Gdx.input.isKeyPressed(S)) {
             if (isEqual(playerMovementProgress, 1f)) {
-                if (!treeObstacleCoordinates.equals(decrementedY(playerCoordinates))) {
+                if (!tree.getObstacleCoordinates().equals(decrementedY(playerCoordinates))) {
                     playerDestinationCoordinates.y--;
                     playerMovementProgress = 0f;
                 }
@@ -113,7 +109,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         }
         if (Gdx.input.isKeyPressed(RIGHT) || Gdx.input.isKeyPressed(D)) {
             if (isEqual(playerMovementProgress, 1f)) {
-                if (!treeObstacleCoordinates.equals(incrementedX(playerCoordinates))) {
+                if (!tree.getObstacleCoordinates().equals(incrementedX(playerCoordinates))) {
                     playerDestinationCoordinates.x++;
                     playerMovementProgress = 0f;
                 }
@@ -140,7 +136,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         drawTextureRegionUnscaled(batch, playerGraphics, playerRectangle, playerRotation);
 
         // render tree obstacle
-        drawTextureRegionUnscaled(batch, treeObstacleGraphics, treeObstacleRectangle, 0f);
+        drawTextureRegionUnscaled(batch, tree.getObstacleGraphics(), tree.getObstacleRectangle(), 0f);
 
         // submit all drawing requests
         batch.end();
@@ -164,7 +160,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         // dispose of all the native resources (classes which implement com.badlogic.gdx.utils.Disposable)
-        greenTreeTexture.dispose();
+        tree.dispose();
         blueTankTexture.dispose();
         level.dispose();
         batch.dispose();
