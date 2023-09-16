@@ -11,10 +11,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.util.Direction;
-import ru.mipt.bit.platformer.util.Obstacle;
-import ru.mipt.bit.platformer.util.Player;
-import ru.mipt.bit.platformer.util.TileMovement;
+import ru.mipt.bit.platformer.util.*;
+
+import java.util.ArrayList;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -30,6 +29,8 @@ public class GameDesktopLauncher implements ApplicationListener {
     private TiledMap level;
     private MapRenderer levelRenderer;
     private TileMovement tileMovement;
+
+    ArrayList<GraphicObject> objectsToRender = new ArrayList<>();
 
     private Player player;
 
@@ -50,6 +51,9 @@ public class GameDesktopLauncher implements ApplicationListener {
         player = new Player("images/tank_blue.png", 1, 1);
 
         tree = new Obstacle("images/greenTree.png", 1, 3);
+
+        objectsToRender.add(player);
+        objectsToRender.add(tree);
 
         direction = new Direction(player, tree);
 
@@ -93,13 +97,10 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         // start recording all drawing commands
         batch.begin();
-
-        // render player
-        drawTextureRegionUnscaled(batch, player.getGraphics(), player.getRectangle(), player.getRotation());
-
-        // render tree obstacle
-        drawTextureRegionUnscaled(batch, tree.getGraphics(), tree.getRectangle(), 0f);
-
+        // render all objects (tree and player)
+        for (GraphicObject object : objectsToRender) {
+            drawTextureRegionUnscaled(batch, object.getGraphics(), object.getRectangle(), object.getRotation());
+        }
         // submit all drawing requests
         batch.end();
     }

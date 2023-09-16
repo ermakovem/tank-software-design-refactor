@@ -5,8 +5,8 @@ import static ru.mipt.bit.platformer.util.GdxGameUtils.decrementedX;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.incrementedY;
 
 public class Direction {
-    private Player player;
-    private Obstacle obstacle;
+    private final Player player;
+    private final Obstacle obstacle;
     public Direction(Player player, Obstacle obstacle) {
         this.obstacle = obstacle;
         this.player = player;

@@ -9,5 +9,6 @@ public interface GraphicObject {
     public GridPoint2 getCoordinates();
     public Rectangle getRectangle();
     public TextureRegion getGraphics();
+    public float getRotation();
     public void dispose();
 }

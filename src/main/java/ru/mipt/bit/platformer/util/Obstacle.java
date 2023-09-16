@@ -32,6 +32,10 @@ public class Obstacle implements GraphicObject{
         return graphics;
     }
     @Override
+    public float getRotation() {
+        return 0f;
+    }
+    @Override
     public void dispose() {
         texture.dispose();
     }

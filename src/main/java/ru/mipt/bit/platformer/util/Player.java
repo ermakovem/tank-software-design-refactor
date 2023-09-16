@@ -30,6 +30,7 @@ public class Player implements GraphicObject{
         rotation = 0f;
     }
 
+    //setters
     public void setCoordinates(GridPoint2 coordinates) {
         this.coordinates = coordinates;
     }
@@ -42,7 +43,7 @@ public class Player implements GraphicObject{
     public void setRotation(float rotation) {
         this.rotation = rotation;
     }
-
+    //getters
     public float getMovementProgress() {
         return movementProgress;
     }
