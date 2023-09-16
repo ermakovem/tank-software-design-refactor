@@ -7,32 +7,32 @@ import com.badlogic.gdx.math.Rectangle;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createBoundingRectangle;
 
-public class Obstacle {
-    private Rectangle obstacleRectangle;
-    protected GridPoint2 obstacleCoordinates;
-    private Texture obstacleTexture;
-    private TextureRegion obstacleGraphics;
+public class Obstacle implements GraphicObject{
+    private final Rectangle rectangle;
+    protected final GridPoint2 coordinates;
+    private final Texture texture;
+    private TextureRegion graphics;
 
     public Obstacle(String texturePath, int coordinateX, int coordinateY) {
-        obstacleTexture = new Texture(texturePath);
-        obstacleGraphics = new TextureRegion(obstacleTexture);
-        obstacleCoordinates = new GridPoint2(coordinateX, coordinateY);
-        obstacleRectangle = createBoundingRectangle(obstacleGraphics);
+        texture = new Texture(texturePath);
+        graphics = new TextureRegion(texture);
+        coordinates = new GridPoint2(coordinateX, coordinateY);
+        rectangle = createBoundingRectangle(graphics);
     }
-
-    public GridPoint2 getObstacleCoordinates() {
-        return obstacleCoordinates;
+    @Override
+    public GridPoint2 getCoordinates() {
+        return coordinates;
     }
-    public Rectangle getObstacleRectangle() {
-        return obstacleRectangle;
+    @Override
+    public Rectangle getRectangle() {
+        return rectangle;
     }
-    public Texture getObstacleTexture() {
-        return obstacleTexture;
+    @Override
+    public TextureRegion getGraphics() {
+        return graphics;
     }
-    public TextureRegion getObstacleGraphics() {
-        return obstacleGraphics;
-    }
+    @Override
     public void dispose() {
-        obstacleTexture.dispose();
+        texture.dispose();
     }
 }
