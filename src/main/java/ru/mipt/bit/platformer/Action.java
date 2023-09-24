@@ -8,7 +8,7 @@ public enum Action {
     RIGHT(new GridPoint2(1, 0)),
     LEFT(new GridPoint2(-1, 0));
 
-    private GridPoint2 vector = new GridPoint2(0, 0);
+    private final GridPoint2 vector;
 
     Action(GridPoint2 vector) {
         this.vector = vector;

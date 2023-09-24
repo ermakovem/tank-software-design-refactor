@@ -1,19 +1,16 @@
 package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 public class Tank implements GameObject{
-    private GridPoint2 coordinates;
-    private GridPoint2 destinationCoordinates;
+    private final GridPoint2 coordinates;
+    private final GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
     private final float movementSpeed;
     private float rotation = 0f;

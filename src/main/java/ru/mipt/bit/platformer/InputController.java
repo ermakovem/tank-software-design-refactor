@@ -1,8 +1,6 @@
 package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.Action;
 
 import java.util.*;
 
