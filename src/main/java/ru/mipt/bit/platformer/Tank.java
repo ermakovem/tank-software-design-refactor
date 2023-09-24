@@ -21,17 +21,17 @@ public class Tank implements GameObject{
         this.movementSpeed = movementSpeed;
     }
 
-    public void handleActions(ArrayList<Action> actions, HashMap<GridPoint2, Boolean> possibleVectors) {
+    public void handleActions(ArrayList<Action> actions, HashMap<GridPoint2, Boolean> collisionVectors) {
         if (!isEqual(movementProgress, 1f) || actions.isEmpty()) {//we do not handle action if tank is still moving
             return;
         }
 
-        GridPoint2 resultingVector = new GridPoint2(0, 0);
+        GridPoint2 resultingVector = new GridPoint2(0, 0);//iterate whole 'actions' to get resulting Vector
         for (Action action : actions) {
             resultingVector.add(action.getVector());
         }
 
-        if (possibleVectors.get(resultingVector)) {// if we can move there
+        if (collisionVectors.get(resultingVector)) {// if we can move there
             movementProgress = 0f;
             destinationCoordinates.add(resultingVector);//set target
         }
@@ -40,9 +40,9 @@ public class Tank implements GameObject{
     }
 
     public void updateState(float deltaTime) {
-        movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
-        if (isEqual(movementProgress, 1f)) {
-            coordinates.set(destinationCoordinates);
+        movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);//continue movement progress
+        if (isEqual(movementProgress, 1f)) { // if movement has ended set coordinates
+            //coordinates.set(destinationCoordinates);
         }
     }
 
@@ -59,10 +59,7 @@ public class Tank implements GameObject{
         return movementProgress;
     }
 
-    public float getMovementSpeed() {
-        return movementSpeed;
-    }
-
+    @Override
     public float getRotation() {
         return rotation;
     }
