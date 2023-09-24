@@ -30,7 +30,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     private MapRenderer levelRenderer;
     private TileMovement tileMovement;
 
-    private final CollisionHandler collisionHandler = new CollisionHandler();
+    private CollisionHandler collisionHandler;
 
     private final InputController inputController = new InputController();
 
@@ -41,6 +41,9 @@ public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsObject graphicTank;
     private GraphicsObject graphicTree;
     private final List<GraphicsObject> objectsGraphics = new ArrayList<>();// ArrayList of all objects that are rendered
+
+    public GameDesktopLauncher() {
+    }
 
     @Override
     public void create() {
@@ -54,6 +57,9 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         // create graphics objects
         createGraphicsObjects();
+
+        //create collision handler
+        collisionHandler = new CollisionHandler(objectsGame);
 
         //load level tiles
         moveRectangleAtTileCenter(getTiledMapTileLayer(), graphicTree.getRectangle(), tree.getCoordinates());
@@ -107,7 +113,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         //check input controller and change tank state
-        tank.handleActions(inputController.checkKeyboard(), collisionHandler.fakeCollisionMaker());
+        tank.handleActions(inputController.checkKeyboard(), collisionHandler.getOccupiedPoints());
 
         // calculate interpolated player screen coordinates
         tileMovement.moveRectangleBetweenTileCenters(graphicTank.getRectangle(), tank.getCoordinates(),

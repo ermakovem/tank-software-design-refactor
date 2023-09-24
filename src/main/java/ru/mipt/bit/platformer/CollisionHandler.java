@@ -3,21 +3,26 @@ package ru.mipt.bit.platformer;
 import com.badlogic.gdx.math.GridPoint2;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class CollisionHandler {
-    public HashMap<GridPoint2, Boolean> fakeCollisionMaker() {
-        HashMap<GridPoint2, Boolean> fakeCollision = new HashMap<>();
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                fakeCollision.put(new GridPoint2(i, j), true);
-            }
+    private final List<GameObject> objectsGame;
+    private final HashSet<GridPoint2> occupiedPoints = new HashSet<>();
+
+    public CollisionHandler(List<GameObject> objectsGame) {
+        this.objectsGame = objectsGame;
+    }
+
+    private void UpdateMap() {
+        occupiedPoints.clear();
+        for (GameObject object : objectsGame) {
+            occupiedPoints.add(object.getDestinationCoordinates());
         }
-        return fakeCollision;
     }
 
-    public CollisionHandler() {
-
+    public HashSet<GridPoint2> getOccupiedPoints() {
+        UpdateMap();
+        return occupiedPoints;
     }
-
-    HashMap<GridPoint2, Boolean> possibleVectors = new HashMap<>();
 }

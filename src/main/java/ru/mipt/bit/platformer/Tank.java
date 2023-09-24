@@ -4,12 +4,13 @@ import com.badlogic.gdx.math.GridPoint2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 public class Tank implements GameObject{
-    private GridPoint2 coordinates;
+    private final GridPoint2 coordinates;
     private final GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
     private final float movementSpeed;
@@ -21,7 +22,7 @@ public class Tank implements GameObject{
         this.movementSpeed = movementSpeed;
     }
 
-    public void handleActions(ArrayList<Action> actions, HashMap<GridPoint2, Boolean> collisionVectors) {
+    public void handleActions(ArrayList<Action> actions, HashSet<GridPoint2> occupiedPoints) {
         if (!isEqual(movementProgress, 1f) || actions.isEmpty()) {//we do not handle action if tank is still moving
             return;
         }
@@ -31,7 +32,7 @@ public class Tank implements GameObject{
             resultingVector.add(action.getVector());
         }
 
-        if (collisionVectors.get(resultingVector)) {// if we can move there
+        if (!occupiedPoints.contains(destinationCoordinates.cpy().add(resultingVector))) {// if we can move there
             movementProgress = 0f;
             destinationCoordinates.add(resultingVector);//set target
         }
