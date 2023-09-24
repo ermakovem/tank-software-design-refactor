@@ -17,9 +17,11 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.util.TileMovement;
 
+import java.util.HashMap;
+
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static com.badlogic.gdx.math.MathUtils.isEqual;
+import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
 public class GameDesktopLauncher implements ApplicationListener {
@@ -31,6 +33,10 @@ public class GameDesktopLauncher implements ApplicationListener {
     private TiledMap level;
     private MapRenderer levelRenderer;
     private TileMovement tileMovement;
+
+    private InputController inputController = new InputController();
+
+    private Tank player;
 
     private Texture blueTankTexture;
     private TextureRegion playerGraphics;
@@ -52,10 +58,10 @@ public class GameDesktopLauncher implements ApplicationListener {
         batch = new SpriteBatch();
 
         // load level tiles
-        level = new TmxMapLoader().load("level.tmx");
-        levelRenderer = createSingleLayerMapRenderer(level, batch);
-        TiledMapTileLayer groundLayer = getSingleLayer(level);
-        tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
+        TiledMapTileLayer groundLayer = getTiledMapTileLayer();
+
+        //maps keys to tank actions
+        keyMap(inputController);
 
         // Texture decodes an image file and loads it into GPU memory, it represents a native resource
         blueTankTexture = new Texture("images/tank_blue.png");
@@ -63,6 +69,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         playerGraphics = new TextureRegion(blueTankTexture);
         playerRectangle = createBoundingRectangle(playerGraphics);
         // set player initial position
+        player = new Tank(new GridPoint2(1, 1), 0.4f);
         playerDestinationCoordinates = new GridPoint2(1, 1);
         playerCoordinates = new GridPoint2(playerDestinationCoordinates);
         playerRotation = 0f;
@@ -74,14 +81,40 @@ public class GameDesktopLauncher implements ApplicationListener {
         moveRectangleAtTileCenter(groundLayer, treeObstacleRectangle, treeObstacleCoordinates);
     }
 
+    private void keyMap(InputController i) {
+        i.mapKeyToAction(UP, Action.UP);
+        i.mapKeyToAction(W, Action.UP);
+        i.mapKeyToAction(DOWN, Action.DOWN);
+        i.mapKeyToAction(S, Action.DOWN);
+        i.mapKeyToAction(RIGHT, Action.RIGHT);
+        i.mapKeyToAction(D, Action.RIGHT);
+        i.mapKeyToAction(A, Action.LEFT);
+        i.mapKeyToAction(LEFT, Action.LEFT);
+    }
+
+    private TiledMapTileLayer getTiledMapTileLayer() {
+        level = new TmxMapLoader().load("level.tmx");
+        levelRenderer = createSingleLayerMapRenderer(level, batch);
+        TiledMapTileLayer groundLayer = getSingleLayer(level);
+        tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
+        return groundLayer;
+    }
+    static int i = 0;
     @Override
     public void render() {
         // clear the screen
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
-        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
+        clearScreen();
 
         // get time passed since the last render
         float deltaTime = Gdx.graphics.getDeltaTime();
+
+        HashMap<GridPoint2, Boolean> fakeCollisionHandler = new HashMap<>();
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                fakeCollisionHandler.put(new GridPoint2(i, j), true);
+            }
+        }
+
 
         if (Gdx.input.isKeyPressed(UP) || Gdx.input.isKeyPressed(W)) {
             if (isEqual(playerMovementProgress, 1f)) {
@@ -99,7 +132,7 @@ public class GameDesktopLauncher implements ApplicationListener {
                     playerDestinationCoordinates.x--;
                     playerMovementProgress = 0f;
                 }
-                playerRotation = -180f;
+                playerRotation = 180f;
             }
         }
         if (Gdx.input.isKeyPressed(DOWN) || Gdx.input.isKeyPressed(S)) {
@@ -120,14 +153,27 @@ public class GameDesktopLauncher implements ApplicationListener {
                 playerRotation = 0f;
             }
         }
+        player.handleActions(inputController.checkKeyboard(), fakeCollisionHandler);
 
         // calculate interpolated player screen coordinates
-        tileMovement.moveRectangleBetweenTileCenters(playerRectangle, playerCoordinates, playerDestinationCoordinates, playerMovementProgress);
+        tileMovement.moveRectangleBetweenTileCenters(playerRectangle, playerCoordinates,
+                playerDestinationCoordinates, playerMovementProgress);
 
         playerMovementProgress = continueProgress(playerMovementProgress, deltaTime, MOVEMENT_SPEED);
         if (isEqual(playerMovementProgress, 1f)) {
             // record that the player has reached his/her destination
-            playerCoordinates.set(playerDestinationCoordinates);
+            playerCoordinates.set(playerDestinationCoordinates); // not twitchy .set()
+            //playerCoordinates = playerDestinationCoordinates;      // twitchy .copy_ctor
+        }
+
+        if (!playerCoordinates.equals(player.getCoordinates())) {
+            System.out.println("Coordinates " + playerCoordinates.toString() + " " + player.getCoordinates().toString());
+        }
+        if (!playerDestinationCoordinates.equals(player.getDestinationCoordinates())) {
+            System.out.println("Destination");
+        }
+        if (!isEqual(playerMovementProgress, player.getMovementProgress())) {
+            System.out.println("Progress " + playerMovementProgress + ", " + player.getMovementProgress());
         }
 
         // render each tile of the level
@@ -144,6 +190,11 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         // submit all drawing requests
         batch.end();
+    }
+
+    private static void clearScreen() {
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
+        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
     }
 
     @Override
