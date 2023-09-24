@@ -11,7 +11,7 @@ import java.util.Set;
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
-public class Tank{
+public class Tank implements CollisionObject{
     private GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
@@ -30,7 +30,6 @@ public class Tank{
         }
 
         GridPoint2 resultingVector = new GridPoint2(0, 0);
-        //boolean shoot = false;
         for (Action action : actions) {
             resultingVector.add(action.getVector());
         }
@@ -46,7 +45,6 @@ public class Tank{
     public void updateState(float deltaTime) {
         movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
         if (isEqual(movementProgress, 1f)) {
-            System.out.println("IN");
             coordinates.set(destinationCoordinates);
         }
     }
@@ -55,6 +53,7 @@ public class Tank{
         return coordinates;
     }
 
+    @Override
     public GridPoint2 getDestinationCoordinates() {
         return destinationCoordinates;
     }

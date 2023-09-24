@@ -6,5 +6,4 @@ import java.util.HashMap;
 
 public class CollisionHandler {
     HashMap<GridPoint2, Boolean> possibleVectors = new HashMap<>();
-
 }
