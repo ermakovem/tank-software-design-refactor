@@ -4,29 +4,25 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.util.TileMovement;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
+import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GameDesktopLauncher implements ApplicationListener {
-
-    private static final float MOVEMENT_SPEED = 0.4f;
 
     private Batch batch;
 
@@ -34,30 +30,53 @@ public class GameDesktopLauncher implements ApplicationListener {
     private MapRenderer levelRenderer;
     private TileMovement tileMovement;
 
-    private InputController inputController = new InputController();
+    private final CollisionHandler collisionHandler = new CollisionHandler();
 
-    private Tank player;
+    private final InputController inputController = new InputController();
+
+    private Tank tank;
     private Obstacle tree;
-    private RenderObject graphicTank;
-    private RenderObject graphicTree;
+    private final List<GameObject> objectsGame = new ArrayList<>();// ArrayList of all game objects
+
+    private GraphicsObject graphicTank;
+    private GraphicsObject graphicTree;
+    private final List<GraphicsObject> objectsGraphics = new ArrayList<>();// ArrayList of all objects that are rendered
 
     @Override
     public void create() {
         batch = new SpriteBatch();
 
-        // load level tiles
-        TiledMapTileLayer groundLayer = getTiledMapTileLayer();
-
         //maps keys to tank actions
         keyMap(inputController);
-        // set player initial position
-        player = new Tank(new GridPoint2(1, 1), 0.4f);
-        graphicTank = new RenderObject("images/tank_blue.png", player.getRotation());
+
+        // create game objects
+        createGameObjects();
+
+        // create graphics objects
+        createGraphicsObjects();
+
+        //load level tiles
+        moveRectangleAtTileCenter(getTiledMapTileLayer(), graphicTree.getRectangle(), tree.getCoordinates());
+    }
+
+    private void createGraphicsObjects() {
+        // create tank
+        graphicTank = new GraphicsObject("images/tank_blue.png");
+        objectsGraphics.add(graphicTank);
+
+        // create tree
+        graphicTree = new GraphicsObject("images/greenTree.png");
+        objectsGraphics.add(graphicTree);
+    }
+
+    private void createGameObjects() {
+        // create tank
+        tank = new Tank(new GridPoint2(1, 1), 0.4f);
+        objectsGame.add(tank);
+
         // create tree obstacle
         tree = new Obstacle(new GridPoint2(1, 3));
-        graphicTree = new RenderObject("images/greenTree.png", 0f);
-
-        moveRectangleAtTileCenter(groundLayer, graphicTree.getRectangle(), tree.getCoordinates());
+        objectsGame.add(tree);
     }
 
     private void keyMap(InputController i) {
@@ -67,8 +86,8 @@ public class GameDesktopLauncher implements ApplicationListener {
         i.mapKeyToAction(S, Action.DOWN);
         i.mapKeyToAction(RIGHT, Action.RIGHT);
         i.mapKeyToAction(D, Action.RIGHT);
-        i.mapKeyToAction(A, Action.LEFT);
         i.mapKeyToAction(LEFT, Action.LEFT);
+        i.mapKeyToAction(A, Action.LEFT);
     }
 
     private TiledMapTileLayer getTiledMapTileLayer() {
@@ -87,20 +106,15 @@ public class GameDesktopLauncher implements ApplicationListener {
         // get time passed since the last render
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        HashMap<GridPoint2, Boolean> fakeCollisionHandler = new HashMap<>();
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                fakeCollisionHandler.put(new GridPoint2(i, j), true);
-            }
-        }
-
-        player.handleActions(inputController.checkKeyboard(), fakeCollisionHandler);
+        //check input controller and change tank state
+        tank.handleActions(inputController.checkKeyboard(), collisionHandler.fakeCollisionMaker());
 
         // calculate interpolated player screen coordinates
-        tileMovement.moveRectangleBetweenTileCenters(graphicTank.getRectangle(), player.getCoordinates(),
-                player.getDestinationCoordinates(), player.getMovementProgress());
+        tileMovement.moveRectangleBetweenTileCenters(graphicTank.getRectangle(), tank.getCoordinates(),
+                tank.getDestinationCoordinates(), tank.getMovementProgress());
 
-        player.updateState(deltaTime);
+        //updates tank state
+        tank.updateState(deltaTime);
 
         // render each tile of the level
         levelRenderer.render();
@@ -108,11 +122,11 @@ public class GameDesktopLauncher implements ApplicationListener {
         // start recording all drawing commands
         batch.begin();
 
-        // render player
-        drawTextureRegionUnscaled(batch, graphicTank.getGraphics(), graphicTank.getRectangle(), player.getRotation());
-
-        // render tree obstacle
-        drawTextureRegionUnscaled(batch, graphicTree.getGraphics(), graphicTree.getRectangle(), 0f);
+        // render all objects
+        for (int i = 0; i < objectsGraphics.size(); i++) {
+            drawTextureRegionUnscaled(batch, objectsGraphics.get(i).getGraphics(), objectsGraphics.get(i).getRectangle(),
+                    objectsGame.get(i).getRotation());
+        }
 
         // submit all drawing requests
         batch.end();
@@ -140,9 +154,11 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
+        //dispose created objects
+        for (GraphicsObject object : objectsGraphics) {
+            object.dispose();
+        }
         // dispose of all the native resources (classes which implement com.badlogic.gdx.utils.Disposable)
-        graphicTree.dispose();
-        graphicTank.dispose();
         level.dispose();
         batch.dispose();
     }
