@@ -2,6 +2,6 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
 
-public interface GameObject {
-    GridPoint2 updateState(float deltaTime);
+public interface CanMove {
+    void moveTo(GridPoint2 vector);
 }

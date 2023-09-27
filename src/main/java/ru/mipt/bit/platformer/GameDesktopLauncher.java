@@ -16,6 +16,7 @@ import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -25,22 +26,19 @@ import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled
 public class GameDesktopLauncher implements ApplicationListener {
 
     private Batch batch;
-
     private TiledMap level;
     private MapRenderer levelRenderer;
     private TileMovement tileMovement;
 
+    private GameLevel level1 = new GameLevel();
     private CollisionHandler collisionHandler;
-
     private final InputController inputController = new InputController();
 
     private Tank tank;
     private Obstacle tree;
-    private final List<GameObject> objectsGame = new ArrayList<>();// ArrayList of all game objects
 
     private GraphicsObject graphicTank;
     private GraphicsObject graphicTree;
-    private final List<GraphicsObject> objectsGraphics = new ArrayList<>();// ArrayList of all objects that are rendered
 
     public GameDesktopLauncher() {
     }
@@ -50,7 +48,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         batch = new SpriteBatch();
 
         //maps keys to tank actions
-        keyMap(inputController);
+        keyMap();
 
         // create game objects
         createGameObjects();
@@ -85,15 +83,15 @@ public class GameDesktopLauncher implements ApplicationListener {
         objectsGame.add(tree);
     }
 
-    private void keyMap(InputController i) {
-        i.mapKeyToAction(UP, Action.UP);
-        i.mapKeyToAction(W, Action.UP);
-        i.mapKeyToAction(DOWN, Action.DOWN);
-        i.mapKeyToAction(S, Action.DOWN);
-        i.mapKeyToAction(RIGHT, Action.RIGHT);
-        i.mapKeyToAction(D, Action.RIGHT);
-        i.mapKeyToAction(LEFT, Action.LEFT);
-        i.mapKeyToAction(A, Action.LEFT);
+    private void keyMap() {
+        inputController.mapKeyToActionObject(UP, Action.UP, tank);
+        inputController.mapKeyToActionObject(W, Action.UP, tank);
+        inputController.mapKeyToActionObject(DOWN, Action.DOWN, tank);
+        inputController.mapKeyToActionObject(S, Action.DOWN, tank);
+        inputController.mapKeyToActionObject(RIGHT, Action.RIGHT, tank);
+        inputController.mapKeyToActionObject(D, Action.RIGHT, tank);
+        inputController.mapKeyToActionObject(LEFT, Action.LEFT, tank);
+        inputController.mapKeyToActionObject(A, Action.LEFT, tank);
     }
 
     private TiledMapTileLayer getTiledMapTileLayer() {
@@ -112,8 +110,12 @@ public class GameDesktopLauncher implements ApplicationListener {
         // get time passed since the last render
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        //check input controller and change tank state
-        tank.handleActions(inputController.checkKeyboard(), collisionHandler.getOccupiedPoints());
+        //action.apply(GameObject)
+        for (Map.Entry<Action, GameObject> action : inputController.readActions()) {
+            action.getKey().apply(action.getValue());
+        }
+
+        level.updateState();
 
         // calculate interpolated player screen coordinates
         tileMovement.moveRectangleBetweenTileCenters(graphicTank.getRectangle(), tank.getCoordinates(),

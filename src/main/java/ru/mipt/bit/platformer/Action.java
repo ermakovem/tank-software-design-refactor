@@ -6,15 +6,27 @@ public enum Action {
     UP(new GridPoint2(0, 1)),
     DOWN(new GridPoint2(0, -1)),
     RIGHT(new GridPoint2(1, 0)),
-    LEFT(new GridPoint2(-1, 0));
+    LEFT(new GridPoint2(-1, 0)),
+    SHOOT(true);
 
-    private final GridPoint2 vector;
+    private GridPoint2 vector = new GridPoint2();
+    private boolean shoot = false;
 
+    Action(boolean shoot) {
+        this.shoot = shoot;
+    }
     Action(GridPoint2 vector) {
         this.vector = vector;
     }
 
-    public GridPoint2 getVector() {
-        return vector;
+    public void apply(GameObject object) {
+//        if (shoot && object instanceof CanShoot) {
+//            object.shoot();
+//        }
+        if (object instanceof CanMove) {
+            ((CanMove) object).moveTo(vector);
+        } else {
+            throw new IllegalArgumentException("Only Tank can have action");
+        }
     }
 }
