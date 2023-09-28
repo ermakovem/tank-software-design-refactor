@@ -10,13 +10,12 @@ public class GameLevel {
     public GameLevel() {}
 
     public void add(GameObject o) {
-        //if
         gameObjects.add(o);
     }
     public void updateState(float deltaTime) {
-        collisionHandler.Update();
+        //collisionHandler.Update();
         for (GameObject gameObject : gameObjects) {
-            gameObject.updateState();
+            gameObject.updateState(deltaTime);
         }
     }
 }

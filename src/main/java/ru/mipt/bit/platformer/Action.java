@@ -25,8 +25,6 @@ public enum Action {
 //        }
         if (object instanceof CanMove) {
             ((CanMove) object).moveTo(vector);
-        } else {
-            throw new IllegalArgumentException("Only Tank can have action");
         }
     }
 }

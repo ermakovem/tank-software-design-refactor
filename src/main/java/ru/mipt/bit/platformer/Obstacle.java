@@ -8,20 +8,19 @@ public class Obstacle implements GameObject, HasCollision {
     public Obstacle(GridPoint2 coordinates) {
         this.coordinates = coordinates;
     }
+
+    @Override
     public GridPoint2 getCoordinates() {
         return coordinates;
     }
+
     @Override
     public GridPoint2 getDestinationCoordinates() {
-        return getCoordinates();
-    }
-    @Override
-    public float getRotation() {
-        return 0;
+        return coordinates;
     }
 
     @Override
-    public GridPoint2 updateState(float deltaTime) {
-        return null;
+    public void updateState(float deltaTime) {
+        return;
     }
 }
