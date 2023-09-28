@@ -2,31 +2,32 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 public class CollisionHandler {
-    private final List<HasCollision> objectsGame;
+    private final List<HasCollision> collisionObjects = new ArrayList<>();
     private final HashSet<GridPoint2> occupiedPoints = new HashSet<>();
 
-    public CollisionHandler(List<HasCollision> objectsGame) {
-        this.objectsGame = objectsGame;
+    public CollisionHandler() {
     }
 
-    private void UpdateMap() {
+    public void add(HasCollision object) {
+        collisionObjects.add(object);
+    }
+
+    private void updateMap() {
         occupiedPoints.clear();
-        for (HasCollision object : objectsGame) {
+        for (HasCollision object : collisionObjects) {
+            occupiedPoints.add(object.getCoordinates());
             occupiedPoints.add(object.getDestinationCoordinates());
         }
     }
 
     public boolean isFree(GridPoint2 pointToCheck) {
-        return true;
+        updateMap();
+        return !occupiedPoints.contains(pointToCheck);
     }
-
-//    public HashSet<GridPoint2> getOccupiedPoints() {
-//        UpdateMap();
-//        return occupiedPoints;
-//    }
 }

@@ -2,10 +2,6 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
@@ -15,6 +11,7 @@ public class Tank implements GameObject, CanMove, HasCollision{
     private float movementProgress = 1f;
     private final float movementSpeed;
     private float rotation = 0f;
+    private CollisionHandler collisionHandler;
 
     public Tank(GridPoint2 coordinates, float movementSpeed) {
         this.coordinates = coordinates;
@@ -25,7 +22,7 @@ public class Tank implements GameObject, CanMove, HasCollision{
     @Override
     public void updateState(float deltaTime) {
         movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
-        if (isntMoving()) {
+        if (isNotMoving()) {
             coordinates.set(destinationCoordinates);
         }
     }
@@ -49,15 +46,22 @@ public class Tank implements GameObject, CanMove, HasCollision{
     }
 
     @Override
+    public void addCollisionHandler(CollisionHandler collisionHandler) {
+        this.collisionHandler = collisionHandler;
+    }
+
+    @Override
     public void moveTo(GridPoint2 vector) {
-        if (isntMoving()) {
-            destinationCoordinates.add(vector);
+        if (isNotMoving()) {
+            if (collisionHandler.isFree(coordinates.cpy().add(vector))) {
+                destinationCoordinates = destinationCoordinates.add(vector);
+                movementProgress = 0;
+            }
             rotation = floor(atan2(vector.y, vector.x) * 180f / PI);
-            movementProgress = 0;
         }
     }
 
-    private boolean isntMoving() {
+    private boolean isNotMoving() {
         return isEqual(movementProgress, 1f);
     }
 }

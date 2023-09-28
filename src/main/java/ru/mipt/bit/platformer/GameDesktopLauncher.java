@@ -4,25 +4,16 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.MapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.Map;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
 public class GameDesktopLauncher implements ApplicationListener {
-    private GraphicHandler graphicHandler;
-    private final GameLevel level = new GameLevel();
-    //private CollisionHandler collisionHandler;
+    private GraphicsHandler graphicsHandler;
+    private final GameLevel level = new GameLevel(new CollisionHandler());
     private InputController inputController;
 
     private Tank tank;
@@ -33,13 +24,13 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        graphicHandler = new GraphicHandler("level.tmx");
+        graphicsHandler = new GraphicsHandler("level.tmx");
 
         tank = new Tank(new GridPoint2(1, 3), 0.4f);
         tree = new Obstacle(new GridPoint2(1, 1));
 
-        graphicHandler.addGraphicsObjects("images/tank_blue.png", tank);
-        graphicHandler.addGraphicsObjects("images/greenTree.png", tree);
+        graphicsHandler.addGraphicsObjects("images/tank_blue.png", tank);
+        graphicsHandler.addGraphicsObjects("images/greenTree.png", tree);
 
         level.add(tank);
         level.add(tree);
@@ -71,7 +62,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         level.updateState(deltaTime);
 
-        graphicHandler.render();
+        graphicsHandler.render();
     }
 
     private static void clearScreen() {
@@ -97,7 +88,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         //dispose created objects
-        graphicHandler.dispose();
+        graphicsHandler.dispose();
     }
 
     public static void main(String[] args) {

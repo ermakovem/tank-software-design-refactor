@@ -14,7 +14,7 @@ import java.util.List;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
-public class GraphicHandler {
+public class GraphicsHandler {
     private final Batch batch;
     private final TiledMap level;
     private final MapRenderer levelRenderer;
@@ -23,7 +23,7 @@ public class GraphicHandler {
     private final List<TankGraphics> tankGraphicsList = new ArrayList<>();
     private final List<ObstacleGraphics> obstacleGraphicsList = new ArrayList<>();
 
-    public GraphicHandler(String pathGameField) {
+    public GraphicsHandler(String pathGameField) {
         this.batch = new SpriteBatch();
         this.level = new TmxMapLoader().load(pathGameField);
         this.levelRenderer = createSingleLayerMapRenderer(level, batch);
