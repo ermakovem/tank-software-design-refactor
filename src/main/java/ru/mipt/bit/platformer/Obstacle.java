@@ -21,6 +21,5 @@ public class Obstacle implements GameObject, HasCollision {
 
     @Override
     public void updateState(float deltaTime) {
-        return;
     }
 }
