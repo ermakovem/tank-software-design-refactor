@@ -11,7 +11,7 @@ public class Tank implements GameObject, CanMove, HasCollision{
     private float movementProgress = 1f;
     private final float movementSpeed;
     private float rotation = 0f;
-    private CollisionHandler collisionHandler;
+    private CollisionHandler collisionHandler = new CollisionHandler();
 
     public Tank(GridPoint2 coordinates, float movementSpeed) {
         this.coordinates = coordinates;
