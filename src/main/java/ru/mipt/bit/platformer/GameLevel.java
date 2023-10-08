@@ -8,9 +8,21 @@ public class GameLevel {
     private final CollisionHandler collisionHandler = new CollisionHandler();
     private final List<LevelListener> levelListeners = new ArrayList<>();
 
+    //this field and methods are temporary. I hope
+    private Tank theOnlyTank;
+    public Tank getTheTank(){
+        return theOnlyTank;
+    }
+
     public GameLevel() {}
 
     public void add(GameObject o) {
+        //temporary
+        if (o instanceof Tank) {
+            theOnlyTank = (Tank) o;
+        }
+
+
         if (o instanceof HasCollision) {
             collisionHandler.add((HasCollision) o);
         }

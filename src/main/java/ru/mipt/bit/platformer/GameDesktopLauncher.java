@@ -13,41 +13,41 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsHandler graphicsHandler;
-    private  GameLevel level;
+    private GameLevel level;
     private InputController inputController;
 
     private Tank tank;
-    private Obstacle tree;
+
 
     public GameDesktopLauncher() {
     }
 
     @Override
     public void create() {
-        level = new GameLevel();
+        level = new GameLevelGenerator(2);
         graphicsHandler = new GraphicsHandler("level.tmx");
 
         level.addLevelListener(new LevelListenerGraphics(graphicsHandler));
 
-        //tank has to be initialized bcz of InputController :(
-        tank = new Tank(new GridPoint2(1, 3), 0.4f);
+        //tank has to be initialized bcz of InputController
+        //tank = new Tank(new GridPoint2(1, 3), 0.4f);
 
-        level.add(tank);
+        level.add(new Tank(new GridPoint2(1, 3), 0.4f));
         level.add(new Obstacle(new GridPoint2(1, 1)));
 
-        //also maps keys to tank actions
         createInputController();
     }
     private void createInputController() {
+        //maps keys to gameObject actions
         inputController = new InputController();
-        inputController.mapKeyToActionObject(UP, Action.UP, tank);
-        inputController.mapKeyToActionObject(W, Action.UP, tank);
-        inputController.mapKeyToActionObject(DOWN, Action.DOWN, tank);
-        inputController.mapKeyToActionObject(S, Action.DOWN, tank);
-        inputController.mapKeyToActionObject(RIGHT, Action.RIGHT, tank);
-        inputController.mapKeyToActionObject(D, Action.RIGHT, tank);
-        inputController.mapKeyToActionObject(LEFT, Action.LEFT, tank);
-        inputController.mapKeyToActionObject(A, Action.LEFT, tank);
+        inputController.mapKeyToActionObject(UP, Action.UP, level.getTheTank());
+        inputController.mapKeyToActionObject(W, Action.UP, level.getTheTank());
+        inputController.mapKeyToActionObject(DOWN, Action.DOWN, level.getTheTank());
+        inputController.mapKeyToActionObject(S, Action.DOWN, level.getTheTank());
+        inputController.mapKeyToActionObject(RIGHT, Action.RIGHT, level.getTheTank());
+        inputController.mapKeyToActionObject(D, Action.RIGHT, level.getTheTank());
+        inputController.mapKeyToActionObject(LEFT, Action.LEFT, level.getTheTank());
+        inputController.mapKeyToActionObject(A, Action.LEFT, level.getTheTank());
     }
 
     @Override
