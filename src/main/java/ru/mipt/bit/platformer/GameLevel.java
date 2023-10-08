@@ -5,11 +5,10 @@ import java.util.List;
 
 public class GameLevel {
     private final List<GameObject> gameObjects = new ArrayList<>();
-    private final CollisionHandler collisionHandler;
+    private final CollisionHandler collisionHandler = new CollisionHandler();
+    private final List<LevelListener> levelListeners = new ArrayList<>();
 
-    public GameLevel(CollisionHandler collisionHandler) {
-        this.collisionHandler = collisionHandler;
-    }
+    public GameLevel() {}
 
     public void add(GameObject o) {
         if (o instanceof HasCollision) {
@@ -18,12 +17,20 @@ public class GameLevel {
         if (o instanceof CanMove) {
             ((CanMove) o).addCollisionHandler(collisionHandler);
         }
+        for (LevelListener levelListener : levelListeners) {
+            levelListener.addObject(o);
+        }
         gameObjects.add(o);
     }
+
     public void updateState(float deltaTime) {
         //collisionHandler.Update();
         for (GameObject gameObject : gameObjects) {
             gameObject.updateState(deltaTime);
         }
+    }
+
+    public void addLevelListener(LevelListener levelListener) {
+        levelListeners.add(levelListener);
     }
 }

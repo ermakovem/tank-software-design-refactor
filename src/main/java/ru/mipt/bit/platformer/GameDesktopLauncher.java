@@ -13,7 +13,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsHandler graphicsHandler;
-    private final GameLevel level = new GameLevel(new CollisionHandler());
+    private  GameLevel level;
     private InputController inputController;
 
     private Tank tank;
@@ -24,16 +24,16 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
+        level = new GameLevel();
         graphicsHandler = new GraphicsHandler("level.tmx");
 
-        tank = new Tank(new GridPoint2(1, 3), 0.4f);
-        tree = new Obstacle(new GridPoint2(1, 1));
+        level.addLevelListener(new LevelListenerGraphics(graphicsHandler));
 
-        graphicsHandler.addGraphicsObjects("images/tank_blue.png", tank);
-        graphicsHandler.addGraphicsObjects("images/greenTree.png", tree);
+        //tank has to be initialized bcz of InputController :(
+        tank = new Tank(new GridPoint2(1, 3), 0.4f);
 
         level.add(tank);
-        level.add(tree);
+        level.add(new Obstacle(new GridPoint2(1, 1)));
 
         //also maps keys to tank actions
         createInputController();
@@ -56,7 +56,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        for (Map.Entry<Action, GameObject> action : inputController.readActions()) {
+        for (Map.Entry<Action, GameObject> action : inputController.getActions()) {
             action.getKey().apply(action.getValue());
         }
 

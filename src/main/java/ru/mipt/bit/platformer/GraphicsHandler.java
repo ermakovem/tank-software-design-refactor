@@ -56,14 +56,25 @@ public class GraphicsHandler {
         batch.dispose();
     }
 
-    public void addGraphicsObjects(String imagePath, Tank tank){
-        TankGraphics tankGraphics = new TankGraphics(imagePath, tank, tileMovement, batch);
-        tankGraphicsList.add(tankGraphics);
+    public void addGraphicsObjects(String imagePath, GameObject gameObject){
+        if (gameObject instanceof Tank) {
+            TankGraphics tankGraphics = new TankGraphics(imagePath, (Tank) gameObject, tileMovement, batch);
+            tankGraphicsList.add(tankGraphics);
+        }
+        if (gameObject instanceof Obstacle) {
+            ObstacleGraphics obstacleGraphics  = new ObstacleGraphics(imagePath, (Obstacle) gameObject, groundLayer, batch);
+            obstacleGraphicsList.add(obstacleGraphics);
+        }
     }
 
-    public void addGraphicsObjects(String imagePath, Obstacle obstacle){
-        ObstacleGraphics obstacleGraphics  = new ObstacleGraphics(imagePath, obstacle, groundLayer, batch);
-        obstacleGraphicsList.add(obstacleGraphics);
-    }
+//    public void addGraphicsObjects(String imagePath, Tank tank){
+//        TankGraphics tankGraphics = new TankGraphics(imagePath, tank, tileMovement, batch);
+//        tankGraphicsList.add(tankGraphics);
+//    }
+//
+//    public void addGraphicsObjects(String imagePath, Obstacle obstacle){
+//        ObstacleGraphics obstacleGraphics  = new ObstacleGraphics(imagePath, obstacle, groundLayer, batch);
+//        obstacleGraphicsList.add(obstacleGraphics);
+//    }
 
 }
