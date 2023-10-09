@@ -30,17 +30,13 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void create() {
         graphicsHandler = new GraphicsHandler("level.tmx");
-        //"images/tank_blue.png"
-        level = new GameLevelGenerator("/objectsMap/objectsMap.txt", new LevelListenerGraphics(graphicsHandler));
-        level = new GameLevelGenerator(20, new LevelListenerGraphics(graphicsHandler));
 
-        //level.addLevelListener(new LevelListenerGraphics(graphicsHandler));
+        //TODO: absolute -> relative
+        level = new GameLevelGenerator("/Programming/GitHub/tank-software-design-refactor" +
+                "/src/main/resources/objectsMap/objectsMap.txt", new LevelListenerGraphics(graphicsHandler));
 
         //tank has to be initialized bcz of InputController
         //tank = new Tank(new GridPoint2(1, 3), 0.4f);
-
-        //level.add(new Tank(new GridPoint2(1, 3), 0.4f));
-        //level.add(new Obstacle(new GridPoint2(1, 1)));
 
         createInputController();
     }

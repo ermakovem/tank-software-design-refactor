@@ -33,6 +33,7 @@ public class GraphicsHandler {
         this.groundLayer = getSingleLayer(level);
         this.tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
     }
+
     public void render(){
         levelRenderer.render();
         batch.begin();
@@ -40,7 +41,6 @@ public class GraphicsHandler {
         for (TankGraphics tankGraphics : tankGraphicsList) {
             tankGraphics.render();
         }
-
         for (ObstacleGraphics obstacleGraphics : obstacleGraphicsList) {
             obstacleGraphics.render();
         }
@@ -59,13 +59,16 @@ public class GraphicsHandler {
         batch.dispose();
     }
 
-    public void addGraphicsObjects(String imagePath, GameObject gameObject){
+    public void addGraphicsObjects(GameObject gameObject){
         if (gameObject instanceof Tank) {
-            TankGraphics tankGraphics = new TankGraphics(imagePath, (Tank) gameObject, tileMovement, batch);
+            TankGraphics tankGraphics =
+                    new TankGraphics("images/tank_blue.png", (Tank) gameObject, tileMovement, batch);
             tankGraphicsList.add(tankGraphics);
         }
+
         if (gameObject instanceof Obstacle) {
-            ObstacleGraphics obstacleGraphics  = new ObstacleGraphics(imagePath, (Obstacle) gameObject, groundLayer, batch);
+            ObstacleGraphics obstacleGraphics  =
+                    new ObstacleGraphics("images/greenTree.png", (Obstacle) gameObject, groundLayer, batch);
             obstacleGraphicsList.add(obstacleGraphics);
         }
     }
