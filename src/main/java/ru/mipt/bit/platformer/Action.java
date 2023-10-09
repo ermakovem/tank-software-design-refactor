@@ -1,6 +1,8 @@
 package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.logic.CanMove;
+import ru.mipt.bit.platformer.logic.GameObject;
 
 public enum Action {
     UP(new GridPoint2(0, 1)),

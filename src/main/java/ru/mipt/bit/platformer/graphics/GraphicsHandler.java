@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -7,6 +7,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
+import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.logic.Obstacle;
+import ru.mipt.bit.platformer.logic.Tank;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.ArrayList;
@@ -66,15 +69,4 @@ public class GraphicsHandler {
             obstacleGraphicsList.add(obstacleGraphics);
         }
     }
-
-//    public void addGraphicsObjects(String imagePath, Tank tank){
-//        TankGraphics tankGraphics = new TankGraphics(imagePath, tank, tileMovement, batch);
-//        tankGraphicsList.add(tankGraphics);
-//    }
-//
-//    public void addGraphicsObjects(String imagePath, Obstacle obstacle){
-//        ObstacleGraphics obstacleGraphics  = new ObstacleGraphics(imagePath, obstacle, groundLayer, batch);
-//        obstacleGraphicsList.add(obstacleGraphics);
-//    }
-
 }

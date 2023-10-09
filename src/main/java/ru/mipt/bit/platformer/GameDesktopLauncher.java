@@ -4,7 +4,12 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.graphics.GraphicsHandler;
+import ru.mipt.bit.platformer.graphics.LevelListenerGraphics;
+import ru.mipt.bit.platformer.logic.GameLevel;
+import ru.mipt.bit.platformer.logic.GameLevelGenerator;
+import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.logic.Tank;
 
 import java.util.Map;
 
@@ -24,16 +29,18 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        level = new GameLevelGenerator(2);
         graphicsHandler = new GraphicsHandler("level.tmx");
+        //"images/tank_blue.png"
+        level = new GameLevelGenerator("/objectsMap/objectsMap.txt", new LevelListenerGraphics(graphicsHandler));
+        level = new GameLevelGenerator(20, new LevelListenerGraphics(graphicsHandler));
 
-        level.addLevelListener(new LevelListenerGraphics(graphicsHandler));
+        //level.addLevelListener(new LevelListenerGraphics(graphicsHandler));
 
         //tank has to be initialized bcz of InputController
         //tank = new Tank(new GridPoint2(1, 3), 0.4f);
 
-        level.add(new Tank(new GridPoint2(1, 3), 0.4f));
-        level.add(new Obstacle(new GridPoint2(1, 1)));
+        //level.add(new Tank(new GridPoint2(1, 3), 0.4f));
+        //level.add(new Obstacle(new GridPoint2(1, 1)));
 
         createInputController();
     }

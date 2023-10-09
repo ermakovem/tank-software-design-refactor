@@ -1,9 +1,9 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.graphics;
 
-import org.lwjgl.system.CallbackI;
-import ru.mipt.bit.platformer.*;
-
-import java.util.HashMap;
+import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.logic.LevelListener;
+import ru.mipt.bit.platformer.logic.Obstacle;
+import ru.mipt.bit.platformer.logic.Tank;
 
 public class LevelListenerGraphics implements LevelListener {
     private final GraphicsHandler graphicsHandler;
@@ -17,6 +17,7 @@ public class LevelListenerGraphics implements LevelListener {
         graphicsHandler.addGraphicsObjects(getTexturePath(gameObject), gameObject);
     }
     private String getTexturePath(GameObject gameObject) {
+        //mb that should be inside GraphicsHandler
         if (gameObject instanceof Tank) {
             return "images/tank_blue.png";
         }

@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.Gdx;
+import ru.mipt.bit.platformer.logic.GameObject;
 
 import java.util.*;
 

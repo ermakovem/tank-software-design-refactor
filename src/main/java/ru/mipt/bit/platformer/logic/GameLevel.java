@@ -1,14 +1,14 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.logic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameLevel {
     private final List<GameObject> gameObjects = new ArrayList<>();
-    private final CollisionHandler collisionHandler = new CollisionHandler();
+    protected final CollisionHandler collisionHandler = new CollisionHandler();
     private final List<LevelListener> levelListeners = new ArrayList<>();
 
-    //this field and methods are temporary. I hope
+    //this field and method are temporary. I hope
     private Tank theOnlyTank;
     public Tank getTheTank(){
         return theOnlyTank;
@@ -16,6 +16,7 @@ public class GameLevel {
 
     public GameLevel() {}
 
+    //if we only use LevelGenerator that may be protected
     public void add(GameObject o) {
         //temporary
         if (o instanceof Tank) {
