@@ -14,7 +14,7 @@ import java.util.*;
 
 import static java.lang.Math.abs;
 
-//не понял зачем нужен интрефейс левел генератор и левелинфо
+//не вспомнил зачем нужен интрефейс левел генератор и левелинфо
 public class LevelGenerator {
     private final int tilesWidth = 10;
     private final int tilesHeight = 8;
@@ -38,6 +38,29 @@ public class LevelGenerator {
             GridPoint2 randPoint = getRandPoint();
             if (level.tryAdd(new Obstacle(randPoint))) {
                 amountOfTrees--;
+            }
+        }
+        return level;
+    }
+
+    public GameLevel generateRandomWithEnemies(int amountOfTrees, int amountOfEnemies) {
+        if (amountOfTrees + amountOfEnemies + 1 > tilesHeight * tilesWidth) {
+            throw new IllegalArgumentException("amount of trees > map capacity");
+        }
+
+        level.tryAdd(new Tank(getRandPoint(), 0.4f));
+
+        while (amountOfTrees > 0) {
+            GridPoint2 randPoint = getRandPoint();
+            if (level.tryAdd(new Obstacle(randPoint))) {
+                amountOfTrees--;
+            }
+        }
+
+        while (amountOfEnemies > 0) {
+            GridPoint2 randPoint = getRandPoint();
+            if (level.tryAdd(new Tank(getRandPoint(), 0.4f, false))) {
+                amountOfEnemies--;
             }
         }
         return level;

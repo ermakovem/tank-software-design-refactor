@@ -1,11 +1,13 @@
 package ru.mipt.bit.platformer.logic;
 
+import ru.mipt.bit.platformer.Action;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameLevel {
     private final List<GameObject> gameObjects = new ArrayList<>();
-    protected final CollisionHandler collisionHandler = new CollisionHandler();
+    protected final CollisionHandler collisionHandler = new CollisionHandler(8, 10);
     private final List<LevelListener> levelListeners = new ArrayList<>();
 
     //this field and method are temporary. I hope

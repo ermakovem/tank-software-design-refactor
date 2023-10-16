@@ -10,6 +10,8 @@ import ru.mipt.bit.platformer.logic.GameLevel;
 import ru.mipt.bit.platformer.logic.GameObject;
 import ru.mipt.bit.platformer.logic.Tank;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.badlogic.gdx.Input.Keys.*;
@@ -18,37 +20,41 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
-    private InputController inputController;
 
-    private Tank tank;
-
+    private final ArrayList<Controller> controllers = new ArrayList<>();
 
     public GameDesktopLauncher() {
     }
 
     @Override
     public void create() {
+        //inits controller for player tank
+        InputController inputController1 = new InputController();
+        initInputController1(inputController1);
+
+        controllers.add(inputController1);
+        controllers.add(new AIController());
+
         graphicsHandler = new GraphicsHandler("level.tmx");
-        LevelGenerator levelGenerator = new LevelGenerator(new LevelListenerGraphics(graphicsHandler));
+        LevelGenerator levelGenerator =
+                new LevelGenerator(new LevelListenerGraphics(graphicsHandler),
+                        new LevelListenerControllers(controllers));
 
         //TODO: absolute -> relative
-        level = levelGenerator.generatePath("/Programming/GitHub/tank-software-design-refactor" +
-                "/src/main/resources/objectsMap/objectsMap.txt");
-        //level = levelGenerator.generateRandom(20);
-
-        createInputController();
+        //level = levelGenerator.generatePath("/Programming/GitHub/tank-software-design-refactor" +
+        //        "/src/main/resources/objectsMap/objectsMap.txt");
+        level = levelGenerator.generateRandomWithEnemies(20, 1);
     }
-    private void createInputController() {
+    private void initInputController1(InputController inputController1) {
         //maps keys to gameObject actions
-        inputController = new InputController();
-        inputController.mapKeyToActionObject(UP, MoveAction.UP, level.getTheTank());
-        inputController.mapKeyToActionObject(W, MoveAction.UP, level.getTheTank());
-        inputController.mapKeyToActionObject(DOWN, MoveAction.DOWN, level.getTheTank());
-        inputController.mapKeyToActionObject(S, MoveAction.DOWN, level.getTheTank());
-        inputController.mapKeyToActionObject(RIGHT, MoveAction.RIGHT, level.getTheTank());
-        inputController.mapKeyToActionObject(D, MoveAction.RIGHT, level.getTheTank());
-        inputController.mapKeyToActionObject(LEFT, MoveAction.LEFT, level.getTheTank());
-        inputController.mapKeyToActionObject(A, MoveAction.LEFT, level.getTheTank());
+        inputController1.mapKeyToActionObject(UP, MoveAction.UP);
+        inputController1.mapKeyToActionObject(W, MoveAction.UP);
+        inputController1.mapKeyToActionObject(DOWN, MoveAction.DOWN);
+        inputController1.mapKeyToActionObject(S, MoveAction.DOWN);
+        inputController1.mapKeyToActionObject(RIGHT, MoveAction.RIGHT);
+        inputController1.mapKeyToActionObject(D, MoveAction.RIGHT);
+        inputController1.mapKeyToActionObject(LEFT, MoveAction.LEFT);
+        inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
     }
 
     @Override
@@ -57,8 +63,10 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        for (Map.Entry<Action, GameObject> action : inputController.getActions()) {
-            action.getKey().apply(action.getValue());
+        for (Controller controller : controllers) {
+            for (Action action : controller.getActions().getValue()) {
+                action.apply(controller.getActions().getKey());
+            }
         }
 
         level.updateState(deltaTime);

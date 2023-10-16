@@ -7,10 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CollisionHandler {
+    private final int width;
+    private final int hight;
     private final List<HasCollision> collisionObjects = new ArrayList<>();
     private final HashSet<GridPoint2> occupiedPoints = new HashSet<>();
 
-    public CollisionHandler() {
+    public CollisionHandler(int hight, int width) {
+        this.width = width;
+        this.hight = hight;
     }
 
     public void add(HasCollision object) {
@@ -26,6 +30,10 @@ public class CollisionHandler {
     }
 
     public boolean isFree(GridPoint2 pointToCheck) {
+        if (pointToCheck.x > width - 1 || pointToCheck.y > hight - 1
+        || pointToCheck.x < 0 || pointToCheck.y < 0) {
+            return false;
+        }
         updateMap();
         return !occupiedPoints.contains(pointToCheck);
     }
