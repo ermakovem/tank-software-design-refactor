@@ -17,15 +17,15 @@ public class GameLevel {
     public GameLevel() {}
 
     //if we only use LevelGenerator that may be protected
-    public void add(GameObject o) {
-        //temporary
-        if (o instanceof Tank) {
-            theOnlyTank = (Tank) o;
-        }
+    public boolean tryAdd(GameObject o) {
 
-
+        //we check if the point is already occupied
         if (o instanceof HasCollision) {
-            collisionHandler.add((HasCollision) o);
+            if (collisionHandler.isFree(((HasCollision) o).getCoordinates())) {
+                collisionHandler.add((HasCollision) o);
+            } else {
+                return false;
+            }
         }
         if (o instanceof CanMove) {
             ((CanMove) o).addCollisionHandler(collisionHandler);
@@ -34,6 +34,13 @@ public class GameLevel {
             levelListener.addObject(o);
         }
         gameObjects.add(o);
+
+        //temporary
+        if (o instanceof Tank) {
+            theOnlyTank = (Tank) o;
+        }
+
+        return true;
     }
 
     public void updateState(float deltaTime) {

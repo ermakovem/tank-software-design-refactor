@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.test;
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.Test;
 import ru.mipt.bit.platformer.Action;
+import ru.mipt.bit.platformer.MoveAction;
 import ru.mipt.bit.platformer.logic.GameLevel;
 import ru.mipt.bit.platformer.logic.Obstacle;
 import ru.mipt.bit.platformer.logic.Tank;
@@ -19,13 +20,13 @@ class GameLevelandCollisionHandlerTest {
         Tank tank1 = new Tank(tank1Coord, 1.0f);
         Tank tank2 = new Tank(tank2Coord, 1.0f);
         Obstacle tree = new Obstacle(obstacleCoord);
-        Action a = Action.UP;
-        Action b = Action.RIGHT;
-        Action c = Action.DOWN;
+        Action a = MoveAction.UP;
+        Action b = MoveAction.RIGHT;
+        Action c = MoveAction.DOWN;
 
-        level.add(tank1);
-        level.add(tank2);
-        level.add(tree);
+        level.tryAdd(tank1);
+        level.tryAdd(tank2);
+        level.tryAdd(tree);
 
         //move to occupied point
         a.apply(tank1);

@@ -8,7 +8,7 @@ import java.util.*;
 public class InputController {
     private final HashMap<Integer, Map.Entry<Action, GameObject>> keyToActionGameObject = new HashMap<>();
     //there is no pair in java :( Map.Entry<R, L> is analog.
-    //so that structure defines key, action and who gets that action
+    //so that structure defines (action; who gets that action)
 
     public InputController() {}
 

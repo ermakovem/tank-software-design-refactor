@@ -1,8 +1,12 @@
-package ru.mipt.bit.platformer.logic;
+package ru.mipt.bit.platformer;
 
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.graphics.LevelListenerGraphics;
+import ru.mipt.bit.platformer.logic.GameLevel;
+import ru.mipt.bit.platformer.logic.LevelListener;
+import ru.mipt.bit.platformer.logic.Obstacle;
+import ru.mipt.bit.platformer.logic.Tank;
 
 
 import java.io.*;
@@ -10,41 +14,44 @@ import java.util.*;
 
 import static java.lang.Math.abs;
 
-public class GameLevelGenerator extends GameLevel {
-    //idk how to get width and height from config
-    // and they probably have to also/only be in collision handler
+//не понял зачем нужен интрефейс левел генератор и левелинфо
+public class LevelGenerator {
     private final int tilesWidth = 10;
     private final int tilesHeight = 8;
-    public GameLevelGenerator(int amountOfTrees, LevelListenerGraphics levelListenerGraphics) {
+    GameLevel level = new GameLevel();
+    public LevelGenerator() {}
+    public LevelGenerator(LevelListener... levelListeners) {
+        for (LevelListener levelListener : levelListeners) {
+            level.addLevelListener(levelListener);
+        }
+    }
+
+
+    public GameLevel generateRandom(int amountOfTrees) {
         if (amountOfTrees + 1 > tilesHeight * tilesWidth) {
-            throw new IllegalArgumentException("in class GameLevelGenerator in random GameLevelGenerator " +
-                    "amount of GameObjects exceed map capacity");
+            throw new IllegalArgumentException("amount of trees > map capacity");
         }
 
-        addLevelListener(levelListenerGraphics);
-
-        add(new Tank(getRandPoint(), 0.4f));
+        level.tryAdd(new Tank(getRandPoint(), 0.4f));
 
         while (amountOfTrees > 0) {
             GridPoint2 randPoint = getRandPoint();
-            if (collisionHandler.isFree(randPoint)) {
-                add(new Obstacle(randPoint));
+            if (level.tryAdd(new Obstacle(randPoint))) {
                 amountOfTrees--;
             }
         }
+        return level;
     }
 
     private GridPoint2 getRandPoint() {
         Random random = new Random();
         return new GridPoint2(abs(random.nextInt() % tilesWidth), abs(random.nextInt() % tilesHeight));
     }
-    public GameLevelGenerator(String pathToMapFile, LevelListenerGraphics levelListenerGraphics) {
-        addLevelListener(levelListenerGraphics);
+    public GameLevel generatePath(String pathToMapFile) {
 
         List<Integer> objectsMap = new ArrayList<>();
 
         try {
-
             FileReader reader = new FileReader(pathToMapFile);
             for (int read = reader.read(); read != -1; read = reader.read()) {
                 objectsMap.add(read);
@@ -52,12 +59,11 @@ public class GameLevelGenerator extends GameLevel {
             parseObjectsMap(objectsMap);
 
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("in class GameLevelGenerator in path GameLevelGenerator " +
-                    "path doesn't contain the file");
+            throw new IllegalArgumentException("exception in creating of FileReader");
         } catch (IOException e) {
-            throw new IllegalArgumentException("in class GameLevelGenerator in path GameLevelGenerator " +
-                    "couldn't read next char");
+            throw new IllegalArgumentException("exception in read");
         }
+        return level;
     }
 
     //contract: tank is 'X'; obstacle is 'T'; spare space is '_';
@@ -67,12 +73,12 @@ public class GameLevelGenerator extends GameLevel {
             switch (objectsMap.get(i)) {
                 case (int)'X':
                 {
-                    add(new Tank(new GridPoint2(w++, h), 0.4f));
+                    level.tryAdd(new Tank(new GridPoint2(w++, h), 0.4f));
                     break;
                 }
                 case (int)'T':
                 {
-                    add(new Obstacle(new GridPoint2(w++, h)));
+                    level.tryAdd(new Obstacle(new GridPoint2(w++, h)));
                     break;
                 }
                 case (int)'_':
