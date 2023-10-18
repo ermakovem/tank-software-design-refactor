@@ -5,11 +5,11 @@ import ru.mipt.bit.platformer.logic.LevelListener;
 
 import java.util.ArrayList;
 
-public class LevelListenerControllers implements LevelListener {
+public class LevelListenerController implements LevelListener {
     // assigns new GameObject with first suitable controller.
     private final ArrayList<Controller> controllers;
 
-    public LevelListenerControllers(ArrayList<Controller> controllers) {
+    public LevelListenerController(ArrayList<Controller> controllers) {
         this.controllers = controllers;
     }
 

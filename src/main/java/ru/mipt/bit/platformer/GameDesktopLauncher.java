@@ -7,12 +7,10 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
 import ru.mipt.bit.platformer.graphics.LevelListenerGraphics;
 import ru.mipt.bit.platformer.logic.GameLevel;
-import ru.mipt.bit.platformer.logic.GameObject;
-import ru.mipt.bit.platformer.logic.Tank;
+import ru.mipt.bit.platformer.logic.LevelListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -20,42 +18,18 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
-
     private final ArrayList<Controller> controllers = new ArrayList<>();
 
-    public GameDesktopLauncher() {
-    }
+    public GameDesktopLauncher() {}
 
     @Override
     public void create() {
-        //inits controller for player tank
-        InputController inputController1 = new InputController();
-        initInputController1(inputController1);
-
-        controllers.add(inputController1);
-        controllers.add(new AIController());
-        controllers.add(new AIController());
-
         graphicsHandler = new GraphicsHandler("level.tmx");
-        LevelGenerator levelGenerator =
-                new LevelGenerator(new LevelListenerGraphics(graphicsHandler),
-                        new LevelListenerControllers(controllers));
 
-        //TODO: absolute -> relative
-        //level = levelGenerator.generatePath("/Programming/GitHub/tank-software-design-refactor" +
-        //        "/src/main/resources/objectsMap/objectsMap.txt");
-        level = levelGenerator.generateRandomWithEnemies(20, 1);
-    }
-    private void initInputController1(InputController inputController1) {
-        //maps keys to gameObject actions
-        inputController1.mapKeyToActionObject(UP, MoveAction.UP);
-        inputController1.mapKeyToActionObject(W, MoveAction.UP);
-        inputController1.mapKeyToActionObject(DOWN, MoveAction.DOWN);
-        inputController1.mapKeyToActionObject(S, MoveAction.DOWN);
-        inputController1.mapKeyToActionObject(RIGHT, MoveAction.RIGHT);
-        inputController1.mapKeyToActionObject(D, MoveAction.RIGHT);
-        inputController1.mapKeyToActionObject(LEFT, MoveAction.LEFT);
-        inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
+        LevelGenerateStrategy levelGenerator = new RandomWithEnemiesLevelGenerator(createLevelListeners(),
+                8, 10, 10, 2);
+
+        level = levelGenerator.generate();
     }
 
     @Override
@@ -73,6 +47,34 @@ public class GameDesktopLauncher implements ApplicationListener {
         level.updateState(deltaTime);
 
         graphicsHandler.render();
+    }
+
+    private ArrayList<LevelListener> createLevelListeners() {
+        ArrayList<LevelListener> levelListeners = new ArrayList<>();
+
+        createControllers();
+        LevelListenerController levelListenerController = new LevelListenerController(controllers);
+        LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
+
+        levelListeners.add(levelListenerController);
+        levelListeners.add(levelListenerGraphics);
+        return levelListeners;
+    }
+
+    private void createControllers() {
+        InputController inputController1 = new InputController();
+
+        inputController1.mapKeyToActionObject(UP, MoveAction.UP);
+        inputController1.mapKeyToActionObject(W, MoveAction.UP);
+        inputController1.mapKeyToActionObject(DOWN, MoveAction.DOWN);
+        inputController1.mapKeyToActionObject(S, MoveAction.DOWN);
+        inputController1.mapKeyToActionObject(RIGHT, MoveAction.RIGHT);
+        inputController1.mapKeyToActionObject(D, MoveAction.RIGHT);
+        inputController1.mapKeyToActionObject(LEFT, MoveAction.LEFT);
+        inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
+
+        controllers.add(inputController1);
+        controllers.add(new AIController());
     }
 
     private static void clearScreen() {
