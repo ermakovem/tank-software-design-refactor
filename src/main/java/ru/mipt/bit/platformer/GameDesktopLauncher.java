@@ -34,6 +34,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         controllers.add(inputController1);
         controllers.add(new AIController());
+        controllers.add(new AIController());
 
         graphicsHandler = new GraphicsHandler("level.tmx");
         LevelGenerator levelGenerator =

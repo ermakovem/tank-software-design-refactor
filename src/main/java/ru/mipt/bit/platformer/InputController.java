@@ -2,17 +2,15 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.logic.Tank;
 
 import java.util.*;
 
 public class InputController implements Controller {
     private final HashMap<Integer, HashSet<Action>> keyToAction = new HashMap<>();
     private GameObject gameObject;
-    //there is no pair in java :( Map.Entry<R, L> is analog.
-    //so that structure defines (action; who gets that action)
 
-    public InputController() {
-    }
+    public InputController() {}
 
     public void mapKeyToActionObject(Integer key, Action action) {
         if (!keyToAction.containsKey(key)) {
@@ -22,13 +20,26 @@ public class InputController implements Controller {
     }
 
     @Override
-    public void addGameObject(GameObject gameObject) {
-        this.gameObject = gameObject;
+    public boolean trySetGameObject(GameObject gameObject) {
+        //if it is player tank
+        if (gameObject instanceof Tank && ((Tank)gameObject).isPlayer()) {
+            //and there are no GameObject yet
+            if (this.gameObject == null) {
+                this.gameObject = gameObject;
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Map.Entry<GameObject, ArrayList<Action>> getActions() {//returns all actions that have happened during checking
+    public Map.Entry<GameObject, ArrayList<Action>> getActions() {
         Map.Entry<GameObject, ArrayList<Action>> gameToObjectActions =
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
+
+        if (gameObject == null) {
+            return gameToObjectActions;
+        }
+
         for (Integer key : keyToAction.keySet()) {
             if (Gdx.input.isKeyPressed(key)) {
                 for (Action action : keyToAction.get(key)) {

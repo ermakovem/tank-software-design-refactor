@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer;
 
 import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.logic.Tank;
 
 import java.util.*;
 
@@ -11,8 +12,16 @@ public class AIController implements Controller{
     public AIController() {}
 
     @Override
-    public void addGameObject(GameObject gameObject) {
-        this.gameObject = gameObject;
+    public boolean trySetGameObject(GameObject gameObject) {
+        //if it is an AI tank
+        if (gameObject instanceof Tank && !((Tank)gameObject).isPlayer()) {
+            //and there are no GameObject yet
+            if (this.gameObject == null) {
+                this.gameObject = gameObject;
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -20,6 +29,10 @@ public class AIController implements Controller{
         Map.Entry<GameObject, ArrayList<Action>> gameObjectToActions =
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
         Action moveAction;
+
+        if (gameObject == null) {
+            return gameObjectToActions;
+        }
 
         Random random = new Random();
         int direction = abs(random.nextInt() % 4);
