@@ -52,25 +52,21 @@ public class PathLevelGenerator implements LevelGenerateStrategy {
     //contract: tank is 'X'; obstacle is 'T'; spare space is '_';
     private void parseObjectsMap(List<Integer> objectsMap, GameLevel gameLevel) {
         int h = 0, w = 0;
-        for (int i = 0; i < objectsMap.size(); i++) {
-            switch (objectsMap.get(i)) {
-                case (int)'X':
-                {
+        for (Integer character : objectsMap) {
+            switch (character) {
+                case (int) 'X': {
                     gameLevel.add(new Tank(new GridPoint2(w++, h), 0.4f));
                     break;
                 }
-                case (int)'T':
-                {
+                case (int) 'T': {
                     gameLevel.add(new Obstacle(new GridPoint2(w++, h)));
                     break;
                 }
-                case (int)'_':
-                {
+                case (int) '_': {
                     w++;
                     break;
                 }
-                case 13:
-                {
+                case 13: {
                     h++;
                     w = 0;
                     break;

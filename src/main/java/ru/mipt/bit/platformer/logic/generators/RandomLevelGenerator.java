@@ -3,7 +3,6 @@ package ru.mipt.bit.platformer.logic.generators;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.logic.CollisionHandler;
 import ru.mipt.bit.platformer.logic.GameLevel;
-import ru.mipt.bit.platformer.logic.generators.LevelGenerateStrategy;
 import ru.mipt.bit.platformer.logic.listeners.LevelListener;
 import ru.mipt.bit.platformer.logic.objects.GameObject;
 import ru.mipt.bit.platformer.logic.objects.Obstacle;

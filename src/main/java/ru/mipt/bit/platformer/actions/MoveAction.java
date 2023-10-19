@@ -10,7 +10,7 @@ public enum MoveAction implements Action {
     RIGHT(new GridPoint2(1, 0)),
     LEFT(new GridPoint2(-1, 0));
 
-    GridPoint2 vector = new GridPoint2();
+    private final GridPoint2 vector;
 
     MoveAction(GridPoint2 vector) {
         this.vector = vector;
