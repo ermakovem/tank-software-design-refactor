@@ -1,8 +1,8 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.actions;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.logic.CanMove;
-import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.logic.objects.CanMove;
+import ru.mipt.bit.platformer.logic.objects.GameObject;
 
 public enum MoveAction implements Action {
     UP(new GridPoint2(0, 1)),
@@ -15,7 +15,6 @@ public enum MoveAction implements Action {
     MoveAction(GridPoint2 vector) {
         this.vector = vector;
     }
-
 
     @Override
     public void apply(GameObject gameObject) {

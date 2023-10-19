@@ -1,33 +1,39 @@
 package ru.mipt.bit.platformer.logic;
 
-import ru.mipt.bit.platformer.Action;
+import ru.mipt.bit.platformer.logic.listeners.LevelListener;
+import ru.mipt.bit.platformer.logic.listeners.LevelListenerCollision;
+import ru.mipt.bit.platformer.logic.objects.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameLevel {
     private final List<GameObject> gameObjects = new ArrayList<>();
-    protected final CollisionHandler collisionHandler = new CollisionHandler(8, 10);
+    //private final CollisionHandler collisionHandler;
     private final List<LevelListener> levelListeners = new ArrayList<>();
 
-    public GameLevel() {}
+    public GameLevel(int tilesHeight, int tilesWidth) {
+        addLevelListener(new LevelListenerCollision(new CollisionHandler(tilesHeight, tilesWidth)));
+    }
 
-    public boolean tryAdd(GameObject o) {
-        //we check if the point is already occupied
-        if (o instanceof HasCollision) {
-            if (collisionHandler.isFree(((HasCollision) o).getCoordinates())) {
-                collisionHandler.add((HasCollision) o);
-            } else {
-                return false;
-            }
-        }
-        if (o instanceof CanMove) {
-            ((CanMove) o).addCollisionHandler(collisionHandler);
-        }
+    public boolean add(GameObject o) {
+//        //TODO: migrate that inside a generator and make void
+//        if (o instanceof CanCollide) {
+//            if (collisionHandler.isFree(((CanCollide) o).getCoordinates())) {
+//                collisionHandler.add((CanCollide) o);
+//            } else {
+//                return false;
+//            }
+//        }
+//
+//        //should I use level listener to add to a collision handler?
+//        if (o instanceof CanMove) {
+//            ((CanMove) o).addCollisionHandler(collisionHandler);
+//        }
+
         for (LevelListener levelListener : levelListeners) {
             levelListener.addObject(o);
         }
-
         gameObjects.add(o);
 
         return true;

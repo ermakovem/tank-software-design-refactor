@@ -1,6 +1,7 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.controllers;
 
-import ru.mipt.bit.platformer.logic.GameObject;
+import ru.mipt.bit.platformer.actions.Action;
+import ru.mipt.bit.platformer.logic.objects.GameObject;
 
 import java.util.ArrayList;
 import java.util.Map;

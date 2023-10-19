@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.logic;
+package ru.mipt.bit.platformer.logic.objects;
 
 
 public interface GameObject {

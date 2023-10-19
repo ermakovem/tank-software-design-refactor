@@ -1,11 +1,12 @@
-package ru.mipt.bit.platformer.logic;
+package ru.mipt.bit.platformer.logic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.logic.CollisionHandler;
 
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
-public class Tank implements GameObject, CanMove, HasCollision{
+public class Tank implements GameObject, CanMove, CanCollide {
     private boolean isPlayer = true;
     private final GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;

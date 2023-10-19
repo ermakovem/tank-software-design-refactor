@@ -1,8 +1,8 @@
-package ru.mipt.bit.platformer.logic;
+package ru.mipt.bit.platformer.logic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
 
-public interface HasCollision {
+public interface CanCollide {
     GridPoint2 getDestinationCoordinates();
     GridPoint2 getCoordinates();
 }

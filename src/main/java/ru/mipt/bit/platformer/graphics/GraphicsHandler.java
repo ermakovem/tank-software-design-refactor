@@ -7,9 +7,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.logic.GameObject;
-import ru.mipt.bit.platformer.logic.Obstacle;
-import ru.mipt.bit.platformer.logic.Tank;
+import ru.mipt.bit.platformer.logic.objects.GameObject;
+import ru.mipt.bit.platformer.logic.objects.Obstacle;
+import ru.mipt.bit.platformer.logic.objects.Tank;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.ArrayList;

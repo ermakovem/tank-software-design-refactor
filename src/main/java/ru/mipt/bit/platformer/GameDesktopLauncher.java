@@ -4,13 +4,20 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import ru.mipt.bit.platformer.actions.Action;
+import ru.mipt.bit.platformer.actions.MoveAction;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
-import ru.mipt.bit.platformer.graphics.LevelListenerGraphics;
+import ru.mipt.bit.platformer.logic.listeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.logic.GameLevel;
-import ru.mipt.bit.platformer.logic.LevelListener;
+import ru.mipt.bit.platformer.logic.listeners.LevelListener;
+import ru.mipt.bit.platformer.logic.listeners.LevelListenerController;
+import ru.mipt.bit.platformer.controllers.AIController;
+import ru.mipt.bit.platformer.controllers.Controller;
+import ru.mipt.bit.platformer.controllers.InputController;
+import ru.mipt.bit.platformer.logic.generators.LevelGenerateStrategy;
+import ru.mipt.bit.platformer.logic.generators.RandomWithEnemiesLevelGenerator;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -26,10 +33,11 @@ public class GameDesktopLauncher implements ApplicationListener {
     public void create() {
         graphicsHandler = new GraphicsHandler("level.tmx");
 
-        LevelGenerateStrategy levelGenerator = new RandomWithEnemiesLevelGenerator(createLevelListeners(),
-                8, 10, 10, 2);
+        LevelGenerateStrategy randomWithEnemiesLevelGenerator =
+                new RandomWithEnemiesLevelGenerator(createLevelListeners(),
+                10, 8, 10, 2);
 
-        level = levelGenerator.generate();
+        level = randomWithEnemiesLevelGenerator.generate();
     }
 
     @Override

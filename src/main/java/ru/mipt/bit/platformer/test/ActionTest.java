@@ -2,10 +2,10 @@ package ru.mipt.bit.platformer.test;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.Action;
-import ru.mipt.bit.platformer.MoveAction;
-import ru.mipt.bit.platformer.logic.Obstacle;
-import ru.mipt.bit.platformer.logic.Tank;
+import ru.mipt.bit.platformer.actions.Action;
+import ru.mipt.bit.platformer.actions.MoveAction;
+import ru.mipt.bit.platformer.logic.objects.Obstacle;
+import ru.mipt.bit.platformer.logic.objects.Tank;
 
 import static org.junit.jupiter.api.Assertions.*;
 

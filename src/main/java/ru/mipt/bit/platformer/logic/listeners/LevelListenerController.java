@@ -1,7 +1,7 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.logic.listeners;
 
-import ru.mipt.bit.platformer.logic.GameObject;
-import ru.mipt.bit.platformer.logic.LevelListener;
+import ru.mipt.bit.platformer.controllers.Controller;
+import ru.mipt.bit.platformer.logic.objects.GameObject;
 
 import java.util.ArrayList;
 
