@@ -15,11 +15,11 @@ public class GameLevel {
         addLevelListener(new LevelListenerCollisionHandler(new CollisionHandler(tilesHeight, tilesWidth)));
     }
 
-    public void add(GameObject o) {
+    public void add(GameObject gameObject) {
         for (LevelListener levelListener : levelListeners) {
-            levelListener.add(o);
+            levelListener.add(gameObject);
         }
-        gameObjects.add(o);
+        gameObjects.add(gameObject);
     }
 
     public void updateState(float deltaTime) {

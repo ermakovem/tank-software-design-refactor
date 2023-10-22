@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import org.awesome.ai.Recommendation;
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
