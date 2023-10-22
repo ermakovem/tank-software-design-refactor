@@ -6,7 +6,7 @@ import ru.mipt.bit.platformer.logic.CollisionHandler;
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
-public class Tank implements GameObject, CanMove, CanCollide {
+public class Tank implements GameObject, CanMove, Collidable, CanShoot {
     private boolean isPlayer = true;
     private final GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;
@@ -69,6 +69,12 @@ public class Tank implements GameObject, CanMove, CanCollide {
             rotation = floor(atan2(vector.y, vector.x) * 180f / PI);
         }
     }
+
+    @Override
+    public void shoot() {
+        System.out.println("BOOOM");
+    }
+
     public boolean isPlayer() {
         return isPlayer;
     }

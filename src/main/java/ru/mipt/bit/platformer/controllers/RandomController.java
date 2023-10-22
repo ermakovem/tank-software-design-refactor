@@ -9,9 +9,9 @@ import java.util.*;
 
 import static java.lang.Math.abs;
 
-public class AIController implements Controller{
+public class RandomController implements Controller{
     private GameObject gameObject;
-    public AIController() {}
+    public RandomController() {}
 
     @Override
     public boolean trySetGameObject(GameObject gameObject) {

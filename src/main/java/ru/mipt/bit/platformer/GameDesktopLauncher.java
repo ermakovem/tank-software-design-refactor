@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import org.awesome.ai.Recommendation;
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
@@ -12,7 +11,7 @@ import ru.mipt.bit.platformer.logic.listeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.logic.GameLevel;
 import ru.mipt.bit.platformer.logic.listeners.LevelListener;
 import ru.mipt.bit.platformer.logic.listeners.LevelListenerController;
-import ru.mipt.bit.platformer.controllers.AIController;
+import ru.mipt.bit.platformer.controllers.RandomController;
 import ru.mipt.bit.platformer.controllers.Controller;
 import ru.mipt.bit.platformer.controllers.InputController;
 import ru.mipt.bit.platformer.logic.generators.LevelGenerateStrategy;
@@ -83,7 +82,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
 
         controllers.add(inputController1);
-        controllers.add(new AIController());
+        controllers.add(new RandomController());
     }
 
     private static void clearScreen() {

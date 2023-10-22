@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//WIP
+//TODO: redo
 public class PathLevelGenerator implements LevelGenerateStrategy {
     private final int tilesWidth;
     private final int tilesHeight;

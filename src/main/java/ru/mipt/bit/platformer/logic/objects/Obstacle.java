@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.logic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
 
-public class Obstacle implements GameObject, CanCollide {
+public class Obstacle implements GameObject, Collidable {
     private final GridPoint2 coordinates;
 
     public Obstacle(GridPoint2 coordinates) {
