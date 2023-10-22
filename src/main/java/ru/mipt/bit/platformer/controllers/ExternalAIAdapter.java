@@ -23,6 +23,13 @@ public class ExternalAIAdapter {
     private final List<org.awesome.ai.state.immovable.Obstacle> obstacles = new ArrayList<>();
     private Player player;
     private final List<Bot> bots = new ArrayList<>();
+    private final int tilesWidth;
+    private final int tilesHeight;
+
+    public ExternalAIAdapter(int tilesWidth, int tilesHeight) {
+        this.tilesHeight = tilesHeight;
+        this.tilesWidth = tilesWidth;
+    }
 
     public void add(GameObject gameObject) {
         //if it is player tank
@@ -43,7 +50,8 @@ public class ExternalAIAdapter {
                             ((Obstacle) gameObject).getCoordinates().y);
             obstacles.add(obstacle);
         }
-        gameState = new GameState.GameStateBuilder().bots(bots).player(player).obstacles(obstacles).build();
+        gameState = new GameState.GameStateBuilder().bots(bots).player(player)
+                        .obstacles(obstacles).levelWidth(tilesWidth).levelHeight(tilesHeight).build();
     }
 
     public Map.Entry<GameObject, ArrayList<ru.mipt.bit.platformer.actions.Action>> getActions(GameObject gameObject) {
@@ -51,6 +59,9 @@ public class ExternalAIAdapter {
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
 
         List<Recommendation> recommendations = ai.recommend(gameState);
+        if (recommendations.size() != 0) {
+            System.out.println("!= 0");
+        }
         for (Recommendation recommendation : recommendations) {
             if (actorToGameObject.get(recommendation.getActor()) == gameObject) {
                 gameToObjectActions.getValue().add(parseAction(recommendation.getAction()));

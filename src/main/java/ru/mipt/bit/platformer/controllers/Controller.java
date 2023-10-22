@@ -12,4 +12,5 @@ import java.util.Map;
 public interface Controller {
     boolean trySetGameObject(GameObject gameObject);
     Map.Entry<GameObject, ArrayList<Action>> getActions();
+    //void applyActions();
 }

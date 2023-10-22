@@ -11,12 +11,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ExternalAIController implements Controller {
-    private final AI ai = new NotRecommendingAI();
     private GameObject gameObject;
-    private final GameLevel gameLevel;
+    private final ExternalAIAdapter externalAIAdapter;
 
-    public ExternalAIController(GameLevel gameLevel) {
-        this.gameLevel = gameLevel;
+    public ExternalAIController(ExternalAIAdapter externalAIAdapter) {
+        this.externalAIAdapter = externalAIAdapter;
     }
 
     @Override
@@ -34,6 +33,6 @@ public class ExternalAIController implements Controller {
 
     @Override
     public Map.Entry<GameObject, ArrayList<Action>> getActions() {
-        return null;
+        return externalAIAdapter.getActions(gameObject);
     }
 }

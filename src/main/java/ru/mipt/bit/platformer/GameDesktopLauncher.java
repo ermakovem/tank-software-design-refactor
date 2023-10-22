@@ -6,14 +6,13 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
+import ru.mipt.bit.platformer.controllers.*;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
+import ru.mipt.bit.platformer.logic.listeners.LevelListenerExtAIAdapter;
 import ru.mipt.bit.platformer.logic.listeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.logic.GameLevel;
 import ru.mipt.bit.platformer.logic.listeners.LevelListener;
 import ru.mipt.bit.platformer.logic.listeners.LevelListenerController;
-import ru.mipt.bit.platformer.controllers.RandomController;
-import ru.mipt.bit.platformer.controllers.Controller;
-import ru.mipt.bit.platformer.controllers.InputController;
 import ru.mipt.bit.platformer.logic.generators.LevelGenerateStrategy;
 import ru.mipt.bit.platformer.logic.generators.RandomWithEnemiesLevelGenerator;
 
@@ -47,6 +46,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         for (Controller controller : controllers) {
+            //TODO: controller.applyActions();
             for (Action action : controller.getActions().getValue()) {
                 action.apply(controller.getActions().getKey());
             }
@@ -60,12 +60,30 @@ public class GameDesktopLauncher implements ApplicationListener {
     private ArrayList<LevelListener> createLevelListeners() {
         ArrayList<LevelListener> levelListeners = new ArrayList<>();
 
-        createControllers();
+        //createControllers();
+        InputController inputController1 = new InputController();
+        inputController1.mapKeyToActionObject(UP, MoveAction.UP);
+        inputController1.mapKeyToActionObject(W, MoveAction.UP);
+        inputController1.mapKeyToActionObject(DOWN, MoveAction.DOWN);
+        inputController1.mapKeyToActionObject(S, MoveAction.DOWN);
+        inputController1.mapKeyToActionObject(RIGHT, MoveAction.RIGHT);
+        inputController1.mapKeyToActionObject(D, MoveAction.RIGHT);
+        inputController1.mapKeyToActionObject(LEFT, MoveAction.LEFT);
+        inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
+
+        controllers.add(inputController1);
+        controllers.add(new RandomController());
+        ExternalAIAdapter externalAIAdapter = new ExternalAIAdapter(10, 8);
+        controllers.add(new ExternalAIController(externalAIAdapter));
+        //
+
         LevelListenerController levelListenerController = new LevelListenerController(controllers);
         LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
+        LevelListenerExtAIAdapter levelListenerExtAIAdapter = new LevelListenerExtAIAdapter(externalAIAdapter);
 
         levelListeners.add(levelListenerController);
         levelListeners.add(levelListenerGraphics);
+        levelListeners.add(levelListenerExtAIAdapter);
         return levelListeners;
     }
 
@@ -83,6 +101,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         controllers.add(inputController1);
         controllers.add(new RandomController());
+        controllers.add(new ExternalAIController(new ExternalAIAdapter(10, 8)));
     }
 
     private static void clearScreen() {

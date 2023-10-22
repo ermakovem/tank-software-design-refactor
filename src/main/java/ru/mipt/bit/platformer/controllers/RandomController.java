@@ -57,4 +57,33 @@ public class RandomController implements Controller{
         gameObjectToActions.getValue().add(moveAction);
         return gameObjectToActions;
     }
+
+    //@Override
+    public void applyActions() {
+        if (gameObject == null) {
+            return;
+        }
+
+        Action moveAction;
+        Random random = new Random();
+        int direction = abs(random.nextInt() % 4);
+        switch (direction) {
+            case 0:
+                moveAction = MoveAction.UP;
+                break;
+            case 1:
+                moveAction = MoveAction.RIGHT;
+                break;
+            case 2:
+                moveAction = MoveAction.DOWN;
+                break;
+            case 3:
+                moveAction = MoveAction.LEFT;
+                break;
+            default:
+                throw new IllegalArgumentException("Wrong direction");
+        }
+
+        moveAction.apply(gameObject);
+    }
 }
