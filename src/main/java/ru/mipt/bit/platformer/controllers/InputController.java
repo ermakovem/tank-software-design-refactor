@@ -21,7 +21,7 @@ public class InputController implements Controller {
     }
 
     @Override
-    public boolean trySetGameObject(GameObject gameObject) {
+    public boolean trySet(GameObject gameObject) {
         //if it is player tank
         if (gameObject instanceof Tank && ((Tank)gameObject).isPlayer()) {
             //and there are no GameObject yet

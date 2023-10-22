@@ -16,7 +16,7 @@ public class LevelListenerController implements LevelListener {
     @Override
     public void add(GameObject gameObject) {
         for (Controller controller : controllers) {
-            if (controller.trySetGameObject(gameObject)) {
+            if (controller.trySet(gameObject)) {
                 break;
             }
         }

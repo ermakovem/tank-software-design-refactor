@@ -14,7 +14,7 @@ public class RandomController implements Controller{
     public RandomController() {}
 
     @Override
-    public boolean trySetGameObject(GameObject gameObject) {
+    public boolean trySet(GameObject gameObject) {
         //if it is an AI tank
         if (gameObject instanceof Tank && !((Tank)gameObject).isPlayer()) {
             //and there are no GameObject yet

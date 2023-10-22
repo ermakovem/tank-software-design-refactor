@@ -60,9 +60,7 @@ public class ExternalAIAdapter {
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
 
         List<Recommendation> recommendations = ai.recommend(gameState);
-        if (recommendations.size() != 0) {
-            System.out.println("!= 0");
-        }
+
         for (Recommendation recommendation : recommendations) {
             if (actorToGameObject.get(recommendation.getActor()) == gameObject) {
                 gameToObjectActions.getValue().add(parseAction(recommendation.getAction()));
