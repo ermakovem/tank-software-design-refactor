@@ -17,7 +17,7 @@ import ru.mipt.bit.platformer.logic.objects.Tank;
 import java.util.*;
 
 public class ExternalAIAdapter {
-    private final AI ai = new NotRecommendingAI();
+    private final AI ai;
     private GameState gameState = new GameState.GameStateBuilder().build();
     private final HashMap<Actor, GameObject> actorToGameObject = new HashMap<>();
     private final List<org.awesome.ai.state.immovable.Obstacle> obstacles = new ArrayList<>();
@@ -26,9 +26,10 @@ public class ExternalAIAdapter {
     private final int tilesWidth;
     private final int tilesHeight;
 
-    public ExternalAIAdapter(int tilesWidth, int tilesHeight) {
+    public ExternalAIAdapter(int tilesWidth, int tilesHeight, AI ai) {
         this.tilesHeight = tilesHeight;
         this.tilesWidth = tilesWidth;
+        this.ai = ai;
     }
 
     public void add(GameObject gameObject) {

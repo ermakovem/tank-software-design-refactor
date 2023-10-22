@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import org.awesome.ai.strategy.NotRecommendingAI;
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
 import ru.mipt.bit.platformer.controllers.*;
@@ -58,9 +59,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     }
 
     private ArrayList<LevelListener> createLevelListeners() {
-        ArrayList<LevelListener> levelListeners = new ArrayList<>();
-
-        //createControllers();
+        //createControllers
         InputController inputController1 = new InputController();
         inputController1.mapKeyToActionObject(UP, MoveAction.UP);
         inputController1.mapKeyToActionObject(W, MoveAction.UP);
@@ -73,10 +72,11 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         controllers.add(inputController1);
         controllers.add(new RandomController());
-        ExternalAIAdapter externalAIAdapter = new ExternalAIAdapter(10, 8);
+        ExternalAIAdapter externalAIAdapter = new ExternalAIAdapter(10, 8, new NotRecommendingAI());
         controllers.add(new ExternalAIController(externalAIAdapter));
-        //
 
+        //createLevelListeners
+        ArrayList<LevelListener> levelListeners = new ArrayList<>();
         LevelListenerController levelListenerController = new LevelListenerController(controllers);
         LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
         LevelListenerExtAIAdapter levelListenerExtAIAdapter = new LevelListenerExtAIAdapter(externalAIAdapter);
@@ -85,23 +85,6 @@ public class GameDesktopLauncher implements ApplicationListener {
         levelListeners.add(levelListenerGraphics);
         levelListeners.add(levelListenerExtAIAdapter);
         return levelListeners;
-    }
-
-    private void createControllers() {
-        InputController inputController1 = new InputController();
-
-        inputController1.mapKeyToActionObject(UP, MoveAction.UP);
-        inputController1.mapKeyToActionObject(W, MoveAction.UP);
-        inputController1.mapKeyToActionObject(DOWN, MoveAction.DOWN);
-        inputController1.mapKeyToActionObject(S, MoveAction.DOWN);
-        inputController1.mapKeyToActionObject(RIGHT, MoveAction.RIGHT);
-        inputController1.mapKeyToActionObject(D, MoveAction.RIGHT);
-        inputController1.mapKeyToActionObject(LEFT, MoveAction.LEFT);
-        inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
-
-        controllers.add(inputController1);
-        controllers.add(new RandomController());
-        controllers.add(new ExternalAIController(new ExternalAIAdapter(10, 8)));
     }
 
     private static void clearScreen() {
