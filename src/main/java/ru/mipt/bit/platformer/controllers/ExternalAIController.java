@@ -31,8 +31,14 @@ public class ExternalAIController implements Controller {
         return false;
     }
 
-    @Override
-    public Map.Entry<GameObject, ArrayList<Action>> getActions() {
+    private Map.Entry<GameObject, ArrayList<Action>> getActions() {
         return externalAIAdapter.getActions(gameObject);
+    }
+
+    @Override
+    public void applyActions() {
+        for (Action action : getActions().getValue()) {
+            action.apply(getActions().getKey());
+        }
     }
 }

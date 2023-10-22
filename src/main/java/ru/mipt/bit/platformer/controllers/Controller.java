@@ -11,6 +11,6 @@ import java.util.Map;
 // 3. Method getActions() returns GameObject and array of Actions for the GameObject.
 public interface Controller {
     boolean trySetGameObject(GameObject gameObject);
-    Map.Entry<GameObject, ArrayList<Action>> getActions();
-    //void applyActions();
+    //Map.Entry<GameObject, ArrayList<Action>> getActions();
+    void applyActions();
 }

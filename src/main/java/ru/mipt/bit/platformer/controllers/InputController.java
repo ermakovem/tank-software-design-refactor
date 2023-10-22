@@ -33,7 +33,7 @@ public class InputController implements Controller {
         return false;
     }
 
-    public Map.Entry<GameObject, ArrayList<Action>> getActions() {
+    private Map.Entry<GameObject, ArrayList<Action>> getActions() {
         Map.Entry<GameObject, ArrayList<Action>> gameToObjectActions =
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
 
@@ -49,5 +49,12 @@ public class InputController implements Controller {
             }
         }
         return gameToObjectActions;
+    }
+
+    @Override
+    public void applyActions() {
+        for (Action action : getActions().getValue()) {
+            action.apply(getActions().getKey());
+        }
     }
 }

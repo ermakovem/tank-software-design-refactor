@@ -34,7 +34,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         graphicsHandler = new GraphicsHandler("level.tmx");
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
-                new RandomWithEnemiesLevelGenerator(createLevelListeners(),
+                new RandomWithEnemiesLevelGenerator(createLevelListenersAndControllers(),
                 10, 8, 10, 2);
 
         level = randomWithEnemiesLevelGenerator.generate();
@@ -47,10 +47,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         for (Controller controller : controllers) {
-            //TODO: controller.applyActions();
-            for (Action action : controller.getActions().getValue()) {
-                action.apply(controller.getActions().getKey());
-            }
+            controller.applyActions();
         }
 
         level.updateState(deltaTime);
@@ -58,7 +55,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         graphicsHandler.render();
     }
 
-    private ArrayList<LevelListener> createLevelListeners() {
+    private ArrayList<LevelListener> createLevelListenersAndControllers() {
         //createControllers
         InputController inputController1 = new InputController();
         inputController1.mapKeyToActionObject(UP, MoveAction.UP);

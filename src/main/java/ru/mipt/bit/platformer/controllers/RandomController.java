@@ -26,8 +26,7 @@ public class RandomController implements Controller{
         return false;
     }
 
-    @Override
-    public Map.Entry<GameObject, ArrayList<Action>> getActions() {
+    private Map.Entry<GameObject, ArrayList<Action>> getActions() {
         Map.Entry<GameObject, ArrayList<Action>> gameObjectToActions =
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
         Action moveAction;
@@ -58,32 +57,10 @@ public class RandomController implements Controller{
         return gameObjectToActions;
     }
 
-    //@Override
+    @Override
     public void applyActions() {
-        if (gameObject == null) {
-            return;
+        for (Action action : getActions().getValue()) {
+            action.apply(getActions().getKey());
         }
-
-        Action moveAction;
-        Random random = new Random();
-        int direction = abs(random.nextInt() % 4);
-        switch (direction) {
-            case 0:
-                moveAction = MoveAction.UP;
-                break;
-            case 1:
-                moveAction = MoveAction.RIGHT;
-                break;
-            case 2:
-                moveAction = MoveAction.DOWN;
-                break;
-            case 3:
-                moveAction = MoveAction.LEFT;
-                break;
-            default:
-                throw new IllegalArgumentException("Wrong direction");
-        }
-
-        moveAction.apply(gameObject);
     }
 }
