@@ -10,6 +10,7 @@ public class LevelListenerGraphics implements LevelListener {
     public LevelListenerGraphics(GraphicsHandler graphicsHandler) {
         this.graphicsHandler = graphicsHandler;
     }
+
     @Override
     public void add(GameObject gameObject) {
         graphicsHandler.addGraphicsObjects(gameObject);

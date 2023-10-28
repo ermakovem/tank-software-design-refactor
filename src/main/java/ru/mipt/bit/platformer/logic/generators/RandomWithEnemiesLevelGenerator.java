@@ -40,7 +40,7 @@ public class RandomWithEnemiesLevelGenerator implements LevelGenerateStrategy {
         }
 
         //refresh at each .generate()
-        gameLevel = new GameLevel(tilesHeight, tilesWidth);
+        gameLevel = new GameLevel();
         collisionHandler = new CollisionHandler(tilesHeight, tilesWidth);
         //readd LevelListeners
         for (LevelListener levelListener : levelListeners) {

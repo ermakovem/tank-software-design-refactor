@@ -6,16 +6,16 @@ import ru.mipt.bit.platformer.logic.objects.GameObject;
 import ru.mipt.bit.platformer.logic.objects.GameObjectState;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class GameLevel {
-    private final List<GameObject> gameObjects = new ArrayList<>();
-    private final List<LevelListener> levelListeners = new ArrayList<>();
-    private final List<GameObject> toBeRemoved = new ArrayList<>();
+    private final Collection<GameObject> gameObjects = new ArrayList<>();
+    private final Collection<LevelListener> levelListeners = new ArrayList<>();
+    private final Collection<GameObject> toBeRemoved = new ArrayList<>();
+    private final Collection<GameObject> toBeAdded = new ArrayList<>();
 
-    public GameLevel(int tilesHeight, int tilesWidth) {
-        addLevelListener(new LevelListenerCollisionHandler(new CollisionHandler(tilesHeight, tilesWidth)));
-    }
+    public GameLevel() {}
 
     public void add(GameObject gameObject) {
         for (LevelListener levelListener : levelListeners) {
@@ -27,11 +27,11 @@ public class GameLevel {
     public void updateState(float deltaTime) {
         for (GameObject gameObject : gameObjects) {
             gameObject.updateState(deltaTime);
+            getNewObjects(gameObject);
             parseState(gameObject);
         }
-        for (GameObject gameObject : toBeRemoved) {
-            gameObjects.remove(gameObject);
-        }
+        handleToBeRemoved();
+        handleToBeAdded();
     }
 
     private void parseState(GameObject gameObject) {
@@ -50,6 +50,26 @@ public class GameLevel {
         for (LevelListener levelListener : levelListeners) {
             levelListener.parseState(gameObject);
         }
+    }
+
+    private void getNewObjects(GameObject gameObject) {
+        for (GameObject createdGameObject : gameObject.getCreatedGameObjects()) {
+            toBeAdded.add(createdGameObject);
+        }
+    }
+
+    private void handleToBeRemoved() {
+        for (GameObject gameObject : toBeRemoved) {
+            gameObjects.remove(gameObject);
+        }
+        toBeRemoved.clear();
+    }
+
+    private void handleToBeAdded() {
+        for (GameObject gameObject : toBeAdded) {
+            add(gameObject);
+        }
+        toBeAdded.clear();
     }
 
     public void addLevelListener(LevelListener levelListener) {

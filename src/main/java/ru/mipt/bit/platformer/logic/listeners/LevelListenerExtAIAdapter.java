@@ -16,6 +16,6 @@ public class LevelListenerExtAIAdapter implements LevelListener {
 
     @Override
     public void parseState(GameObject gameObject) {
-
+        //externalAIAdapter.remove(gameObject);
     }
 }

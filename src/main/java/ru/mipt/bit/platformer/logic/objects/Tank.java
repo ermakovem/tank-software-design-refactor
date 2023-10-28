@@ -3,10 +3,14 @@ package ru.mipt.bit.platformer.logic.objects;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.logic.CollisionHandler;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 public class Tank implements GameObject, CanMove, Collidable, CanShoot {
+    Collection<GameObject> createdGameObjects = new ArrayList<>();
     private boolean isPlayer = true;
     private final GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;
@@ -45,6 +49,11 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
     }
 
     @Override
+    public Collection<GameObject> getCreatedGameObjects() {
+        return createdGameObjects;
+    }
+
+    @Override
     public GridPoint2 getCoordinates() {
         return coordinates;
     }
@@ -80,8 +89,7 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
 
     @Override
     public void shoot() {
-        state = GameObjectState.DEAD;
-        System.out.println("BOOOM");
+        // createdGameObjects.add(new Projectile(rotation, coordinate));
     }
 
     public boolean isPlayer() {

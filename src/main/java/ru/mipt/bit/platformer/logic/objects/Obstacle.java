@@ -2,6 +2,9 @@ package ru.mipt.bit.platformer.logic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class Obstacle implements GameObject, Collidable {
     private final GridPoint2 coordinates;
     private final GameObjectState state;
@@ -28,5 +31,10 @@ public class Obstacle implements GameObject, Collidable {
     @Override
     public GameObjectState getState() {
         return state;
+    }
+
+    @Override
+    public Collection<GameObject> getCreatedGameObjects() {
+        return new ArrayList<>();
     }
 }

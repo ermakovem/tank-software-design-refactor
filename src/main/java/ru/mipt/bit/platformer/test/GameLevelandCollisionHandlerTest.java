@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameLevelandCollisionHandlerTest {
     @Test
     void testCollisionHandler() {
-        GameLevel level = new GameLevel(8, 10);
+        GameLevel level = new GameLevel();
         GridPoint2 tank1Coord = new GridPoint2(0, 0);
         GridPoint2 tank2Coord = new GridPoint2(1, 0);
         GridPoint2 obstacleCoord = new GridPoint2(0, 1);

@@ -29,7 +29,7 @@ public class PathLevelGenerator implements LevelGenerateStrategy {
 
     @Override
     public GameLevel generate() {
-        GameLevel gameLevel = new GameLevel(tilesHeight, tilesWidth);
+        GameLevel gameLevel = new GameLevel();
         List<Integer> objectsMap = new ArrayList<>();
 
         for (LevelListener levelListener : levelListeners) {

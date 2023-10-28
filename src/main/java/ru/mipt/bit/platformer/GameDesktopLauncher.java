@@ -8,6 +8,8 @@ import ru.mipt.bit.platformer.actions.MoveAction;
 import ru.mipt.bit.platformer.actions.ShootAction;
 import ru.mipt.bit.platformer.controllers.*;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
+import ru.mipt.bit.platformer.logic.CollisionHandler;
+import ru.mipt.bit.platformer.logic.listeners.LevelListenerCollisionHandler;
 import ru.mipt.bit.platformer.logic.listeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.logic.GameLevel;
 import ru.mipt.bit.platformer.logic.listeners.LevelListener;
@@ -21,6 +23,9 @@ import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 public class GameDesktopLauncher implements ApplicationListener {
+    private final int tilesHeight = 8;
+    private final int tilesWidth = 10;
+
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
     private ControllersHandler controllers;
@@ -33,7 +38,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
                 new RandomWithEnemiesLevelGenerator(createLevelListenersAndControllers(),
-                10, 8, 10, 2);
+                tilesWidth, tilesHeight, 10, 2);
 
         level = randomWithEnemiesLevelGenerator.generate();
     }
@@ -71,9 +76,12 @@ public class GameDesktopLauncher implements ApplicationListener {
         ArrayList<LevelListener> levelListeners = new ArrayList<>();
         LevelListenerController levelListenerController = new LevelListenerController(controllers);
         LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
+        LevelListenerCollisionHandler levelListenerCollisionHandler =
+                new LevelListenerCollisionHandler(new CollisionHandler(tilesHeight, tilesWidth));
 
         levelListeners.add(levelListenerController);
         levelListeners.add(levelListenerGraphics);
+        levelListeners.add(levelListenerCollisionHandler);
         return levelListeners;
     }
 
