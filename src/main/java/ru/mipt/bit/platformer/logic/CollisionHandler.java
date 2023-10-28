@@ -12,6 +12,7 @@ public class CollisionHandler {
     private final int tilesWidth;
     private final int tilesHeight;
     private final List<Collidable> collisionObjects = new ArrayList<>();
+    private final HashSet<GridPoint2> deadGameObjects = new HashSet<>();
     private final HashSet<GridPoint2> occupiedPoints = new HashSet<>();
 
     public CollisionHandler(int tilesHeight, int tilesWidth) {
@@ -27,6 +28,9 @@ public class CollisionHandler {
 
     private void updateMap() {
         occupiedPoints.clear();
+        for (GridPoint2 deadGameObject : deadGameObjects) {
+            occupiedPoints.add(deadGameObject);
+        }
         for (Collidable object : collisionObjects) {
             occupiedPoints.add(object.getCoordinates());
             occupiedPoints.add(object.getDestinationCoordinates());
@@ -40,5 +44,23 @@ public class CollisionHandler {
         }
         updateMap();
         return !occupiedPoints.contains(pointToCheck);
+    }
+
+    public void parseState(GameObject gameObject) {
+        switch (gameObject.getState()) {
+            case ALIVE: {
+                break;
+            }
+            case DEAD: {
+                if (gameObject instanceof Collidable) {
+                    deadGameObjects.add(((Collidable) gameObject).getCoordinates());
+                    collisionObjects.remove(gameObject);
+                }
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("unknown GameObjectState");
+            }
+        }
     }
 }

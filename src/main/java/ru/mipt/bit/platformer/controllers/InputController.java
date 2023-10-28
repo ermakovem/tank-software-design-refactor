@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.controllers;
 import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.logic.objects.GameObject;
+import ru.mipt.bit.platformer.logic.objects.GameObjectState;
 import ru.mipt.bit.platformer.logic.objects.Tank;
 
 import java.util.*;
@@ -10,10 +11,13 @@ import java.util.*;
 public class InputController implements Controller {
     private final HashMap<Integer, HashSet<Action>> keyToAction = new HashMap<>();
     private GameObject gameObject;
+    private ControllerState state;
 
-    public InputController() {}
+    public InputController() {
+        state = ControllerState.INIT;
+    }
 
-    public void mapKeyToActionObject(Integer key, Action action) {
+    public void mapKeyToAction(Integer key, Action action) {
         if (!keyToAction.containsKey(key)) {
             keyToAction.put(key, new HashSet<>());
         }
@@ -27,6 +31,7 @@ public class InputController implements Controller {
             //and there are no GameObject yet
             if (this.gameObject == null) {
                 this.gameObject = gameObject;
+                state = ControllerState.ACTIVE;
                 return true;
             }
         }
@@ -56,5 +61,29 @@ public class InputController implements Controller {
         for (Action action : getActions().getValue()) {
             action.apply(getActions().getKey());
         }
+    }
+
+    @Override
+    public void parseState(GameObject gameObject) {
+        if (gameObject != this.gameObject) {
+            throw new IllegalArgumentException("parsing state of wrong GameObject");
+        }
+        switch (gameObject.getState()) {
+            case DEAD: {
+                state = ControllerState.DEAD;
+                break;
+            }
+            case ALIVE: {
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("unknown GameObjectState");
+            }
+        }
+    }
+
+    @Override
+    public ControllerState getState() {
+        return state;
     }
 }

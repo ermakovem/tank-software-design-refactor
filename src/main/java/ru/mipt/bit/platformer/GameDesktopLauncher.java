@@ -4,12 +4,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import org.awesome.ai.strategy.NotRecommendingAI;
-import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
+import ru.mipt.bit.platformer.actions.ShootAction;
 import ru.mipt.bit.platformer.controllers.*;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
-import ru.mipt.bit.platformer.logic.listeners.LevelListenerExtAIAdapter;
 import ru.mipt.bit.platformer.logic.listeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.logic.GameLevel;
 import ru.mipt.bit.platformer.logic.listeners.LevelListener;
@@ -25,7 +23,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
-    private final ArrayList<Controller> controllers = new ArrayList<>();
+    private ControllersHandler controllers;
 
     public GameDesktopLauncher() {}
 
@@ -46,9 +44,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        for (Controller controller : controllers) {
-            controller.applyActions();
-        }
+        controllers.applyActions();
 
         level.updateState(deltaTime);
 
@@ -58,29 +54,26 @@ public class GameDesktopLauncher implements ApplicationListener {
     private ArrayList<LevelListener> createLevelListenersAndControllers() {
         //createControllers
         InputController inputController1 = new InputController();
-        inputController1.mapKeyToActionObject(UP, MoveAction.UP);
-        inputController1.mapKeyToActionObject(W, MoveAction.UP);
-        inputController1.mapKeyToActionObject(DOWN, MoveAction.DOWN);
-        inputController1.mapKeyToActionObject(S, MoveAction.DOWN);
-        inputController1.mapKeyToActionObject(RIGHT, MoveAction.RIGHT);
-        inputController1.mapKeyToActionObject(D, MoveAction.RIGHT);
-        inputController1.mapKeyToActionObject(LEFT, MoveAction.LEFT);
-        inputController1.mapKeyToActionObject(A, MoveAction.LEFT);
+        inputController1.mapKeyToAction(UP, MoveAction.UP);
+        inputController1.mapKeyToAction(W, MoveAction.UP);
+        inputController1.mapKeyToAction(DOWN, MoveAction.DOWN);
+        inputController1.mapKeyToAction(S, MoveAction.DOWN);
+        inputController1.mapKeyToAction(RIGHT, MoveAction.RIGHT);
+        inputController1.mapKeyToAction(D, MoveAction.RIGHT);
+        inputController1.mapKeyToAction(LEFT, MoveAction.LEFT);
+        inputController1.mapKeyToAction(A, MoveAction.LEFT);
+        inputController1.mapKeyToAction(SPACE, new ShootAction());
 
-        controllers.add(inputController1);
-        controllers.add(new RandomController());
-        ExternalAIAdapter externalAIAdapter = new ExternalAIAdapter(10, 8, new NotRecommendingAI());
-        controllers.add(new ExternalAIController(externalAIAdapter));
+        controllers = new ControllersHandler(inputController1,
+                new RandomController(), new RandomController());
 
         //createLevelListeners
         ArrayList<LevelListener> levelListeners = new ArrayList<>();
         LevelListenerController levelListenerController = new LevelListenerController(controllers);
         LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
-        LevelListenerExtAIAdapter levelListenerExtAIAdapter = new LevelListenerExtAIAdapter(externalAIAdapter);
 
         levelListeners.add(levelListenerController);
         levelListeners.add(levelListenerGraphics);
-        levelListeners.add(levelListenerExtAIAdapter);
         return levelListeners;
     }
 

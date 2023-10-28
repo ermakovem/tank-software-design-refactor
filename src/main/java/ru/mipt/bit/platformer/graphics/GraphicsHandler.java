@@ -72,4 +72,18 @@ public class GraphicsHandler {
             obstacleGraphicsList.add(obstacleGraphics);
         }
     }
+    public void parseState(GameObject gameObject) {
+        switch (gameObject.getState()) {
+            case DEAD: {
+                //change texture
+                break;
+            }
+            case ALIVE: {
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("unknown GameObjectState");
+            }
+        }
+    }
 }

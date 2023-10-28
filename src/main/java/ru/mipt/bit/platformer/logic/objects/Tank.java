@@ -13,9 +13,11 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
     private float movementProgress = 1f;
     private final float movementSpeed;
     private float rotation = 0f;
+    private GameObjectState state;
     private CollisionHandler collisionHandler = new CollisionHandler(10 , 8);
 
     public Tank(GridPoint2 coordinates, float movementSpeed, boolean isPlayer) {
+        state = GameObjectState.ALIVE;
         this.coordinates = coordinates;
         this.destinationCoordinates = new GridPoint2(coordinates);
         this.movementSpeed = movementSpeed;
@@ -23,6 +25,7 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
     }
 
     public Tank(GridPoint2 coordinates, float movementSpeed) {
+        state = GameObjectState.ALIVE;
         this.coordinates = coordinates;
         this.destinationCoordinates = new GridPoint2(coordinates);
         this.movementSpeed = movementSpeed;
@@ -34,6 +37,11 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
         if (isNotMoving()) {
             coordinates.set(destinationCoordinates);
         }
+    }
+
+    @Override
+    public GameObjectState getState() {
+        return state;
     }
 
     @Override
@@ -72,6 +80,7 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
 
     @Override
     public void shoot() {
+        state = GameObjectState.DEAD;
         System.out.println("BOOOM");
     }
 

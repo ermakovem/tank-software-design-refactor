@@ -11,7 +11,10 @@ import static java.lang.Math.abs;
 
 public class RandomController implements Controller{
     private GameObject gameObject;
-    public RandomController() {}
+    private ControllerState state;
+    public RandomController() {
+        state = ControllerState.INIT;
+    }
 
     @Override
     public boolean trySet(GameObject gameObject) {
@@ -20,6 +23,7 @@ public class RandomController implements Controller{
             //and there are no GameObject yet
             if (this.gameObject == null) {
                 this.gameObject = gameObject;
+                state = ControllerState.ACTIVE;
                 return true;
             }
         }
@@ -62,5 +66,29 @@ public class RandomController implements Controller{
         for (Action action : getActions().getValue()) {
             action.apply(getActions().getKey());
         }
+    }
+
+    @Override
+    public void parseState(GameObject gameObject) {
+        if (gameObject != this.gameObject) {
+            throw new IllegalArgumentException("parsing state of wrong GameObject");
+        }
+        switch (gameObject.getState()) {
+            case DEAD: {
+                state = ControllerState.DEAD;
+                break;
+            }
+            case ALIVE: {
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("unknown GameObjectState");
+            }
+        }
+    }
+
+    @Override
+    public ControllerState getState() {
+        return state;
     }
 }

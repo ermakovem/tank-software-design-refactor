@@ -9,4 +9,6 @@ import ru.mipt.bit.platformer.logic.objects.GameObject;
 public interface Controller {
     boolean trySet(GameObject gameObject);
     void applyActions();
+    void parseState(GameObject gameObject);
+    ControllerState getState();
 }
