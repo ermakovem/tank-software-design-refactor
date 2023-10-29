@@ -30,11 +30,11 @@ public class ProjectileGraphics implements Graphics{
     public void render() {
         tileMovement.moveRectangleBetweenTileCenters(
                 rectangle,
-                tank.getCoordinates(),
-                tank.getDestinationCoordinates(),
-                tank.getMovementProgress()
+                projectile.getCoordinates(),
+                projectile.getDestinationCoordinates(),
+                projectile.getMovementProgress()
         );
-        drawTextureRegionUnscaled(batch, graphics, rectangle, tank.getRotation());
+        drawTextureRegionUnscaled(batch, graphics, rectangle, projectile.getRotation());
     }
 
     public void dispose() {
