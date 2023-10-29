@@ -2,12 +2,12 @@ package ru.mipt.bit.platformer.test;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.actions.Action;
-import ru.mipt.bit.platformer.actions.MoveAction;
-import ru.mipt.bit.platformer.logic.objects.Obstacle;
-import ru.mipt.bit.platformer.logic.objects.Tank;
+import ru.mipt.bit.platformer.game.controllers.actions.Action;
+import ru.mipt.bit.platformer.game.controllers.actions.MoveAction;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ActionTest {
     @Test
@@ -25,7 +25,7 @@ class ActionTest {
         tank.updateState(2f);
         b.apply(tank);
 
-        assertEquals(new GridPoint2(-1 , 1), tank.getDestinationCoordinates());
+        assertEquals(new GridPoint2(-1, 1), tank.getDestinationCoordinates());
     }
 
     @Test

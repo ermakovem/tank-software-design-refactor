@@ -2,13 +2,13 @@ package ru.mipt.bit.platformer.test;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.actions.Action;
-import ru.mipt.bit.platformer.actions.MoveAction;
-import ru.mipt.bit.platformer.logic.GameLevel;
-import ru.mipt.bit.platformer.logic.objects.Obstacle;
-import ru.mipt.bit.platformer.logic.objects.Tank;
+import ru.mipt.bit.platformer.game.controllers.actions.Action;
+import ru.mipt.bit.platformer.game.controllers.actions.MoveAction;
+import ru.mipt.bit.platformer.game.GameLevel;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GameLevelandCollisionHandlerTest {
     @Test

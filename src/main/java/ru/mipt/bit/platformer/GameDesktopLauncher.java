@@ -4,18 +4,20 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import ru.mipt.bit.platformer.actions.MoveAction;
-import ru.mipt.bit.platformer.actions.ShootAction;
-import ru.mipt.bit.platformer.controllers.*;
-import ru.mipt.bit.platformer.graphics.GraphicsHandler;
-import ru.mipt.bit.platformer.logic.CollisionHandler;
-import ru.mipt.bit.platformer.logic.listeners.LevelListenerCollisionHandler;
-import ru.mipt.bit.platformer.logic.listeners.LevelListenerGraphics;
-import ru.mipt.bit.platformer.logic.GameLevel;
-import ru.mipt.bit.platformer.logic.listeners.LevelListener;
-import ru.mipt.bit.platformer.logic.listeners.LevelListenerController;
-import ru.mipt.bit.platformer.logic.generators.LevelGenerateStrategy;
-import ru.mipt.bit.platformer.logic.generators.RandomWithEnemiesLevelGenerator;
+import ru.mipt.bit.platformer.game.controllers.actions.MoveAction;
+import ru.mipt.bit.platformer.game.controllers.actions.ShootAction;
+import ru.mipt.bit.platformer.game.GameLevel;
+import ru.mipt.bit.platformer.game.LevelListener;
+import ru.mipt.bit.platformer.game.controllers.ControllersHandler;
+import ru.mipt.bit.platformer.game.controllers.LevelListenerController;
+import ru.mipt.bit.platformer.game.controllers.input.InputController;
+import ru.mipt.bit.platformer.game.controllers.random.RandomController;
+import ru.mipt.bit.platformer.game.graphics.GraphicsHandler;
+import ru.mipt.bit.platformer.game.graphics.LevelListenerGraphics;
+import ru.mipt.bit.platformer.game.levelGenerators.LevelGenerateStrategy;
+import ru.mipt.bit.platformer.game.levelGenerators.RandomWithEnemiesLevelGenerator;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.LevelListenerCollisionHandler;
 
 import java.util.ArrayList;
 
@@ -30,7 +32,20 @@ public class GameDesktopLauncher implements ApplicationListener {
     private GameLevel level;
     private ControllersHandler controllers;
 
-    public GameDesktopLauncher() {}
+    public GameDesktopLauncher() {
+    }
+
+    private static void clearScreen() {
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
+        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    public static void main(String[] args) {
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        // level width: 10 tiles x 128px, height: 8 tiles x 128px
+        config.setWindowedMode(1280, 1024);
+        new Lwjgl3Application(new GameDesktopLauncher(), config);
+    }
 
     @Override
     public void create() {
@@ -38,7 +53,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
                 new RandomWithEnemiesLevelGenerator(createLevelListenersAndControllers(),
-                tilesWidth, tilesHeight, 10, 2);
+                        tilesWidth, tilesHeight, 10, 2);
 
         level = randomWithEnemiesLevelGenerator.generate();
     }
@@ -85,11 +100,6 @@ public class GameDesktopLauncher implements ApplicationListener {
         return levelListeners;
     }
 
-    private static void clearScreen() {
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
-        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
-    }
-
     @Override
     public void resize(int width, int height) {
         // do not react to window resizing
@@ -109,12 +119,5 @@ public class GameDesktopLauncher implements ApplicationListener {
     public void dispose() {
         //dispose created objects
         graphicsHandler.dispose();
-    }
-
-    public static void main(String[] args) {
-        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        // level width: 10 tiles x 128px, height: 8 tiles x 128px
-        config.setWindowedMode(1280, 1024);
-        new Lwjgl3Application(new GameDesktopLauncher(), config);
     }
 }
