@@ -1,6 +1,5 @@
 package ru.mipt.bit.platformer.actions;
 
-import ru.mipt.bit.platformer.logic.objects.CanMove;
 import ru.mipt.bit.platformer.logic.objects.CanShoot;
 import ru.mipt.bit.platformer.logic.objects.GameObject;
 

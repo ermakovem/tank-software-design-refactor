@@ -1,13 +1,10 @@
 package ru.mipt.bit.platformer.logic;
 
 import ru.mipt.bit.platformer.logic.listeners.LevelListener;
-import ru.mipt.bit.platformer.logic.listeners.LevelListenerCollisionHandler;
 import ru.mipt.bit.platformer.logic.objects.GameObject;
-import ru.mipt.bit.platformer.logic.objects.GameObjectState;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class GameLevel {
     private final Collection<GameObject> gameObjects = new ArrayList<>();

@@ -11,7 +11,7 @@ import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable {
     ArrayList<GameObject> createdGameObjects = new ArrayList<>();
-    private boolean isPlayer = true;
+    private boolean isPlayer;
     private final GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;

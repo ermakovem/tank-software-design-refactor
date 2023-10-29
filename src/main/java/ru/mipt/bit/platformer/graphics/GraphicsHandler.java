@@ -25,9 +25,6 @@ public class GraphicsHandler {
     private final TileMovement tileMovement;
     private final HashMap<GameObject, Graphics> objectToGraphics = new HashMap<>();
     private final Collection<Graphics> graphicsObjects = new ArrayList<>();
-    private final List<TankGraphics> tankGraphicsList = new ArrayList<>();
-    private final List<ObstacleGraphics> obstacleGraphicsList = new ArrayList<>();
-    private final List<ProjectileGraphics> projectileGraphicsList = new ArrayList<>();
 
     public GraphicsHandler(String pathGameField) {
         this.batch = new SpriteBatch();

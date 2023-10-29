@@ -3,7 +3,6 @@ package ru.mipt.bit.platformer.controllers;
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
 import ru.mipt.bit.platformer.actions.ShootAction;
-import ru.mipt.bit.platformer.logic.objects.CanMove;
 import ru.mipt.bit.platformer.logic.objects.GameObject;
 import ru.mipt.bit.platformer.logic.objects.Tank;
 

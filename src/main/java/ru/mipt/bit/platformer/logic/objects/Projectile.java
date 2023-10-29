@@ -85,10 +85,6 @@ public class Projectile implements GameObject, CanMove {
         return movementProgress;
     }
 
-    public float getMovementSpeed() {
-        return movementSpeed;
-    }
-
     public float getRotation() {
         return rotation;
     }

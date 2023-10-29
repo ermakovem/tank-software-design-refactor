@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.logic.objects.Projectile;
-import ru.mipt.bit.platformer.logic.objects.Tank;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createBoundingRectangle;
@@ -15,15 +14,15 @@ public class ProjectileGraphics implements Graphics{
     private final TextureRegion graphics;
     private final Rectangle rectangle;
     private final Texture texture;
-    private final Projectile tank;
+    private final Projectile projectile;
     private final TileMovement tileMovement;
     private final Batch batch;
 
-    public ProjectileGraphics(String imagePath, Projectile tank, TileMovement tileMovement, Batch batch) {
+    public ProjectileGraphics(String imagePath, Projectile projectile, TileMovement tileMovement, Batch batch) {
         this.texture = new Texture(imagePath);
         this.graphics = new TextureRegion(texture);
         this.rectangle = createBoundingRectangle(graphics);
-        this.tank = tank;
+        this.projectile = projectile;
         this.tileMovement = tileMovement;
         this.batch = batch;
     }
