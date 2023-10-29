@@ -11,8 +11,6 @@ public class ShootAction implements Action {
     public void apply(GameObject gameObject) {
         if (gameObject instanceof CanShoot) {
             ((CanShoot) gameObject).shoot();
-        } else {
-            throw new IllegalArgumentException("trying to shoot but GameObject cannot");
         }
     }
 }

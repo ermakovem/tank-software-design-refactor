@@ -20,8 +20,6 @@ public enum MoveAction implements Action {
     public void apply(GameObject gameObject) {
         if (gameObject instanceof CanMove) {
             ((CanMove) gameObject).moveTo(vector);
-        } else {
-            throw new IllegalArgumentException("trying to move immovable GameObject");
         }
     }
 }

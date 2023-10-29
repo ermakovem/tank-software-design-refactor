@@ -9,15 +9,18 @@ import java.util.Collection;
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
-public class Tank implements GameObject, CanMove, Collidable, CanShoot {
-    Collection<GameObject> createdGameObjects = new ArrayList<>();
+public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable {
+    ArrayList<GameObject> createdGameObjects = new ArrayList<>();
     private boolean isPlayer = true;
     private final GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
     private final float movementSpeed;
     private float rotation = 0f;
+    private final int reloadInTicks = 100;
+    private int currentReload = reloadInTicks;
     private GameObjectState state;
+    private float hp = 300;
     private CollisionHandler collisionHandler = new CollisionHandler(10 , 8);
 
     public Tank(GridPoint2 coordinates, float movementSpeed, boolean isPlayer) {
@@ -28,18 +31,14 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
         this.isPlayer = isPlayer;
     }
 
-    public Tank(GridPoint2 coordinates, float movementSpeed) {
-        state = GameObjectState.ALIVE;
-        this.coordinates = coordinates;
-        this.destinationCoordinates = new GridPoint2(coordinates);
-        this.movementSpeed = movementSpeed;
-    }
-
     @Override
     public void updateState(float deltaTime) {
         movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
         if (isNotMoving()) {
             coordinates.set(destinationCoordinates);
+        }
+        if (currentReload != reloadInTicks) {
+            currentReload++;
         }
     }
 
@@ -89,7 +88,10 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
 
     @Override
     public void shoot() {
-        // createdGameObjects.add(new Projectile(rotation, coordinate));
+        if (currentReload == reloadInTicks) {
+            currentReload = 0;
+            createdGameObjects.add(new Projectile(destinationCoordinates, rotation));
+        }
     }
 
     public boolean isPlayer() {
@@ -97,5 +99,13 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot {
     }
     private boolean isNotMoving() {
         return isEqual(movementProgress, 1f);
+    }
+
+    @Override
+    public void getHit(float damage) {
+        if (hp - damage <= 0) {
+            hp = 0;
+            state = GameObjectState.DEAD;
+        }
     }
 }

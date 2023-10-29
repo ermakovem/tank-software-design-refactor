@@ -56,6 +56,7 @@ public class GameLevel {
         for (GameObject createdGameObject : gameObject.getCreatedGameObjects()) {
             toBeAdded.add(createdGameObject);
         }
+        gameObject.getCreatedGameObjects().clear();
     }
 
     private void handleToBeRemoved() {

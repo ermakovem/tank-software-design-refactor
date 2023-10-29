@@ -54,6 +54,7 @@ public class CollisionHandler {
             case DEAD: {
                 if (gameObject instanceof Collidable) {
                     deadGameObjects.add(((Collidable) gameObject).getCoordinates());
+                    deadGameObjects.add(((Collidable) gameObject).getDestinationCoordinates());
                     collisionObjects.remove(gameObject);
                 }
                 break;
@@ -62,5 +63,15 @@ public class CollisionHandler {
                 throw new IllegalArgumentException("unknown GameObjectState");
             }
         }
+    }
+
+    public Collidable getObjectFromCoordinate(GridPoint2 pointToCheck) {
+        for (Collidable collisionObject : collisionObjects) {
+            if (pointToCheck.equals(collisionObject.getCoordinates())
+                    || pointToCheck.equals(collisionObject.getDestinationCoordinates())) {
+                return collisionObject;
+            }
+        }
+        return null;
     }
 }

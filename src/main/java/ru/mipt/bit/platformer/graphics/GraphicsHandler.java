@@ -7,12 +7,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.logic.objects.GameObject;
-import ru.mipt.bit.platformer.logic.objects.Obstacle;
-import ru.mipt.bit.platformer.logic.objects.Tank;
+import ru.mipt.bit.platformer.logic.objects.*;
 import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
@@ -23,8 +23,11 @@ public class GraphicsHandler {
     private final MapRenderer levelRenderer;
     private final TiledMapTileLayer groundLayer;
     private final TileMovement tileMovement;
+    private final HashMap<GameObject, Graphics> objectToGraphics = new HashMap<>();
+    private final Collection<Graphics> graphicsObjects = new ArrayList<>();
     private final List<TankGraphics> tankGraphicsList = new ArrayList<>();
     private final List<ObstacleGraphics> obstacleGraphicsList = new ArrayList<>();
+    private final List<ProjectileGraphics> projectileGraphicsList = new ArrayList<>();
 
     public GraphicsHandler(String pathGameField) {
         this.batch = new SpriteBatch();
@@ -37,45 +40,52 @@ public class GraphicsHandler {
     public void render(){
         levelRenderer.render();
         batch.begin();
-
-        for (TankGraphics tankGraphics : tankGraphicsList) {
-            tankGraphics.render();
-        }
-        for (ObstacleGraphics obstacleGraphics : obstacleGraphicsList) {
-            obstacleGraphics.render();
+        for (Graphics graphicsObject : graphicsObjects) {
+            graphicsObject.render();
         }
 
         batch.end();
     }
 
     public void dispose(){
-        for (TankGraphics tankGraphics : tankGraphicsList) {
-            tankGraphics.dispose();
-        }
-        for (ObstacleGraphics obstacleGraphics : obstacleGraphicsList) {
-            obstacleGraphics.dispose();
+        for (Graphics graphicsObject : graphicsObjects) {
+            graphicsObject.dispose();
         }
         level.dispose();
         batch.dispose();
     }
 
     public void addGraphicsObjects(GameObject gameObject){
+        Graphics graphics;
         if (gameObject instanceof Tank) {
-            TankGraphics tankGraphics =
+            graphics =
                     new TankGraphics("images/tank_blue.png", (Tank) gameObject, tileMovement, batch);
-            tankGraphicsList.add(tankGraphics);
-        }
-
-        if (gameObject instanceof Obstacle) {
-            ObstacleGraphics obstacleGraphics  =
+        } else if (gameObject instanceof Obstacle) {
+            graphics  =
                     new ObstacleGraphics("images/greenTree.png", (Obstacle) gameObject, groundLayer, batch);
-            obstacleGraphicsList.add(obstacleGraphics);
+        }else if (gameObject instanceof Projectile) {
+            graphics =
+                    new ProjectileGraphics("images/projectile.png", (Projectile) gameObject, tileMovement, batch);
+        } else {
+            throw new IllegalArgumentException("unknown GameObject");
         }
+        graphicsObjects.add(graphics);
+        objectToGraphics.put(gameObject, graphics);
     }
     public void parseState(GameObject gameObject) {
         switch (gameObject.getState()) {
             case DEAD: {
-                //change texture
+                if (gameObject instanceof Projectile) {
+                    graphicsObjects.remove(objectToGraphics.get(gameObject));
+                    objectToGraphics.remove(gameObject);
+                } else if (gameObject instanceof Tank) {
+                    graphicsObjects.remove(objectToGraphics.get(gameObject));
+                    objectToGraphics.remove(gameObject);
+                    Graphics graphics =
+                            new TankGraphics("images/destroyed_tank_blue.png", (Tank) gameObject, tileMovement, batch);
+                    graphicsObjects.add(graphics);
+                    objectToGraphics.put(gameObject, graphics);
+                }
                 break;
             }
             case ALIVE: {

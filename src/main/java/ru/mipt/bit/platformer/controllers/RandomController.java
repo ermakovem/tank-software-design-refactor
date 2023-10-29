@@ -2,6 +2,8 @@ package ru.mipt.bit.platformer.controllers;
 
 import ru.mipt.bit.platformer.actions.Action;
 import ru.mipt.bit.platformer.actions.MoveAction;
+import ru.mipt.bit.platformer.actions.ShootAction;
+import ru.mipt.bit.platformer.logic.objects.CanMove;
 import ru.mipt.bit.platformer.logic.objects.GameObject;
 import ru.mipt.bit.platformer.logic.objects.Tank;
 
@@ -58,6 +60,10 @@ public class RandomController implements Controller{
                 throw new IllegalArgumentException("Wrong direction");
         }
         gameObjectToActions.getValue().add(moveAction);
+
+        if (random.nextInt() % 100 == 1) {
+            gameObjectToActions.getValue().add(new ShootAction());
+        }
         return gameObjectToActions;
     }
 

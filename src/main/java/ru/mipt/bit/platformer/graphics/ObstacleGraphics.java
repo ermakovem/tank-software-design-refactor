@@ -9,7 +9,7 @@ import ru.mipt.bit.platformer.logic.objects.Obstacle;
 
 import static ru.mipt.bit.platformer.util.GdxGameUtils.*;
 
-public class ObstacleGraphics {
+public class ObstacleGraphics implements Graphics{
     private final TextureRegion graphics;
     private final Rectangle rectangle;
     private final Texture texture;

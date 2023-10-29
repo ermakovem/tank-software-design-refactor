@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TankTest {
     @Test
     void testTankMoveTo() {
-        Tank tank = new Tank(new GridPoint2(0, 0), 0.4f);
+        Tank tank = new Tank(new GridPoint2(0, 0), 0.4f, true);
         GridPoint2 targetCoordinate = new GridPoint2(0, 1);
         tank.moveTo(targetCoordinate);
 
@@ -20,7 +20,7 @@ class TankTest {
 
     @Test
     void testTankUpdateState() {
-        Tank tank = new Tank(new GridPoint2(0, 0), 0.5f);
+        Tank tank = new Tank(new GridPoint2(0, 0), 0.5f, true);
         GridPoint2 targetCoordinate = new GridPoint2(0, 1);
         tank.moveTo(targetCoordinate);
 

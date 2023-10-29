@@ -56,7 +56,7 @@ public class PathLevelGenerator implements LevelGenerateStrategy {
         for (Integer character : objectsMap) {
             switch (character) {
                 case (int) 'X': {
-                    gameLevel.add(new Tank(new GridPoint2(w++, h), 0.4f));
+                    gameLevel.add(new Tank(new GridPoint2(w++, h), 0.4f, true));
                     break;
                 }
                 case (int) 'T': {

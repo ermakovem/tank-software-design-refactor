@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ActionTest {
     @Test
     void testApplyAction() {
-        Tank tank = new Tank(new GridPoint2(0, 0), 0.4f);
+        Tank tank = new Tank(new GridPoint2(0, 0), 0.4f, true);
         Action a = MoveAction.UP;
         Action b = MoveAction.LEFT;
 
