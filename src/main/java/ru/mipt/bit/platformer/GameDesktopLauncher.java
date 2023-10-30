@@ -85,9 +85,10 @@ public class GameDesktopLauncher implements ApplicationListener {
         classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, GameObjectState.DEAD),
                 "images/destroyed_tank_blue.png");
         classStateToPath.put(new AbstractMap.SimpleEntry<>(Obstacle.class, GameObjectState.ALIVE),
-                "images/greenTree");
+                "images/greenTree.png");
         classStateToPath.put(new AbstractMap.SimpleEntry<>(Projectile.class, GameObjectState.ALIVE),
                 "images/projectile.png");
+
         return classStateToPath;
     }
 

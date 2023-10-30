@@ -49,7 +49,6 @@ public class GraphicsHandler {
         for (Graphics graphicsObject : graphicsObjects) {
             graphicsObject.render();
         }
-
         batch.end();
     }
 
@@ -62,11 +61,12 @@ public class GraphicsHandler {
     }
 
     public void addGraphicsObjects(Renderable renderable, GameObjectState state) {
-        Graphics graphics = new ObjectGraphics(
-                classStateToPath.get(new AbstractMap.SimpleEntry<>(renderable.getClass(), state)),
-                        renderable, tileMovement, batch);
-        graphicsObjects.add(graphics);
-        objectToGraphics.put(renderable, graphics);
+        String path = classStateToPath.get(new AbstractMap.SimpleEntry<>(renderable.getClass(), state));
+        if (path != null) {
+            Graphics graphics = new ObjectGraphics(path, renderable, tileMovement, batch);
+            graphicsObjects.add(graphics);
+            objectToGraphics.put(renderable, graphics);
+        }
     }
 
     public void parseState(Renderable renderable, GameObjectState state) {
