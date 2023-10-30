@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.game.objectsWithHelpers;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObject;
+import ru.mipt.bit.platformer.game.GameObjectState;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,10 +20,8 @@ public class CollisionHandler {
         this.tilesHeight = tilesHeight;
     }
 
-    public void add(GameObject gameObject) {
-        if (gameObject instanceof Collidable) {
-            collisionObjects.add((Collidable) gameObject);
-        }
+    public void add(Collidable collidable) {
+        collisionObjects.add(collidable);
     }
 
     private void updateMap() {
@@ -45,17 +44,15 @@ public class CollisionHandler {
         return !occupiedPoints.contains(pointToCheck);
     }
 
-    public void parseState(GameObject gameObject) {
-        switch (gameObject.getState()) {
+    public void parseState(Collidable collidable, GameObjectState state) {
+        switch (state) {
             case ALIVE: {
                 break;
             }
             case DEAD: {
-                if (gameObject instanceof Collidable) {
-                    deadGameObjects.add(((Collidable) gameObject).getCoordinates());
-                    deadGameObjects.add(((Collidable) gameObject).getDestinationCoordinates());
-                    collisionObjects.remove(gameObject);
-                }
+                    deadGameObjects.add(collidable.getCoordinates());
+                    deadGameObjects.add(collidable.getDestinationCoordinates());
+                    collisionObjects.remove(collidable);
                 break;
             }
             default: {

@@ -12,11 +12,15 @@ public class LevelListenerGraphics implements LevelListener {
 
     @Override
     public void add(GameObject gameObject) {
-        graphicsHandler.addGraphicsObjects(gameObject);
+        if (gameObject instanceof Renderable) {
+            graphicsHandler.addGraphicsObjects((Renderable) gameObject, gameObject.getState());
+        }
     }
 
     @Override
     public void parseState(GameObject gameObject) {
-        graphicsHandler.parseState(gameObject);
+        if (gameObject instanceof Renderable) {
+            graphicsHandler.parseState((Renderable) gameObject, gameObject.getState());
+        }
     }
 }

@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.controllers.actions;
+package ru.mipt.bit.platformer.game.actions;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObject;

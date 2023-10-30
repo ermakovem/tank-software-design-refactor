@@ -4,8 +4,9 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import ru.mipt.bit.platformer.game.controllers.actions.MoveAction;
-import ru.mipt.bit.platformer.game.controllers.actions.ShootAction;
+import ru.mipt.bit.platformer.game.GameObjectState;
+import ru.mipt.bit.platformer.game.actions.MoveAction;
+import ru.mipt.bit.platformer.game.actions.ShootAction;
 import ru.mipt.bit.platformer.game.GameLevel;
 import ru.mipt.bit.platformer.game.LevelListener;
 import ru.mipt.bit.platformer.game.controllers.ControllersHandler;
@@ -18,8 +19,14 @@ import ru.mipt.bit.platformer.game.levelGenerators.LevelGenerateStrategy;
 import ru.mipt.bit.platformer.game.levelGenerators.RandomWithEnemiesLevelGenerator;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.LevelListenerCollisionHandler;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.projectile.Projectile;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -49,7 +56,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        graphicsHandler = new GraphicsHandler("level.tmx");
+        graphicsHandler = new GraphicsHandler("level.tmx", createGraphics());
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
                 new RandomWithEnemiesLevelGenerator(createLevelListenersAndControllers(),
@@ -69,6 +76,19 @@ public class GameDesktopLauncher implements ApplicationListener {
         level.updateState(deltaTime);
 
         graphicsHandler.render();
+    }
+
+    private Map<Map.Entry<Class, GameObjectState>, String> createGraphics() {
+        Map<Map.Entry<Class, GameObjectState>, String> classStateToPath = new HashMap<>();
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, GameObjectState.ALIVE),
+                "images/tank_blue.png");
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, GameObjectState.DEAD),
+                "images/destroyed_tank_blue.png");
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Obstacle.class, GameObjectState.ALIVE),
+                "images/greenTree");
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Projectile.class, GameObjectState.ALIVE),
+                "images/projectile.png");
+        return classStateToPath;
     }
 
     private ArrayList<LevelListener> createLevelListenersAndControllers() {

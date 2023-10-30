@@ -7,8 +7,8 @@ import org.awesome.ai.state.movable.Actor;
 import org.awesome.ai.state.movable.Bot;
 import org.awesome.ai.state.movable.Player;
 import ru.mipt.bit.platformer.game.GameObject;
-import ru.mipt.bit.platformer.game.controllers.actions.MoveAction;
-import ru.mipt.bit.platformer.game.controllers.actions.ShootAction;
+import ru.mipt.bit.platformer.game.actions.MoveAction;
+import ru.mipt.bit.platformer.game.actions.ShootAction;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
@@ -53,8 +53,8 @@ public class ExternalAIAdapter {
                 .obstacles(obstacles).levelWidth(tilesWidth).levelHeight(tilesHeight).build();
     }
 
-    public Map.Entry<GameObject, ArrayList<ru.mipt.bit.platformer.game.controllers.actions.Action>> getActions(GameObject gameObject) {
-        Map.Entry<GameObject, ArrayList<ru.mipt.bit.platformer.game.controllers.actions.Action>> gameToObjectActions =
+    public Map.Entry<GameObject, ArrayList<ru.mipt.bit.platformer.game.actions.Action>> getActions(GameObject gameObject) {
+        Map.Entry<GameObject, ArrayList<ru.mipt.bit.platformer.game.actions.Action>> gameToObjectActions =
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
 
         List<Recommendation> recommendations = ai.recommend(gameState);
@@ -68,10 +68,10 @@ public class ExternalAIAdapter {
     }
 
     //no using in java((
-    private ru.mipt.bit.platformer.game.controllers.actions.Action parseAction(
+    private ru.mipt.bit.platformer.game.actions.Action parseAction(
             org.awesome.ai.Action preParsedAction) {
 
-        ru.mipt.bit.platformer.game.controllers.actions.Action parsedAction;
+        ru.mipt.bit.platformer.game.actions.Action parsedAction;
         switch (preParsedAction) {
             case Shoot: {
                 parsedAction = new ShootAction();

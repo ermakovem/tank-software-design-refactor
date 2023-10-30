@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.controllers.actions;
+package ru.mipt.bit.platformer.game.actions;
 
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.CanShoot;

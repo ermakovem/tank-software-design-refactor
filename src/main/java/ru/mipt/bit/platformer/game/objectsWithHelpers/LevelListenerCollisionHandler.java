@@ -12,7 +12,9 @@ public class LevelListenerCollisionHandler implements LevelListener {
 
     @Override
     public void add(GameObject gameObject) {
-        collisionHandler.add(gameObject);
+        if (gameObject instanceof Collidable) {
+            collisionHandler.add((Collidable) gameObject);
+        }
         if (gameObject instanceof CanMove) {
             ((CanMove) gameObject).addCollisionHandler(collisionHandler);
         }
@@ -20,6 +22,8 @@ public class LevelListenerCollisionHandler implements LevelListener {
 
     @Override
     public void parseState(GameObject gameObject) {
-        collisionHandler.parseState(gameObject);
+        if (gameObject instanceof Collidable) {
+            collisionHandler.parseState((Collidable) gameObject, gameObject.getState());
+        }
     }
 }

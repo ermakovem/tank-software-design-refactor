@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameLevel;
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.LevelListener;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.Collidable;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
@@ -63,7 +64,7 @@ public class RandomLevelGenerator implements LevelGenerateStrategy {
     private boolean tryAdd(GameObject gameObject, GridPoint2 randCoord) {
         if (collisionHandler.isFree(randCoord)) {
             gameLevel.add(gameObject);
-            collisionHandler.add(gameObject);
+            collisionHandler.add((Collidable) gameObject);
             return true;
         } else {
             return false;
