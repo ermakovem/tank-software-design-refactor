@@ -12,9 +12,6 @@ version '1.0-SNAPSHOT'
 
 application {
     mainClassName = 'ru.mipt.bit.platformer.GameDesktopLauncher'
-    if (Os.isFamily(Os.FAMILY_MAC)) {
-        applicationDefaultJvmArgs = ['-XstartOnFirstThread']
-    }
 }
 
 
@@ -29,5 +26,6 @@ dependencies {
     implementation deps.gdx.platform_desktop
     implementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     implementation 'com.github.a-ivanov:tank-software-design-ai:v1.0.1'
+    implementation 'org.projectlombok:lombok:1.18.28'
 }
 

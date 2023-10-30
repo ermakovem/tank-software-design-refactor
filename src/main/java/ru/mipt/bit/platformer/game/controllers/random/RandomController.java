@@ -18,6 +18,7 @@ import static java.lang.Math.abs;
 public class RandomController implements Controller {
     private GameObject gameObject;
     private ControllerState state;
+    private Action moveAction = MoveAction.UP;
 
     public RandomController() {
         state = ControllerState.INIT;
@@ -40,14 +41,13 @@ public class RandomController implements Controller {
     private Map.Entry<GameObject, ArrayList<Action>> getActions() {
         Map.Entry<GameObject, ArrayList<Action>> gameObjectToActions =
                 new AbstractMap.SimpleEntry<>(gameObject, new ArrayList<>());
-        Action moveAction;
 
         if (gameObject == null) {
             return gameObjectToActions;
         }
 
         Random random = new Random();
-        int direction = abs(random.nextInt() % 4);
+        int direction = abs(random.nextInt() % 8);
         switch (direction) {
             case 0:
                 moveAction = MoveAction.UP;
@@ -62,7 +62,7 @@ public class RandomController implements Controller {
                 moveAction = MoveAction.LEFT;
                 break;
             default:
-                throw new IllegalArgumentException("Wrong direction");
+                break;
         }
         gameObjectToActions.getValue().add(moveAction);
 
