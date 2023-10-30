@@ -1,11 +1,11 @@
 package ru.mipt.bit.platformer.game.controllers.random;
 
 import ru.mipt.bit.platformer.game.GameObject;
-import ru.mipt.bit.platformer.game.controllers.Controller;
-import ru.mipt.bit.platformer.game.controllers.ControllerState;
 import ru.mipt.bit.platformer.game.actions.Action;
 import ru.mipt.bit.platformer.game.actions.MoveAction;
 import ru.mipt.bit.platformer.game.actions.ShootAction;
+import ru.mipt.bit.platformer.game.controllers.Controller;
+import ru.mipt.bit.platformer.game.controllers.ControllerState;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
 import java.util.AbstractMap;

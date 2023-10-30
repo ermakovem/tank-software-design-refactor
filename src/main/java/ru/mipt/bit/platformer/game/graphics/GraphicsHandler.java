@@ -7,16 +7,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.GameObjectState;
 import ru.mipt.bit.platformer.game.graphics.objects.ObjectGraphics;
-import ru.mipt.bit.platformer.game.graphics.objects.ObstacleGraphics;
-import ru.mipt.bit.platformer.game.graphics.objects.ProjectileGraphics;
-import ru.mipt.bit.platformer.game.graphics.objects.TankGraphics;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.projectile.Projectile;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
 import java.util.*;
 

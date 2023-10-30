@@ -1,7 +1,6 @@
 package ru.mipt.bit.platformer.game.objectsWithHelpers;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.GameObjectState;
 
 import java.util.ArrayList;
@@ -50,9 +49,9 @@ public class CollisionHandler {
                 break;
             }
             case DEAD: {
-                    deadGameObjects.add(collidable.getCoordinates());
-                    deadGameObjects.add(collidable.getDestinationCoordinates());
-                    collisionObjects.remove(collidable);
+                deadGameObjects.add(collidable.getCoordinates());
+                deadGameObjects.add(collidable.getDestinationCoordinates());
+                collisionObjects.remove(collidable);
                 break;
             }
             default: {

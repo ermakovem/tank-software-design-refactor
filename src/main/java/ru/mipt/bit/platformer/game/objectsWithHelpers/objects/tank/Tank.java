@@ -19,8 +19,8 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
     private final GridPoint2 coordinates;
     private final float movementSpeed;
     private final int reloadInTicks = 100;
-    ArrayList<GameObject> createdGameObjects = new ArrayList<>();
     private final boolean isPlayer;
+    ArrayList<GameObject> createdGameObjects = new ArrayList<>();
     private GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
     private float rotation = 0f;

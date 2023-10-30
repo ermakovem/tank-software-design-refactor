@@ -2,9 +2,9 @@ package ru.mipt.bit.platformer.game.controllers.input;
 
 import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.game.GameObject;
+import ru.mipt.bit.platformer.game.actions.Action;
 import ru.mipt.bit.platformer.game.controllers.Controller;
 import ru.mipt.bit.platformer.game.controllers.ControllerState;
-import ru.mipt.bit.platformer.game.actions.Action;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 
 import java.util.*;
