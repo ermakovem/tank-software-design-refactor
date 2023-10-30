@@ -39,14 +39,6 @@ public class GameDesktopLauncher implements ApplicationListener {
     private GameLevel level;
     private ControllersHandler controllers;
 
-    public GameDesktopLauncher() {
-    }
-
-    private static void clearScreen() {
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
-        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
-    }
-
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         // level width: 10 tiles x 128px, height: 8 tiles x 128px
@@ -122,6 +114,20 @@ public class GameDesktopLauncher implements ApplicationListener {
     }
 
     @Override
+    public void dispose() {
+        //dispose created objects
+        graphicsHandler.dispose();
+    }
+
+    public GameDesktopLauncher() {
+    }
+
+    private static void clearScreen() {
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
+        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    @Override
     public void resize(int width, int height) {
         // do not react to window resizing
     }
@@ -134,11 +140,5 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void resume() {
         // game doesn't get paused
-    }
-
-    @Override
-    public void dispose() {
-        //dispose created objects
-        graphicsHandler.dispose();
     }
 }
