@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CanMove;
 
-public enum MoveAction implements Action {
+public enum MoveAction implements Action<CanMove> {
     UP(new GridPoint2(0, 1)),
     DOWN(new GridPoint2(0, -1)),
     RIGHT(new GridPoint2(1, 0)),
@@ -17,9 +17,7 @@ public enum MoveAction implements Action {
     }
 
     @Override
-    public void apply(GameObject gameObject) {
-        if (gameObject instanceof CanMove) {
-            ((CanMove) gameObject).moveTo(vector);
-        }
+    public void apply(CanMove canMove) {
+            canMove.moveTo(vector);
     }
 }

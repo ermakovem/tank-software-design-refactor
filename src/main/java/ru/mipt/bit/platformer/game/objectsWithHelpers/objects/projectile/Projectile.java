@@ -16,7 +16,7 @@ import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continueProgress;
 
 public class Projectile implements GameObject, CanMove, Renderable {
-    private final float damage = 300;
+    private final int damage = 35;
     private final GridPoint2 coordinates;
     private final float movementSpeed = 0.1f;
     private final float rotation;

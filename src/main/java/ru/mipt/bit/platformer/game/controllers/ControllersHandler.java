@@ -6,12 +6,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class ControllersHandler {
+public class ControllersHandler implements Controller{
     private final ArrayList<Controller> controllers = new ArrayList<>();
     private final HashMap<GameObject, Controller> gameObjectToController = new HashMap<>();
 
     public ControllersHandler(Controller... controllers) {
         Collections.addAll(this.controllers, controllers);
+    }
+
+    @Override
+    public boolean trySet(GameObject gameObject) {
+        return false;
     }
 
     public void applyActions() {
@@ -27,7 +32,7 @@ public class ControllersHandler {
                 }
                 case DEAD: {
                     to_be_removed.add(controller);
-                    //remove gameObjectToController
+                    gameObjectToController.remove(controller);
                     break;
                 }
                 default: {
@@ -53,5 +58,10 @@ public class ControllersHandler {
         if (gameObjectToController.containsKey(gameObject)) {
             gameObjectToController.get(gameObject).parseState(gameObject);
         }
+    }
+
+    @Override
+    public ControllerState getState() {
+        return null;
     }
 }

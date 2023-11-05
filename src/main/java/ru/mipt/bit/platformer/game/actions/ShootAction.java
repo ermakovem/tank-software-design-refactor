@@ -3,15 +3,9 @@ package ru.mipt.bit.platformer.game.actions;
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.CanShoot;
 
-public class ShootAction implements Action {
-
-    public ShootAction() {
-    }
-
+public class ShootAction implements Action<CanShoot> {
     @Override
-    public void apply(GameObject gameObject) {
-        if (gameObject instanceof CanShoot) {
-            ((CanShoot) gameObject).shoot();
-        }
+    public void apply(CanShoot canShoot) {
+        canShoot.shoot();
     }
 }

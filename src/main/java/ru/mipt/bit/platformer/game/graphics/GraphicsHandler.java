@@ -8,15 +8,21 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.game.GameObjectState;
-import ru.mipt.bit.platformer.game.graphics.objects.ObjectGraphics;
+import ru.mipt.bit.platformer.game.graphics.objects.GameObjectGraphics;
+import ru.mipt.bit.platformer.game.graphics.objects.HealthBarGraphics;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
+import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Hittable;
 
 import java.util.*;
 
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.getSingleLayer;
 
-public class GraphicsHandler {
+/**
+ *
+ */
+
+public class GraphicsHandler implements Graphics, Toggleable{
     private final Batch batch;
     private final TiledMap level;
     private final MapRenderer levelRenderer;
@@ -56,7 +62,14 @@ public class GraphicsHandler {
     public void addGraphicsObjects(Renderable renderable, GameObjectState state) {
         String path = classStateToPath.get(new AbstractMap.SimpleEntry<>(renderable.getClass(), state));
         if (path != null) {
-            Graphics graphics = new ObjectGraphics(path, renderable, tileMovement, batch);
+            Graphics graphics = new GameObjectGraphics(path, renderable, tileMovement, batch);
+            graphicsObjects.add(graphics);
+            objectToGraphics.put(renderable, graphics);
+        }
+
+        //TODO: redo
+        if (renderable instanceof Hittable) {
+            Graphics graphics = new HealthBarGraphics((Hittable) renderable, renderable, tileMovement, batch);
             graphicsObjects.add(graphics);
             objectToGraphics.put(renderable, graphics);
         }
@@ -77,5 +90,10 @@ public class GraphicsHandler {
                 throw new IllegalArgumentException("unknown GameObjectState");
             }
         }
+    }
+
+    @Override
+    public void toggle() {
+
     }
 }
