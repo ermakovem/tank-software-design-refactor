@@ -1,5 +1,7 @@
 package ru.mipt.bit.platformer.game.graphics;
 
-public interface Toggleable {
+import ru.mipt.bit.platformer.game.HasAction;
+
+public interface Toggleable extends HasAction {
     void toggle();
 }

@@ -30,7 +30,7 @@ public class GraphicsHandler implements Graphics, Toggleable{
     private final TileMovement tileMovement;
     private final Map<Renderable, Graphics> objectToGraphics = new HashMap<>();
     private final Collection<Graphics> graphicsObjects = new ArrayList<>();
-    //TODO: rename
+    //TODO: Class<? extends Renderable> ?
     private final Map<Map.Entry<Class, GameObjectState>, String> classStateToPath;
 
     public GraphicsHandler(String pathGameField, Map<Map.Entry<Class, GameObjectState>, String> classStateToPath) {
@@ -94,6 +94,10 @@ public class GraphicsHandler implements Graphics, Toggleable{
 
     @Override
     public void toggle() {
-
+        for (Graphics graphicsObject : graphicsObjects) {
+            if (graphicsObject instanceof Toggleable) {
+                ((Toggleable) graphicsObject).toggle();
+            }
+        }
     }
 }
