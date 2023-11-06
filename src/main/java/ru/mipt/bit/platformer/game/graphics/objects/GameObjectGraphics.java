@@ -11,19 +11,19 @@ import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createBoundingRectangle;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
-public class ObjectGraphics implements Graphics {
+public class GameObjectGraphics implements Graphics {
     private final TextureRegion graphics;
     private final Rectangle rectangle;
     private final Texture texture;
-    private final Renderable object;
+    private final Renderable renderable;
     private final TileMovement tileMovement;
     private final Batch batch;
 
-    public ObjectGraphics(String imagePath, Renderable object, TileMovement tileMovement, Batch batch) {
+    public GameObjectGraphics(String imagePath, Renderable renderable, TileMovement tileMovement, Batch batch) {
         this.texture = new Texture(imagePath);
         this.graphics = new TextureRegion(texture);
         this.rectangle = createBoundingRectangle(graphics);
-        this.object = object;
+        this.renderable = renderable;
         this.tileMovement = tileMovement;
         this.batch = batch;
     }
@@ -31,11 +31,11 @@ public class ObjectGraphics implements Graphics {
     public void render() {
         tileMovement.moveRectangleBetweenTileCenters(
                 rectangle,
-                object.getCoordinates(),
-                object.getDestinationCoordinates(),
-                object.getMovementProgress()
+                renderable.getCoordinates(),
+                renderable.getDestinationCoordinates(),
+                renderable.getMovementProgress()
         );
-        drawTextureRegionUnscaled(batch, graphics, rectangle, object.getRotation());
+        drawTextureRegionUnscaled(batch, graphics, rectangle, renderable.getRotation());
     }
 
     public void dispose() {

@@ -9,12 +9,13 @@ import ru.mipt.bit.platformer.game.GameObjectState;
 import ru.mipt.bit.platformer.game.LevelListener;
 import ru.mipt.bit.platformer.game.actions.MoveAction;
 import ru.mipt.bit.platformer.game.actions.ShootAction;
-import ru.mipt.bit.platformer.game.controllers.ControllersHandler;
-import ru.mipt.bit.platformer.game.controllers.LevelListenerController;
-import ru.mipt.bit.platformer.game.controllers.input.InputController;
-import ru.mipt.bit.platformer.game.controllers.random.RandomController;
+import ru.mipt.bit.platformer.game.controllers.ActionGeneratorsHandler;
+import ru.mipt.bit.platformer.game.controllers.LevelListenerActionGenerators;
+import ru.mipt.bit.platformer.game.controllers.input.InputActionGenerator;
+import ru.mipt.bit.platformer.game.controllers.random.RandomActionGenerator;
 import ru.mipt.bit.platformer.game.graphics.GraphicsHandler;
 import ru.mipt.bit.platformer.game.graphics.LevelListenerGraphics;
+import ru.mipt.bit.platformer.game.graphics.Renderable;
 import ru.mipt.bit.platformer.game.levelGenerators.LevelGenerateStrategy;
 import ru.mipt.bit.platformer.game.levelGenerators.RandomWithEnemiesLevelGenerator;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
@@ -37,7 +38,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
-    private ControllersHandler controllers;
+    private ActionGeneratorsHandler controllers;
 
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -86,7 +87,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private ArrayList<LevelListener> createLevelListenersAndControllers() {
         //createControllers
-        InputController inputController1 = new InputController();
+        InputActionGenerator inputController1 = new InputActionGenerator();
         inputController1.mapKeyToAction(UP, MoveAction.UP);
         inputController1.mapKeyToAction(W, MoveAction.UP);
         inputController1.mapKeyToAction(DOWN, MoveAction.DOWN);
@@ -97,17 +98,17 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController1.mapKeyToAction(A, MoveAction.LEFT);
         inputController1.mapKeyToAction(SPACE, new ShootAction());
 
-        controllers = new ControllersHandler(inputController1,
-                new RandomController(), new RandomController());
+        controllers = new ActionGeneratorsHandler(inputController1,
+                new RandomActionGenerator(), new RandomActionGenerator());
 
         //createLevelListeners
         ArrayList<LevelListener> levelListeners = new ArrayList<>();
-        LevelListenerController levelListenerController = new LevelListenerController(controllers);
+        LevelListenerActionGenerators levelListenerActionGenerators = new LevelListenerActionGenerators(controllers);
         LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
         LevelListenerCollisionHandler levelListenerCollisionHandler =
                 new LevelListenerCollisionHandler(new CollisionHandler(tilesHeight, tilesWidth));
 
-        levelListeners.add(levelListenerController);
+        levelListeners.add(levelListenerActionGenerators);
         levelListeners.add(levelListenerGraphics);
         levelListeners.add(levelListenerCollisionHandler);
         return levelListeners;

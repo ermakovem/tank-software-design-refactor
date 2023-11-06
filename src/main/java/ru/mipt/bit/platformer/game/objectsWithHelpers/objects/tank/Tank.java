@@ -26,7 +26,7 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
     private float rotation = 0f;
     private int currentReload = reloadInTicks;
     private GameObjectState state;
-    private float hp = 300;
+    private int hp = 100;
     private CollisionHandler collisionHandler = new CollisionHandler(10, 8);
 
     public Tank(GridPoint2 coordinates, float movementSpeed, boolean isPlayer) {
@@ -109,10 +109,17 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
     }
 
     @Override
-    public void getHit(float damage) {
+    public void getHit(int damage) {
         if (hp - damage <= 0) {
             hp = 0;
             state = GameObjectState.DEAD;
+        } else {
+            hp -= damage;
         }
+    }
+
+    @Override
+    public int getHP() {
+        return hp;
     }
 }
