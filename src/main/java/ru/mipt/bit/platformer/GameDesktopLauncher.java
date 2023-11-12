@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.game.GameLevel;
-import ru.mipt.bit.platformer.game.GameObjectState;
 import ru.mipt.bit.platformer.game.LevelListener;
 import ru.mipt.bit.platformer.game.actions.MoveAction;
 import ru.mipt.bit.platformer.game.actions.ShootAction;
@@ -13,8 +12,8 @@ import ru.mipt.bit.platformer.game.controllers.ControllersHandler;
 import ru.mipt.bit.platformer.game.controllers.LevelListenerController;
 import ru.mipt.bit.platformer.game.controllers.input.InputController;
 import ru.mipt.bit.platformer.game.controllers.random.RandomController;
-import ru.mipt.bit.platformer.game.graphics.GraphicsHandler;
-import ru.mipt.bit.platformer.game.graphics.LevelListenerGraphics;
+import ru.mipt.bit.platformer.graphics.GraphicsHandler;
+import ru.mipt.bit.platformer.game.LevelListenerGraphics;
 import ru.mipt.bit.platformer.game.levelGenerators.LevelGenerateStrategy;
 import ru.mipt.bit.platformer.game.levelGenerators.RandomWithEnemiesLevelGenerator;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
@@ -22,6 +21,7 @@ import ru.mipt.bit.platformer.game.objectsWithHelpers.LevelListenerCollisionHand
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.projectile.Projectile;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
+import ru.mipt.bit.platformer.graphics.RenderableState;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -78,15 +78,15 @@ public class GameDesktopLauncher implements ApplicationListener {
         graphicsHandler.render();
     }
 
-    private Map<Map.Entry<Class, GameObjectState>, String> createGraphics() {
-        Map<Map.Entry<Class, GameObjectState>, String> classStateToPath = new HashMap<>();
-        classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, GameObjectState.ALIVE),
+    private Map<Map.Entry<Class<?>, RenderableState>, String> createGraphics() {
+        Map<Map.Entry<Class<?>, RenderableState>, String> classStateToPath = new HashMap<>();
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, RenderableState.ACTIVE),
                 "images/tank_blue.png");
-        classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, GameObjectState.DEAD),
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, RenderableState.INACTIVE),
                 "images/destroyed_tank_blue.png");
-        classStateToPath.put(new AbstractMap.SimpleEntry<>(Obstacle.class, GameObjectState.ALIVE),
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Obstacle.class, RenderableState.ACTIVE),
                 "images/greenTree.png");
-        classStateToPath.put(new AbstractMap.SimpleEntry<>(Projectile.class, GameObjectState.ALIVE),
+        classStateToPath.put(new AbstractMap.SimpleEntry<>(Projectile.class, RenderableState.ACTIVE),
                 "images/projectile.png");
 
         return classStateToPath;

@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.GameObjectState;
-import ru.mipt.bit.platformer.game.graphics.Renderable;
+import ru.mipt.bit.platformer.graphics.Renderable;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.Collidable;
 
 import java.util.ArrayList;

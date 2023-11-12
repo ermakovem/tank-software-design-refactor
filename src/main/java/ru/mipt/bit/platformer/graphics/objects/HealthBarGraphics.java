@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.graphics.objects;
+package ru.mipt.bit.platformer.graphics.objects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -6,15 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.game.graphics.Graphics;
-import ru.mipt.bit.platformer.game.graphics.Renderable;
-import ru.mipt.bit.platformer.game.graphics.Toggleable;
-import ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils;
-import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
+import ru.mipt.bit.platformer.graphics.Graphics;
+import ru.mipt.bit.platformer.graphics.Renderable;
+import ru.mipt.bit.platformer.graphics.Toggleable;
+import ru.mipt.bit.platformer.graphics.util.TileMovement;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Hittable;
 
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createBoundingRectangle;
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createBoundingRectangle;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class HealthBarGraphics implements Graphics, Toggleable {
     private final Texture textureRedBar;
@@ -33,7 +32,7 @@ public class HealthBarGraphics implements Graphics, Toggleable {
         this.graphicsRedBar = new TextureRegion(textureRedBar);
         this.rectangle = createBoundingRectangle(graphicsRedBar);
 
-        this.textureGreenBar = createBarTexture(20, Color.GREEN);
+        this.textureGreenBar = createBarTexture(100, Color.GREEN);
         this.graphicsGreenBar = new TextureRegion(textureGreenBar);
 
         this.renderable = renderable;

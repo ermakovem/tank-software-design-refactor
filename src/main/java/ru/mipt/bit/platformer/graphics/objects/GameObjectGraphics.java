@@ -1,15 +1,15 @@
-package ru.mipt.bit.platformer.game.graphics.objects;
+package ru.mipt.bit.platformer.graphics.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.game.graphics.Graphics;
-import ru.mipt.bit.platformer.game.graphics.Renderable;
-import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
+import ru.mipt.bit.platformer.graphics.Graphics;
+import ru.mipt.bit.platformer.graphics.Renderable;
+import ru.mipt.bit.platformer.graphics.util.TileMovement;
 
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createBoundingRectangle;
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createBoundingRectangle;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GameObjectGraphics implements Graphics {
     private final TextureRegion graphics;

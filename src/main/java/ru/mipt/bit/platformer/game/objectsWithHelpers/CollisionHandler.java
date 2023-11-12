@@ -4,13 +4,14 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObjectState;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 public class CollisionHandler {
     private final int tilesWidth;
     private final int tilesHeight;
-    private final List<Collidable> collisionObjects = new ArrayList<>();
+    private final Collection<Collidable> collisionObjects = new ArrayList<>();
     private final HashSet<GridPoint2> deadGameObjects = new HashSet<>();
     private final HashSet<GridPoint2> occupiedPoints = new HashSet<>();
 
@@ -25,9 +26,9 @@ public class CollisionHandler {
 
     private void updateMap() {
         occupiedPoints.clear();
-        for (GridPoint2 deadGameObject : deadGameObjects) {
-            occupiedPoints.add(deadGameObject);
-        }
+
+        occupiedPoints.addAll(deadGameObjects);
+
         for (Collidable object : collisionObjects) {
             occupiedPoints.add(object.getCoordinates());
             occupiedPoints.add(object.getDestinationCoordinates());

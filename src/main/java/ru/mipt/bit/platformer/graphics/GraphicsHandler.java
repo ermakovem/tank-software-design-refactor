@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.game.graphics;
+package ru.mipt.bit.platformer.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,19 +8,15 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
 import ru.mipt.bit.platformer.game.GameObjectState;
-import ru.mipt.bit.platformer.game.graphics.objects.GameObjectGraphics;
-import ru.mipt.bit.platformer.game.graphics.objects.HealthBarGraphics;
-import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
+import ru.mipt.bit.platformer.graphics.objects.GameObjectGraphics;
+import ru.mipt.bit.platformer.graphics.objects.HealthBarGraphics;
+import ru.mipt.bit.platformer.graphics.util.TileMovement;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Hittable;
 
 import java.util.*;
 
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.getSingleLayer;
-
-/**
- *
- */
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.getSingleLayer;
 
 public class GraphicsHandler implements Graphics, Toggleable{
     private final Batch batch;
@@ -31,9 +27,9 @@ public class GraphicsHandler implements Graphics, Toggleable{
     private final Map<Renderable, Graphics> objectToGraphics = new HashMap<>();
     private final Collection<Graphics> graphicsObjects = new ArrayList<>();
     //TODO: rename
-    private final Map<Map.Entry<Class, GameObjectState>, String> classStateToPath;
+    private final Map<Map.Entry<Class<?>, RenderableState>, String> classStateToPath;
 
-    public GraphicsHandler(String pathGameField, Map<Map.Entry<Class, GameObjectState>, String> classStateToPath) {
+    public GraphicsHandler(String pathGameField, Map<Map.Entry<Class<?>, RenderableState>, String> classStateToPath) {
         this.batch = new SpriteBatch();
         this.level = new TmxMapLoader().load(pathGameField);
         this.levelRenderer = createSingleLayerMapRenderer(level, batch);
@@ -59,7 +55,7 @@ public class GraphicsHandler implements Graphics, Toggleable{
         batch.dispose();
     }
 
-    public void addGraphicsObjects(Renderable renderable, GameObjectState state) {
+    public void addGraphicsObjects(Renderable renderable, RenderableState state) {
         String path = classStateToPath.get(new AbstractMap.SimpleEntry<>(renderable.getClass(), state));
         if (path != null) {
             Graphics graphics = new GameObjectGraphics(path, renderable, tileMovement, batch);
@@ -75,15 +71,15 @@ public class GraphicsHandler implements Graphics, Toggleable{
         }
     }
 
-    public void parseState(Renderable renderable, GameObjectState state) {
+    public void parseState(Renderable renderable, RenderableState state) {
         switch (state) {
-            case DEAD: {
+            case INACTIVE: {
                 graphicsObjects.remove(objectToGraphics.get(renderable));
                 objectToGraphics.remove(renderable);
                 addGraphicsObjects(renderable, state);
                 break;
             }
-            case ALIVE: {
+            case ACTIVE: {
                 break;
             }
             default: {
@@ -94,6 +90,10 @@ public class GraphicsHandler implements Graphics, Toggleable{
 
     @Override
     public void toggle() {
-
+        for (Graphics graphicsObject : graphicsObjects) {
+            if (graphicsObject instanceof Toggleable) {
+                ((Toggleable) graphicsObject).toggle();
+            }
+        }
     }
 }

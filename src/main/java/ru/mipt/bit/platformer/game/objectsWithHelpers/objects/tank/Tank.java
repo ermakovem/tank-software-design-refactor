@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.GameObjectState;
-import ru.mipt.bit.platformer.game.graphics.Renderable;
+import ru.mipt.bit.platformer.graphics.Renderable;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CanMove;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.Collidable;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.badlogic.gdx.math.MathUtils.*;
-import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continueProgress;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.continueProgress;
 
 public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable, Renderable {
     private final GridPoint2 coordinates;
@@ -27,6 +27,7 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
     private int currentReload = reloadInTicks;
     private GameObjectState state;
     private int hp = 100;
+    private TankInternalStatesHandler modifiersHandler = new TankInternalStatesHandler(this);
     private CollisionHandler collisionHandler = new CollisionHandler(10, 8);
 
     public Tank(GridPoint2 coordinates, float movementSpeed, boolean isPlayer) {
@@ -39,10 +40,14 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
 
     @Override
     public void updateState(float deltaTime) {
-        movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
+        modifiersHandler.updateInternalState();
+
+        movementProgress = continueProgress(movementProgress, deltaTime,
+                movementSpeed * modifiersHandler.getMovementSpeedKoef());
         if (isNotMoving()) {
             coordinates.set(destinationCoordinates);
         }
+
         if (currentReload != reloadInTicks) {
             currentReload++;
         }
@@ -68,10 +73,12 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
         return destinationCoordinates;
     }
 
+    @Override
     public float getMovementProgress() {
         return movementProgress;
     }
 
+    @Override
     public float getRotation() {
         return rotation;
     }
@@ -94,7 +101,7 @@ public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable
 
     @Override
     public void shoot() {
-        if (currentReload == reloadInTicks) {
+        if (currentReload == reloadInTicks && modifiersHandler.canShoot()) {
             currentReload = 0;
             createdGameObjects.add(new Projectile(destinationCoordinates, rotation));
         }
