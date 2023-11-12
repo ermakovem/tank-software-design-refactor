@@ -22,11 +22,11 @@ import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.projectile.Projectile;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 import ru.mipt.bit.platformer.graphics.RenderableState;
+import ru.mipt.bit.platformer.graphics.objects.GameObjectGraphics;
+import ru.mipt.bit.platformer.graphics.objects.Graphics;
+import ru.mipt.bit.platformer.graphics.objects.HealthBarGraphics;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
@@ -56,7 +56,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        graphicsHandler = new GraphicsHandler("level.tmx", createGraphics());
+        graphicsHandler = new GraphicsHandler("level.tmx", createClassToPath(), createClassToGraphics());
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
                 new RandomWithEnemiesLevelGenerator(createLevelListenersAndControllers(),
@@ -78,7 +78,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         graphicsHandler.render();
     }
 
-    private Map<Map.Entry<Class<?>, RenderableState>, String> createGraphics() {
+    private Map<Map.Entry<Class<?>, RenderableState>, String> createClassToPath() {
         Map<Map.Entry<Class<?>, RenderableState>, String> classStateToPath = new HashMap<>();
         classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, RenderableState.ACTIVE),
                 "images/tank_blue.png");
@@ -90,6 +90,18 @@ public class GameDesktopLauncher implements ApplicationListener {
                 "images/projectile.png");
 
         return classStateToPath;
+    }
+
+    private Map<Class<?>, HashSet<Class<? extends Graphics>>> createClassToGraphics() {
+        Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics = new HashMap<>();
+        classToGraphics.put(Tank.class, new HashSet<>());
+        classToGraphics.get(Tank.class).add(GameObjectGraphics.class);
+        classToGraphics.get(Tank.class).add(HealthBarGraphics.class);
+        classToGraphics.put(Obstacle.class, new HashSet<>());
+        classToGraphics.get(Obstacle.class).add(GameObjectGraphics.class);
+        classToGraphics.put(Projectile.class, new HashSet<>());
+        classToGraphics.get(Projectile.class).add(GameObjectGraphics.class);
+        return classToGraphics;
     }
 
     private ArrayList<LevelListener> createLevelListenersAndControllers() {

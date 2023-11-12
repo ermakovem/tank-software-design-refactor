@@ -28,18 +28,22 @@ public class GraphicsHandler implements Graphics, Toggleable{
     private final MapRenderer levelRenderer;
     private final TiledMapTileLayer groundLayer;
     private final TileMovement tileMovement;
-    private final Map<Renderable, Graphics> objectToGraphics = new HashMap<>();
+    private final Map<Renderable, HashSet<Graphics>> objectToGraphics = new HashMap<>();
     private final Collection<Graphics> graphicsObjects = new ArrayList<>();
     //TODO: rename
     private final Map<Map.Entry<Class<?>, RenderableState>, String> classStateToTexturePath;
     private Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics = new HashMap<>();
 
-    public GraphicsHandler(String pathGameField, Map<Map.Entry<Class<?>, RenderableState>, String> classStateToTexturePath){
+    public GraphicsHandler(String pathGameField,
+                           Map<Map.Entry<Class<?>, RenderableState>, String> classStateToTexturePath,
+                           Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics){
         this.batch = new SpriteBatch();
         this.level = new TmxMapLoader().load(pathGameField);
         this.levelRenderer = createSingleLayerMapRenderer(level, batch);
         this.groundLayer = getSingleLayer(level);
         this.tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
+
+        this.classToGraphics = classToGraphics;
         this.classStateToTexturePath = classStateToTexturePath;
     }
 
@@ -62,24 +66,36 @@ public class GraphicsHandler implements Graphics, Toggleable{
 
     public void addGraphicsObjects(Renderable renderable, RenderableState state) {
         String path = classStateToTexturePath.get(new AbstractMap.SimpleEntry<>(renderable.getClass(), state));
-        if (path != null) {
-            Graphics graphics = new GameObjectGraphics(path, renderable, tileMovement, batch);
-            graphicsObjects.add(graphics);
-            objectToGraphics.put(renderable, graphics);
+        HashSet<Class<? extends Graphics>> graphicsClasses = classToGraphics.get(renderable.getClass());
+        objectToGraphics.put(renderable, new HashSet<>());
+        if (path != null && graphicsClasses != null) {
+            for (Class<? extends Graphics> graphicsClass : graphicsClasses) {
+                Graphics graphics = getGraphics(renderable, graphicsClass, path);
+                graphicsObjects.add(graphics);
+                objectToGraphics.get(renderable).add(graphics);
+            }
         }
+    }
 
-        //TODO: redo
-        if (renderable instanceof Hittable) {
-            Graphics graphics = new HealthBarGraphics((Hittable) renderable, renderable, tileMovement, batch);
-            graphicsObjects.add(graphics);
-            objectToGraphics.put(renderable, graphics);
+    private Graphics getGraphics(Renderable renderable, Class<? extends Graphics> graphicsClass, String path) {
+        Graphics graphics;
+        //TODO: redo with reflections
+        if (graphicsClass.equals(GameObjectGraphics.class)) {
+            graphics = new GameObjectGraphics(path, renderable, tileMovement, batch);
+        } else if (graphicsClass.equals(HealthBarGraphics.class)) {
+            graphics = new HealthBarGraphics((Hittable) renderable, renderable,tileMovement, batch);
+        } else {
+            throw new IllegalArgumentException("unknown Class<? extends Graphics>");
         }
+        return graphics;
     }
 
     public void parseState(Renderable renderable, RenderableState state) {
         switch (state) {
             case INACTIVE: {
-                graphicsObjects.remove(objectToGraphics.get(renderable));
+                for(Graphics graphics : objectToGraphics.get(renderable)) {
+                    graphicsObjects.remove(graphics);
+                }
                 objectToGraphics.remove(renderable);
                 addGraphicsObjects(renderable, state);
                 break;
