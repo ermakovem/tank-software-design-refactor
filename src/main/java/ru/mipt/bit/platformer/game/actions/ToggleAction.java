@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.game.actions;
 
-import ru.mipt.bit.platformer.graphics.Toggleable;
+import ru.mipt.bit.platformer.graphics.objects.Toggleable;
 
 public class ToggleAction implements Action<Toggleable> {
     @Override

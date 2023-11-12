@@ -3,7 +3,7 @@ package ru.mipt.bit.platformer.game.objectsWithHelpers.objects.projectile;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.GameObject;
 import ru.mipt.bit.platformer.game.GameObjectState;
-import ru.mipt.bit.platformer.graphics.Renderable;
+import ru.mipt.bit.platformer.graphics.objects.Renderable;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CanMove;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.Collidable;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.badlogic.gdx.math.MathUtils.*;
-import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.continueProgress;
+import static ru.mipt.bit.platformer.game.util.GdxGameUtils.continueProgress;
 
 public class Projectile implements GameObject, CanMove, Renderable {
     private final int damage = 35;

@@ -1,11 +1,11 @@
-package ru.mipt.bit.platformer.graphics.util;
+package ru.mipt.bit.platformer.game.util;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 
-import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.moveRectangleAtTileCenter;
+import static ru.mipt.bit.platformer.game.util.GdxGameUtils.moveRectangleAtTileCenter;
 
 public class TileMovement {
 

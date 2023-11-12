@@ -6,14 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.graphics.Graphics;
-import ru.mipt.bit.platformer.graphics.Renderable;
-import ru.mipt.bit.platformer.graphics.Toggleable;
-import ru.mipt.bit.platformer.graphics.util.TileMovement;
+import ru.mipt.bit.platformer.game.util.TileMovement;
 import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Hittable;
 
-import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createBoundingRectangle;
-import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.game.util.GdxGameUtils.createBoundingRectangle;
+import static ru.mipt.bit.platformer.game.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class HealthBarGraphics implements Graphics, Toggleable {
     private final Texture textureRedBar;

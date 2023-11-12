@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.graphics.util;
+package ru.mipt.bit.platformer.game.util;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
