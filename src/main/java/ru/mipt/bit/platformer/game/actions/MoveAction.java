@@ -20,4 +20,9 @@ public enum MoveAction implements Action<CanMove> {
     public void apply(CanMove canMove) {
             canMove.moveTo(vector);
     }
+
+    @Override
+    public Class<?> getRequiredInterface() {
+        return CanMove.class;
+    }
 }

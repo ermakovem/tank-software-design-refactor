@@ -104,7 +104,7 @@ public class GraphicsHandler implements Graphics, Toggleable{
                 break;
             }
             default: {
-                throw new IllegalArgumentException("unknown GameObjectState");
+                throw new IllegalArgumentException("unknown RenderableState");
             }
         }
     }

@@ -7,4 +7,9 @@ public class ToggleAction implements Action<Toggleable> {
     public void apply(Toggleable toggleable) {
         toggleable.toggle();
     }
+
+    @Override
+    public Class<?> getRequiredInterface() {
+        return Toggleable.class;
+    }
 }

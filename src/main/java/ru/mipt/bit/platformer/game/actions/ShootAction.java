@@ -8,4 +8,9 @@ public class ShootAction implements Action<CanShoot> {
     public void apply(CanShoot canShoot) {
         canShoot.shoot();
     }
+
+    @Override
+    public Class<?> getRequiredInterface() {
+        return CanShoot.class;
+    }
 }
