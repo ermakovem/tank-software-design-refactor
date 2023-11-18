@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.util.TileMovement;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.tank.Hittable;
+import ru.mipt.bit.platformer.actionGenerators.actions.Toggleable;
+import ru.mipt.bit.platformer.graphics.util.TileMovement;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.createBoundingRectangle;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createBoundingRectangle;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class HealthBarGraphics implements Graphics, Toggleable {
     private final Texture textureRedBar;
@@ -19,12 +19,12 @@ public class HealthBarGraphics implements Graphics, Toggleable {
     private Texture textureGreenBar;
     private TextureRegion graphicsGreenBar;
     private final Renderable renderable;
-    private final Hittable hittable;
+    private final HasHP hasHP;
     private final TileMovement tileMovement;
     private final Batch batch;
     private boolean toggle = true;
 
-    public HealthBarGraphics(Hittable hittable, Renderable renderable, TileMovement tileMovement, Batch batch) {
+    public HealthBarGraphics(HasHP hasHP, Renderable renderable, TileMovement tileMovement, Batch batch) {
         this.textureRedBar = createBarTexture(100, Color.RED);
         this.graphicsRedBar = new TextureRegion(textureRedBar);
         this.rectangle = createBoundingRectangle(graphicsRedBar);
@@ -33,7 +33,7 @@ public class HealthBarGraphics implements Graphics, Toggleable {
         this.graphicsGreenBar = new TextureRegion(textureGreenBar);
 
         this.renderable = renderable;
-        this.hittable = hittable;
+        this.hasHP = hasHP;
         this.tileMovement = tileMovement;
         this.batch = batch;
     }
@@ -48,7 +48,7 @@ public class HealthBarGraphics implements Graphics, Toggleable {
         rectangle.y += 75f;
 
         textureGreenBar.dispose();
-        this.textureGreenBar = createBarTexture(hittable.getHP(), Color.GREEN);
+        this.textureGreenBar = createBarTexture(hasHP.getHP(), Color.GREEN);
         this.graphicsGreenBar = new TextureRegion(textureGreenBar);
         if (toggle) {
             drawTextureRegionUnscaled(batch, graphicsRedBar, rectangle, 0);

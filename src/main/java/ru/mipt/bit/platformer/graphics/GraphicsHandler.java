@@ -7,14 +7,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
+import ru.mipt.bit.platformer.actionGenerators.actions.Toggleable;
 import ru.mipt.bit.platformer.graphics.objects.*;
-import ru.mipt.bit.platformer.util.TileMovement;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.tank.Hittable;
+import ru.mipt.bit.platformer.graphics.util.TileMovement;
 
 import java.util.*;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
+import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.getSingleLayer;
 
 public class GraphicsHandler implements Graphics, Toggleable {
     private final Batch batch;
@@ -77,7 +77,7 @@ public class GraphicsHandler implements Graphics, Toggleable {
         if (graphicsClass.equals(GameObjectGraphics.class)) {
             graphics = new GameObjectGraphics(path, renderable, tileMovement, batch);
         } else if (graphicsClass.equals(HealthBarGraphics.class)) {
-            graphics = new HealthBarGraphics((Hittable) renderable, renderable,tileMovement, batch);
+            graphics = new HealthBarGraphics((HasHP) renderable, renderable,tileMovement, batch);
         } else {
             throw new IllegalArgumentException("unknown Class<? extends Graphics>");
         }

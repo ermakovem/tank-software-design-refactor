@@ -2,10 +2,10 @@ package ru.mipt.bit.platformer.test;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.actions.Action;
-import ru.mipt.bit.platformer.actions.MoveAction;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.obstacle.Obstacle;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.tank.Tank;
+import ru.mipt.bit.platformer.actionGenerators.Action;
+import ru.mipt.bit.platformer.actionGenerators.actions.MoveAction;
+import ru.mipt.bit.platformer.gameLogic.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.gameLogic.objects.tank.Tank;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

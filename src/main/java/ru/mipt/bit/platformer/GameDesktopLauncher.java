@@ -5,20 +5,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.actionGenerators.*;
-import ru.mipt.bit.platformer.actionGenerators.objects.ActionGenerator;
-import ru.mipt.bit.platformer.actionGenerators.objects.InputActionGenerator;
-import ru.mipt.bit.platformer.actionGenerators.objects.RandomActionGenerator;
-import ru.mipt.bit.platformer.actions.MoveAction;
-import ru.mipt.bit.platformer.actions.ShootAction;
-import ru.mipt.bit.platformer.actions.ToggleAction;
+import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.ActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.GeneralActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.predicates.*;
+import ru.mipt.bit.platformer.actionGenerators.actions.MoveAction;
+import ru.mipt.bit.platformer.actionGenerators.actions.ShootAction;
+import ru.mipt.bit.platformer.actionGenerators.actions.ToggleAction;
+import ru.mipt.bit.platformer.gameLogic.GameLevel;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerActionGenerator;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
-import ru.mipt.bit.platformer.levelGenerators.LevelGenerateStrategy;
-import ru.mipt.bit.platformer.levelGenerators.RandomWithEnemiesLevelGenerator;
-import ru.mipt.bit.platformer.objectsWithHelpers.CollisionHandler;
-import ru.mipt.bit.platformer.objectsWithHelpers.LevelListenerCollisionHandler;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.obstacle.Obstacle;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.projectile.Projectile;
-import ru.mipt.bit.platformer.objectsWithHelpers.objects.tank.Tank;
+import ru.mipt.bit.platformer.gameLogic.levelGenerators.LevelGenerateStrategy;
+import ru.mipt.bit.platformer.gameLogic.levelGenerators.RandomWithEnemiesLevelGenerator;
+import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerCollisionHandler;
+import ru.mipt.bit.platformer.gameLogic.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.gameLogic.objects.projectile.Projectile;
+import ru.mipt.bit.platformer.gameLogic.objects.tank.Tank;
 import ru.mipt.bit.platformer.graphics.RenderableState;
 import ru.mipt.bit.platformer.graphics.objects.GameObjectGraphics;
 import ru.mipt.bit.platformer.graphics.objects.Graphics;
@@ -36,12 +40,11 @@ public class GameDesktopLauncher implements ApplicationListener {
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
     private ActionGeneratorsHandler actionGeneratorsHandler;
-    //private ControllersHandler controllers;
 
     public GameDesktopLauncher() {
     }
 
-    private static void clearScreen() {
+    private void clearScreen() {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
     }
@@ -106,22 +109,25 @@ public class GameDesktopLauncher implements ApplicationListener {
     private ArrayList<LevelListener> createLevelListenersAndActionGenerators() {
         //createActionGenerators
         Collection<ActionGenerator> actionGenerators = new ArrayList<>();
-        actionGenerators.add(new ActionGeneratorDecorator(new RandomActionGenerator(Tank.class, new ShootAction(), 0.01f),
-                new RandomActionGenerator(Tank.class, MoveAction.UP, 0.25f),
-                new RandomActionGenerator(Tank.class, MoveAction.DOWN, 0.25f),
-                new RandomActionGenerator(Tank.class, MoveAction.RIGHT, 0.25f),
-                new RandomActionGenerator(Tank.class, MoveAction.LEFT, 0.25f)));
-        actionGenerators.add(new ActionGeneratorDecorator(new RandomActionGenerator(Tank.class, new ShootAction(), 0.01f),
-                new RandomActionGenerator(Tank.class, MoveAction.UP, 0.25f),
-                new RandomActionGenerator(Tank.class, MoveAction.DOWN, 0.25f),
-                new RandomActionGenerator(Tank.class, MoveAction.RIGHT, 0.25f),
-                new RandomActionGenerator(Tank.class, MoveAction.LEFT, 0.25f)));
-        actionGenerators.add(new ActionGeneratorDecorator(new InputActionGenerator(Tank.class, new ShootAction(), SPACE),
-                new InputActionGenerator(Tank.class, MoveAction.UP, W),
-                new InputActionGenerator(Tank.class, MoveAction.DOWN, S),
-                new InputActionGenerator(Tank.class, MoveAction.LEFT, A),
-                new InputActionGenerator(Tank.class, MoveAction.RIGHT, D)));
-        actionGenerators.add(new InputActionGenerator(GraphicsHandler.class, new ToggleAction(), L));
+        actionGenerators.add(new ActionGeneratorDecorator(
+                new GeneralActionGenerator(Tank.class, new ShootAction(), new RandomPredicate(0.001f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.UP, new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.DOWN, new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.RIGHT, new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.LEFT, new RandomPredicate(0.1f))));
+        actionGenerators.add(new ActionGeneratorDecorator(
+                new GeneralActionGenerator(Tank.class, new ShootAction(), new RandomPredicate(0.001f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.UP, new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.DOWN, new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.RIGHT, new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, MoveAction.LEFT, new RandomPredicate(0.1f))));
+        actionGenerators.add(new ActionGeneratorDecorator(
+                new GeneralActionGenerator(Tank.class, new ShootAction(), new InputIsKeyPressedPredicate(SPACE)),
+                new GeneralActionGenerator(Tank.class, MoveAction.UP, new InputIsKeyPressedPredicate(W)),
+                new GeneralActionGenerator(Tank.class, MoveAction.DOWN, new InputIsKeyPressedPredicate(S)),
+                new GeneralActionGenerator(Tank.class, MoveAction.RIGHT, new InputIsKeyPressedPredicate(D)),
+                new GeneralActionGenerator(Tank.class, MoveAction.LEFT, new InputIsKeyPressedPredicate(A))));
+        actionGenerators.add(new GeneralActionGenerator(GraphicsHandler.class, new ToggleAction(), new InputIsKeyJustPressedPredicate(L)));
 
         actionGeneratorsHandler = new ActionGeneratorsHandler(actionGenerators);
         actionGeneratorsHandler.add(graphicsHandler);//!!!!

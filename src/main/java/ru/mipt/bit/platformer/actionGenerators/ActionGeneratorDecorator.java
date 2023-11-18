@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.actionGenerators;
 
-import ru.mipt.bit.platformer.actionGenerators.objects.ActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.ActionGenerator;
 
 import java.util.ArrayList;
 import java.util.Collection;
