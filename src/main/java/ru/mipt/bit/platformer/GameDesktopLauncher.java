@@ -4,23 +4,21 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import ru.mipt.bit.platformer.game.GameLevel;
-import ru.mipt.bit.platformer.game.LevelListener;
-import ru.mipt.bit.platformer.game.actions.MoveAction;
-import ru.mipt.bit.platformer.game.actions.ShootAction;
-import ru.mipt.bit.platformer.game.controllers.ControllersHandler;
-import ru.mipt.bit.platformer.game.controllers.LevelListenerController;
-import ru.mipt.bit.platformer.game.controllers.input.InputController;
-import ru.mipt.bit.platformer.game.controllers.random.RandomController;
+import ru.mipt.bit.platformer.actionGenerators.*;
+import ru.mipt.bit.platformer.actionGenerators.objects.ActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.objects.InputActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.objects.RandomActionGenerator;
+import ru.mipt.bit.platformer.actions.MoveAction;
+import ru.mipt.bit.platformer.actions.ShootAction;
+import ru.mipt.bit.platformer.actions.ToggleAction;
 import ru.mipt.bit.platformer.graphics.GraphicsHandler;
-import ru.mipt.bit.platformer.game.LevelListenerGraphics;
-import ru.mipt.bit.platformer.game.levelGenerators.LevelGenerateStrategy;
-import ru.mipt.bit.platformer.game.levelGenerators.RandomWithEnemiesLevelGenerator;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.CollisionHandler;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.LevelListenerCollisionHandler;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.obstacle.Obstacle;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.projectile.Projectile;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
+import ru.mipt.bit.platformer.levelGenerators.LevelGenerateStrategy;
+import ru.mipt.bit.platformer.levelGenerators.RandomWithEnemiesLevelGenerator;
+import ru.mipt.bit.platformer.objectsWithHelpers.CollisionHandler;
+import ru.mipt.bit.platformer.objectsWithHelpers.LevelListenerCollisionHandler;
+import ru.mipt.bit.platformer.objectsWithHelpers.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.objectsWithHelpers.objects.projectile.Projectile;
+import ru.mipt.bit.platformer.objectsWithHelpers.objects.tank.Tank;
 import ru.mipt.bit.platformer.graphics.RenderableState;
 import ru.mipt.bit.platformer.graphics.objects.GameObjectGraphics;
 import ru.mipt.bit.platformer.graphics.objects.Graphics;
@@ -37,7 +35,8 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private GraphicsHandler graphicsHandler;
     private GameLevel level;
-    private ControllersHandler controllers;
+    private ActionGeneratorsHandler actionGeneratorsHandler;
+    //private ControllersHandler controllers;
 
     public GameDesktopLauncher() {
     }
@@ -59,7 +58,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         graphicsHandler = new GraphicsHandler("level.tmx", createClassToPath(), createClassToGraphics());
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
-                new RandomWithEnemiesLevelGenerator(createLevelListenersAndControllers(),
+                new RandomWithEnemiesLevelGenerator(createLevelListenersAndActionGenerators(),
                         tilesWidth, tilesHeight, 10, 2);
 
         level = randomWithEnemiesLevelGenerator.generate();
@@ -71,7 +70,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        controllers.applyActions();
+        actionGeneratorsHandler.apply();
 
         level.updateState(deltaTime);
 
@@ -104,30 +103,37 @@ public class GameDesktopLauncher implements ApplicationListener {
         return classToGraphics;
     }
 
-    private ArrayList<LevelListener> createLevelListenersAndControllers() {
-        //createControllers
-        InputController inputController1 = new InputController();
-        inputController1.mapKeyToAction(UP, MoveAction.UP);
-        inputController1.mapKeyToAction(W, MoveAction.UP);
-        inputController1.mapKeyToAction(DOWN, MoveAction.DOWN);
-        inputController1.mapKeyToAction(S, MoveAction.DOWN);
-        inputController1.mapKeyToAction(RIGHT, MoveAction.RIGHT);
-        inputController1.mapKeyToAction(D, MoveAction.RIGHT);
-        inputController1.mapKeyToAction(LEFT, MoveAction.LEFT);
-        inputController1.mapKeyToAction(A, MoveAction.LEFT);
-        inputController1.mapKeyToAction(SPACE, new ShootAction());
+    private ArrayList<LevelListener> createLevelListenersAndActionGenerators() {
+        //createActionGenerators
+        Collection<ActionGenerator> actionGenerators = new ArrayList<>();
+        actionGenerators.add(new ActionGeneratorDecorator(new RandomActionGenerator(Tank.class, new ShootAction(), 0.01f),
+                new RandomActionGenerator(Tank.class, MoveAction.UP, 0.25f),
+                new RandomActionGenerator(Tank.class, MoveAction.DOWN, 0.25f),
+                new RandomActionGenerator(Tank.class, MoveAction.RIGHT, 0.25f),
+                new RandomActionGenerator(Tank.class, MoveAction.LEFT, 0.25f)));
+        actionGenerators.add(new ActionGeneratorDecorator(new RandomActionGenerator(Tank.class, new ShootAction(), 0.01f),
+                new RandomActionGenerator(Tank.class, MoveAction.UP, 0.25f),
+                new RandomActionGenerator(Tank.class, MoveAction.DOWN, 0.25f),
+                new RandomActionGenerator(Tank.class, MoveAction.RIGHT, 0.25f),
+                new RandomActionGenerator(Tank.class, MoveAction.LEFT, 0.25f)));
+        actionGenerators.add(new ActionGeneratorDecorator(new InputActionGenerator(Tank.class, new ShootAction(), SPACE),
+                new InputActionGenerator(Tank.class, MoveAction.UP, W),
+                new InputActionGenerator(Tank.class, MoveAction.DOWN, S),
+                new InputActionGenerator(Tank.class, MoveAction.LEFT, A),
+                new InputActionGenerator(Tank.class, MoveAction.RIGHT, D)));
+        actionGenerators.add(new InputActionGenerator(GraphicsHandler.class, new ToggleAction(), L));
 
-        controllers = new ControllersHandler(inputController1,
-                new RandomController(), new RandomController());
+        actionGeneratorsHandler = new ActionGeneratorsHandler(actionGenerators);
+        actionGeneratorsHandler.add(graphicsHandler);//!!!!
 
         //createLevelListeners
         ArrayList<LevelListener> levelListeners = new ArrayList<>();
-        LevelListenerController levelListenerController = new LevelListenerController(controllers);
+        LevelListenerActionGenerator levelListenerActionGenerator = new LevelListenerActionGenerator(actionGeneratorsHandler);
         LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
         LevelListenerCollisionHandler levelListenerCollisionHandler =
                 new LevelListenerCollisionHandler(new CollisionHandler(tilesHeight, tilesWidth));
 
-        levelListeners.add(levelListenerController);
+        levelListeners.add(levelListenerActionGenerator);
         levelListeners.add(levelListenerGraphics);
         levelListeners.add(levelListenerCollisionHandler);
         return levelListeners;

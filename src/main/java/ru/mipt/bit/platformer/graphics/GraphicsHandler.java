@@ -6,23 +6,17 @@ import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Interpolation;
-import org.lwjgl.opengl.GLXSGIMakeCurrentRead;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Tank;
 import ru.mipt.bit.platformer.graphics.objects.*;
-import ru.mipt.bit.platformer.game.util.TileMovement;
-import ru.mipt.bit.platformer.game.objectsWithHelpers.objects.tank.Hittable;
+import ru.mipt.bit.platformer.util.TileMovement;
+import ru.mipt.bit.platformer.objectsWithHelpers.objects.tank.Hittable;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
-import static ru.mipt.bit.platformer.game.util.GdxGameUtils.createSingleLayerMapRenderer;
-import static ru.mipt.bit.platformer.game.util.GdxGameUtils.getSingleLayer;
+import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
+import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 
-public class GraphicsHandler implements Graphics, Toggleable{
+public class GraphicsHandler implements Graphics, Toggleable {
     private final Batch batch;
     private final TiledMap level;
     private final MapRenderer levelRenderer;
