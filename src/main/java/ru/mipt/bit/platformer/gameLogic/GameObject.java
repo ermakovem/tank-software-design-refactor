@@ -8,5 +8,5 @@ public interface GameObject {
 
     GameObjectState getState();
 
-    Collection<GameObject> getCreatedGameObjects();
+    //Collection<GameObject> getCreatedGameObjects();
 }

@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.gameLogic.objects.obstacle;
+package ru.mipt.bit.platformer.gameLogic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
@@ -45,10 +45,5 @@ public class Obstacle implements GameObject, Collidable, Renderable {
     @Override
     public GameObjectState getState() {
         return state;
-    }
-
-    @Override
-    public Collection<GameObject> getCreatedGameObjects() {
-        return new ArrayList<>();
     }
 }

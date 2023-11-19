@@ -1,13 +1,13 @@
-package ru.mipt.bit.platformer.gameLogic.objects.projectile;
+package ru.mipt.bit.platformer.gameLogic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
+import ru.mipt.bit.platformer.gameLogic.objects.tank.Hittable;
 import ru.mipt.bit.platformer.graphics.objects.Renderable;
 import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
 import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
-import ru.mipt.bit.platformer.gameLogic.objects.tank.Hittable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,11 +68,6 @@ public class Projectile implements GameObject, CanMove, Renderable {
     @Override
     public GameObjectState getState() {
         return state;
-    }
-
-    @Override
-    public Collection<GameObject> getCreatedGameObjects() {
-        return new ArrayList<>();
     }
 
     private boolean isNotMoving() {

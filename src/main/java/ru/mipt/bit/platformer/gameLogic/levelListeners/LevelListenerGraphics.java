@@ -29,15 +29,10 @@ public class LevelListenerGraphics implements LevelListener {
     }
 
     private RenderableState convertState(GameObjectState state) {
-        switch (state) {
-            case ALIVE: {
-                return RenderableState.ACTIVE;
-            }
-            case DEAD: {
-                return RenderableState.INACTIVE;
-            }
-            default:
-                throw new IllegalArgumentException("Unknown GameObjectState");
-        }
+        return switch (state) {
+            case ALIVE -> RenderableState.ACTIVE;
+            case DEAD -> RenderableState.INACTIVE;
+            default -> throw new IllegalArgumentException("Unknown GameObjectState");
+        };
     }
 }

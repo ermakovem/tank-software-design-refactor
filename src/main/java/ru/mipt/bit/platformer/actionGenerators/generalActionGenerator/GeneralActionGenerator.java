@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.actionGenerators.generalActionGenerator;
 
 import ru.mipt.bit.platformer.actionGenerators.Action;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class GeneralActionGenerator implements ActionGenerator {
@@ -12,20 +13,18 @@ public class GeneralActionGenerator implements ActionGenerator {
 
 
     public GeneralActionGenerator(Class<?> requiredClass, Action action, Predicate<Object> predicate) {
-        //TODO: there has to be a simpler way :)
-        boolean found = false;
-        for (Class<?> anInterface : requiredClass.getInterfaces()) {
-            if (action.getRequiredInterface() == anInterface) {
-                found = true;
-            }
-        }
-        if (!found) {
-            throw new IllegalArgumentException("requiredClass cannot do the action");
-        }
+
+        checkIfClassSupportsAction(requiredClass, action);
 
         this.requiredClass = requiredClass;
         this.action = action;
         this.predicate = predicate;
+    }
+
+    private void checkIfClassSupportsAction(Class<?> requiredClass, Action action) {
+        if (!Arrays.stream(requiredClass.getInterfaces()).toList().contains(action.getRequiredInterface())) {
+            throw new IllegalArgumentException("requiredClass cannot do the action");
+        }
     }
 
     @Override

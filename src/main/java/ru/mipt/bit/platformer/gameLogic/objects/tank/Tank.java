@@ -2,14 +2,15 @@ package ru.mipt.bit.platformer.gameLogic.objects.tank;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.actionGenerators.actions.CanShoot;
+import ru.mipt.bit.platformer.gameLogic.CanCreateGameObjects;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
+import ru.mipt.bit.platformer.gameLogic.objects.Projectile;
 import ru.mipt.bit.platformer.graphics.objects.HasHP;
 import ru.mipt.bit.platformer.graphics.objects.Renderable;
 import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
 import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
-import ru.mipt.bit.platformer.gameLogic.objects.projectile.Projectile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.Collection;
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.continueProgress;
 
-public class Tank implements GameObject, CanMove, Collidable, CanShoot, Hittable, Renderable, HasHP {
+public class Tank implements GameObject, CanCreateGameObjects, CanMove, Collidable, CanShoot, Hittable, Renderable, HasHP {
     private final GridPoint2 coordinates;
     private final float movementSpeed;
     private final int reloadInTicks = 100;

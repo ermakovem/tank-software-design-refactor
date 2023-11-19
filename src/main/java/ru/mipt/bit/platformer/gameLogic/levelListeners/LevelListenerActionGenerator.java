@@ -25,15 +25,10 @@ public class LevelListenerActionGenerator implements LevelListener {
     }
 
     private ObjectState convertState(GameObjectState state) {
-        switch (state) {
-            case ALIVE: {
-                return ObjectState.ACTIVE;
-            }
-            case DEAD: {
-                return ObjectState.INACTIVE;
-            }
-            default:
-                throw new IllegalArgumentException("Unknown GameObjectState");
-        }
+        return switch (state) {
+            case ALIVE -> ObjectState.ACTIVE;
+            case DEAD -> ObjectState.INACTIVE;
+            default -> throw new IllegalArgumentException("Unknown GameObjectState");
+        };
     }
 }

@@ -24,7 +24,9 @@ public class GameLevel {
     public void updateState(float deltaTime) {
         for (GameObject gameObject : gameObjects) {
             gameObject.updateState(deltaTime);
-            getNewObjects(gameObject);
+            if (gameObject instanceof CanCreateGameObjects) {
+                getNewObjects((CanCreateGameObjects) gameObject);
+            }
             parseState(gameObject);
         }
         handleToBeRemoved();
@@ -49,7 +51,7 @@ public class GameLevel {
         }
     }
 
-    private void getNewObjects(GameObject gameObject) {
+    private void getNewObjects(CanCreateGameObjects gameObject) {
         for (GameObject createdGameObject : gameObject.getCreatedGameObjects()) {
             toBeAdded.add(createdGameObject);
         }

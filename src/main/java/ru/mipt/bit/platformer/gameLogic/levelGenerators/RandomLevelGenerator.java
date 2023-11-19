@@ -6,7 +6,7 @@ import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
 import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
-import ru.mipt.bit.platformer.gameLogic.objects.obstacle.Obstacle;
+import ru.mipt.bit.platformer.gameLogic.objects.Obstacle;
 import ru.mipt.bit.platformer.gameLogic.objects.tank.Tank;
 
 import java.util.ArrayList;
