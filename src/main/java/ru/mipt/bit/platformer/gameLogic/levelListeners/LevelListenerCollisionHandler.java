@@ -1,6 +1,6 @@
 package ru.mipt.bit.platformer.gameLogic.levelListeners;
 
-import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
+import ru.mipt.bit.platformer.actionGenerators.actions.move.CanMove;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
 import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;

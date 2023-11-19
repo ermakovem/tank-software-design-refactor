@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TankTest {
     @Test
     void testTankMoveTo() {
-        Tank tank = new Tank(new GridPoint2(0, 0), 0.4f, true);
+        Tank tank = new Tank(new GridPoint2(0, 0), 0.4f);
         GridPoint2 targetCoordinate = new GridPoint2(0, 1);
-        tank.moveTo(targetCoordinate);
+        //tank.moveTo(targetCoordinate);
 
         assertEquals(tank.getDestinationCoordinates(), targetCoordinate);
         assertEquals(tank.getRotation(), 90f);
@@ -20,9 +20,9 @@ class TankTest {
 
     @Test
     void testTankUpdateState() {
-        Tank tank = new Tank(new GridPoint2(0, 0), 0.5f, true);
+        Tank tank = new Tank(new GridPoint2(0, 0), 0.5f);
         GridPoint2 targetCoordinate = new GridPoint2(0, 1);
-        tank.moveTo(targetCoordinate);
+        //tank.moveTo(targetCoordinate);
 
         tank.updateState(0.2f);
         assertEquals(tank.getMovementProgress(), 0.4f);

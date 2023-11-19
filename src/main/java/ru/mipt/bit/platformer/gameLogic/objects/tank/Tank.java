@@ -1,8 +1,9 @@
 package ru.mipt.bit.platformer.gameLogic.objects.tank;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
-import ru.mipt.bit.platformer.actionGenerators.actions.CanShoot;
+import ru.mipt.bit.platformer.actionGenerators.actions.move.CanMove;
+import ru.mipt.bit.platformer.actionGenerators.actions.move.Direction;
+import ru.mipt.bit.platformer.actionGenerators.actions.shoot.CanShoot;
 import ru.mipt.bit.platformer.gameLogic.CanCreateGameObjects;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
@@ -15,37 +16,34 @@ import ru.mipt.bit.platformer.graphics.objects.Renderable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.badlogic.gdx.math.MathUtils.*;
-import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.continueProgress;
+import static com.badlogic.gdx.math.MathUtils.isEqual;
 
 public class Tank implements GameObject, CanCreateGameObjects, CanMove, Collidable, CanShoot, Hittable, Renderable, HasHP {
     private final GridPoint2 coordinates;
     private final float movementSpeed;
     private final int reloadInTicks = 100;
-    private final boolean isPlayer;
+    private final TankInternalStatesHandler modifiersHandler = new TankInternalStatesHandler(this);
     ArrayList<GameObject> createdGameObjects = new ArrayList<>();
     private GridPoint2 destinationCoordinates;
     private float movementProgress = 1f;
-    private float rotation = 0f;
+    private Direction direction = Direction.RIGHT;
     private int currentReload = reloadInTicks;
     private GameObjectState state;
     private int hp = 100;
-    private final TankInternalStatesHandler modifiersHandler = new TankInternalStatesHandler(this);
     private CollisionHandler collisionHandler = new CollisionHandler(10, 8);
 
-    public Tank(GridPoint2 coordinates, float movementSpeed, boolean isPlayer) {
+    public Tank(GridPoint2 coordinates, float movementSpeed) {
         state = GameObjectState.ALIVE;
         this.coordinates = coordinates;
         this.destinationCoordinates = new GridPoint2(coordinates);
         this.movementSpeed = movementSpeed;
-        this.isPlayer = isPlayer;
     }
 
     @Override
     public void updateState(float deltaTime) {
         modifiersHandler.updateInternalState();
 
-        movementProgress = continueProgress(movementProgress, deltaTime,
+        movementProgress = CanMove.continueProgress(movementProgress, deltaTime,
                 movementSpeed * modifiersHandler.getMovementSpeedKoef());
         if (isNotMoving()) {
             coordinates.set(destinationCoordinates);
@@ -83,7 +81,7 @@ public class Tank implements GameObject, CanCreateGameObjects, CanMove, Collidab
 
     @Override
     public float getRotation() {
-        return rotation;
+        return direction.getRotation();
     }
 
     @Override
@@ -92,13 +90,13 @@ public class Tank implements GameObject, CanCreateGameObjects, CanMove, Collidab
     }
 
     @Override
-    public void moveTo(GridPoint2 vector) {
+    public void moveTo(Direction direction) {
         if (isNotMoving()) {
-            if (collisionHandler.isFree(coordinates.cpy().add(vector))) {
-                destinationCoordinates = destinationCoordinates.add(vector);
+            if (collisionHandler.isFree(coordinates.cpy().add(direction.getVector()))) {
+                destinationCoordinates = destinationCoordinates.add(direction.getVector());
                 movementProgress = 0;
             }
-            rotation = floor(atan2(vector.y, vector.x) * 180f / PI);
+            this.direction = direction;
         }
     }
 
@@ -106,12 +104,8 @@ public class Tank implements GameObject, CanCreateGameObjects, CanMove, Collidab
     public void shoot() {
         if (currentReload == reloadInTicks && modifiersHandler.canShoot()) {
             currentReload = 0;
-            createdGameObjects.add(new Projectile(destinationCoordinates, rotation));
+            createdGameObjects.add(new Projectile(destinationCoordinates, direction));
         }
-    }
-
-    public boolean isPlayer() {
-        return isPlayer;
     }
 
     private boolean isNotMoving() {

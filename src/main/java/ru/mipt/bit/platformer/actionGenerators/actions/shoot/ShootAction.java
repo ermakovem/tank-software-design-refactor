@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.actionGenerators.actions;
+package ru.mipt.bit.platformer.actionGenerators.actions.shoot;
 
 import ru.mipt.bit.platformer.actionGenerators.Action;
 
@@ -9,7 +9,7 @@ public class ShootAction implements Action<CanShoot> {
     }
 
     @Override
-    public Class<?> getRequiredInterface() {
+    public Class<CanShoot> getRequiredInterface() {
         return CanShoot.class;
     }
 }

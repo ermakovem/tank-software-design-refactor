@@ -49,7 +49,7 @@ public class RandomLevelGenerator implements LevelGenerateStrategy {
 
         //generate 1 player tank
         GridPoint2 randCoord = getRandPoint();
-        tryAdd(new Tank(randCoord, 0.4f, true), randCoord);
+        tryAdd(new Tank(randCoord, 0.4f), randCoord);
         //generate trees
         while (amountOfTrees > 0) {
             randCoord = getRandPoint();

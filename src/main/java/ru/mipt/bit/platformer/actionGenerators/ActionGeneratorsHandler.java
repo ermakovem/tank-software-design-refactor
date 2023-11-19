@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionGeneratorsHandler {
-    private Collection<ActionGenerator> actionGenerators = new ArrayList<>();
     private final Map<Object, Collection<ActionGenerator>> ownerToActionGenerator = new HashMap<>();
+    private Collection<ActionGenerator> actionGenerators = new ArrayList<>();
 
     public ActionGeneratorsHandler(Collection<ActionGenerator> actionGenerators) {
         this.actionGenerators = actionGenerators;

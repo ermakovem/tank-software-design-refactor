@@ -6,12 +6,12 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import ru.mipt.bit.platformer.actionGenerators.ActionGeneratorDecorator;
 import ru.mipt.bit.platformer.actionGenerators.ActionGeneratorsHandler;
-import ru.mipt.bit.platformer.actionGenerators.actions.MoveAction;
-import ru.mipt.bit.platformer.actionGenerators.actions.ShootAction;
-import ru.mipt.bit.platformer.actionGenerators.actions.ToggleAction;
+import ru.mipt.bit.platformer.actionGenerators.actions.move.Direction;
+import ru.mipt.bit.platformer.actionGenerators.actions.move.MoveAction;
+import ru.mipt.bit.platformer.actionGenerators.actions.shoot.ShootAction;
+import ru.mipt.bit.platformer.actionGenerators.actions.toggle.ToggleAction;
 import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.ActionGenerator;
 import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.GeneralActionGenerator;
-import ru.mipt.bit.platformer.actionGenerators.predicates.InputIsKeyJustPressedPredicate;
 import ru.mipt.bit.platformer.actionGenerators.predicates.InputIsKeyPressedPredicate;
 import ru.mipt.bit.platformer.actionGenerators.predicates.RandomPredicate;
 import ru.mipt.bit.platformer.gameLogic.GameLevel;
@@ -32,17 +32,17 @@ import ru.mipt.bit.platformer.graphics.objects.Graphics;
 import ru.mipt.bit.platformer.graphics.objects.HealthBarGraphics;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static com.badlogic.gdx.Input.Keys.*;
-import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private final int tilesHeight = 8;
     private final int tilesWidth = 10;
 
-    private GraphicsHandler graphicsHandler;
+    private GraphicsHandler graphics;
     private GameLevel level;
-    private ActionGeneratorsHandler actionGeneratorsHandler;
+    private ActionGeneratorsHandler actionGenerator;
 
     public GameDesktopLauncher() {
     }
@@ -54,17 +54,14 @@ public class GameDesktopLauncher implements ApplicationListener {
         new Lwjgl3Application(new GameDesktopLauncher(), config);
     }
 
-    private void clearScreen() {
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
-        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
-    }
-
     @Override
     public void create() {
-        graphicsHandler = new GraphicsHandler("level.tmx", createClassToPath(), createClassToGraphics());
+        graphics = new GraphicsHandler("level.tmx", createClassToTexturePath(), createClassToGraphics());
+
+        createActionGenerators();
 
         LevelGenerateStrategy randomWithEnemiesLevelGenerator =
-                new RandomWithEnemiesLevelGenerator(createLevelListenersAndActionGenerators(),
+                new RandomWithEnemiesLevelGenerator(createLevelListeners(),
                         tilesWidth, tilesHeight, 10, 2);
 
         level = randomWithEnemiesLevelGenerator.generate();
@@ -72,18 +69,14 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void render() {
-        clearScreen();
+        actionGenerator.apply();
 
-        float deltaTime = Gdx.graphics.getDeltaTime();
+        level.updateState(Gdx.graphics.getDeltaTime());
 
-        actionGeneratorsHandler.apply();
-
-        level.updateState(deltaTime);
-
-        graphicsHandler.render();
+        graphics.render();
     }
 
-    private Map<Map.Entry<Class<?>, RenderableState>, String> createClassToPath() {
+    private Map<Map.Entry<Class<?>, RenderableState>, String> createClassToTexturePath() {
         Map<Map.Entry<Class<?>, RenderableState>, String> classStateToPath = new HashMap<>();
         classStateToPath.put(new AbstractMap.SimpleEntry<>(Tank.class, RenderableState.ACTIVE),
                 "images/tank_blue.png");
@@ -109,36 +102,10 @@ public class GameDesktopLauncher implements ApplicationListener {
         return classToGraphics;
     }
 
-    private ArrayList<LevelListener> createLevelListenersAndActionGenerators() {
-        //createActionGenerators
-        Collection<ActionGenerator> actionGenerators = new ArrayList<>();
-        actionGenerators.add(new ActionGeneratorDecorator(
-                new GeneralActionGenerator(Tank.class, new ShootAction(), new RandomPredicate(0.001f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.UP, new RandomPredicate(0.1f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.DOWN, new RandomPredicate(0.1f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.RIGHT, new RandomPredicate(0.1f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.LEFT, new RandomPredicate(0.1f))));
-        actionGenerators.add(new ActionGeneratorDecorator(
-                new GeneralActionGenerator(Tank.class, new ShootAction(), new RandomPredicate(0.001f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.UP, new RandomPredicate(0.1f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.DOWN, new RandomPredicate(0.1f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.RIGHT, new RandomPredicate(0.1f)),
-                new GeneralActionGenerator(Tank.class, MoveAction.LEFT, new RandomPredicate(0.1f))));
-        actionGenerators.add(new ActionGeneratorDecorator(
-                new GeneralActionGenerator(Tank.class, new ShootAction(), new InputIsKeyPressedPredicate(SPACE)),
-                new GeneralActionGenerator(Tank.class, MoveAction.UP, new InputIsKeyPressedPredicate(W)),
-                new GeneralActionGenerator(Tank.class, MoveAction.DOWN, new InputIsKeyPressedPredicate(S)),
-                new GeneralActionGenerator(Tank.class, MoveAction.RIGHT, new InputIsKeyPressedPredicate(D)),
-                new GeneralActionGenerator(Tank.class, MoveAction.LEFT, new InputIsKeyPressedPredicate(A))));
-        actionGenerators.add(new GeneralActionGenerator(GraphicsHandler.class, new ToggleAction(), new InputIsKeyJustPressedPredicate(L)));
-
-        actionGeneratorsHandler = new ActionGeneratorsHandler(actionGenerators);
-        actionGeneratorsHandler.add(graphicsHandler);//!!!!
-
-        //createLevelListeners
+    private ArrayList<LevelListener> createLevelListeners() {
         ArrayList<LevelListener> levelListeners = new ArrayList<>();
-        LevelListenerActionGenerator levelListenerActionGenerator = new LevelListenerActionGenerator(actionGeneratorsHandler);
-        LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphicsHandler);
+        LevelListenerActionGenerator levelListenerActionGenerator = new LevelListenerActionGenerator(actionGenerator);
+        LevelListenerGraphics levelListenerGraphics = new LevelListenerGraphics(graphics);
         LevelListenerCollisionHandler levelListenerCollisionHandler =
                 new LevelListenerCollisionHandler(new CollisionHandler(tilesHeight, tilesWidth));
 
@@ -146,6 +113,37 @@ public class GameDesktopLauncher implements ApplicationListener {
         levelListeners.add(levelListenerGraphics);
         levelListeners.add(levelListenerCollisionHandler);
         return levelListeners;
+    }
+
+    private void createActionGenerators() {
+        Collection<ActionGenerator> actionGenerators = new ArrayList<>();
+        actionGenerators.add(new ActionGeneratorDecorator(
+                new GeneralActionGenerator(Tank.class, new ShootAction(), new RandomPredicate(0.001f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.UP), new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.DOWN), new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.RIGHT), new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.LEFT), new RandomPredicate(0.1f))));
+        actionGenerators.add(new ActionGeneratorDecorator(
+                new GeneralActionGenerator(Tank.class, new ShootAction(), new RandomPredicate(0.001f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.UP), new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.DOWN), new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.RIGHT), new RandomPredicate(0.1f)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.LEFT), new RandomPredicate(0.1f))));
+        actionGenerators.add(new ActionGeneratorDecorator(
+                new GeneralActionGenerator(Tank.class, new ShootAction(), new InputIsKeyPressedPredicate(SPACE)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.UP), new InputIsKeyPressedPredicate(W)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.DOWN), new InputIsKeyPressedPredicate(S)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.RIGHT), new InputIsKeyPressedPredicate(D)),
+                new GeneralActionGenerator(Tank.class, new MoveAction(Direction.LEFT), new InputIsKeyPressedPredicate(A))));
+        actionGenerators.add(new GeneralActionGenerator(GraphicsHandler.class, new ToggleAction(), new Predicate<Object>() {
+            @Override
+            public boolean test(Object object) {
+                return Gdx.input.isKeyJustPressed(L);
+            }
+        }));
+
+        actionGenerator = new ActionGeneratorsHandler(actionGenerators);
+        actionGenerator.add(graphics);//!!!!
     }
 
     @Override
@@ -166,6 +164,6 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void dispose() {
         //dispose created objects
-        graphicsHandler.dispose();
+        graphics.dispose();
     }
 }

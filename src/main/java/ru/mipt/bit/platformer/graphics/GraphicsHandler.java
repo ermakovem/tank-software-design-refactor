@@ -1,18 +1,19 @@
 package ru.mipt.bit.platformer.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.actionGenerators.actions.Toggleable;
+import ru.mipt.bit.platformer.actionGenerators.actions.toggle.Toggleable;
 import ru.mipt.bit.platformer.graphics.objects.*;
 import ru.mipt.bit.platformer.graphics.util.TileMovement;
 
 import java.util.*;
 
+import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
 import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.getSingleLayer;
 
@@ -20,13 +21,12 @@ public class GraphicsHandler implements Graphics, Toggleable {
     private final Batch batch;
     private final TiledMap level;
     private final MapRenderer levelRenderer;
-    private final TiledMapTileLayer groundLayer;
     private final TileMovement tileMovement;
     private final Map<Renderable, HashSet<Graphics>> objectToGraphics = new HashMap<>();
     private final Collection<Graphics> graphicsObjects = new ArrayList<>();
     //TODO: rename
     private final Map<Map.Entry<Class<?>, RenderableState>, String> classStateToTexturePath;
-    private Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics = new HashMap<>();
+    private final Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics;
 
     public GraphicsHandler(String pathGameField,
                            Map<Map.Entry<Class<?>, RenderableState>, String> classStateToTexturePath,
@@ -34,20 +34,26 @@ public class GraphicsHandler implements Graphics, Toggleable {
         this.batch = new SpriteBatch();
         this.level = new TmxMapLoader().load(pathGameField);
         this.levelRenderer = createSingleLayerMapRenderer(level, batch);
-        this.groundLayer = getSingleLayer(level);
-        this.tileMovement = new TileMovement(groundLayer, Interpolation.smooth);
+        this.tileMovement = new TileMovement(getSingleLayer(level), Interpolation.smooth);
 
         this.classToGraphics = classToGraphics;
         this.classStateToTexturePath = classStateToTexturePath;
     }
 
     public void render() {
+        clearScreen();
+
         levelRenderer.render();
         batch.begin();
         for (Graphics graphicsObject : graphicsObjects) {
             graphicsObject.render();
         }
         batch.end();
+    }
+
+    private void clearScreen() {
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
+        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
     }
 
     public void dispose() {

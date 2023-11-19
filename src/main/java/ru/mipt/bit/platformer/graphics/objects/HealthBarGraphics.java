@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.actionGenerators.actions.Toggleable;
+import ru.mipt.bit.platformer.actionGenerators.actions.toggle.Toggleable;
 import ru.mipt.bit.platformer.graphics.util.TileMovement;
 
 import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.createBoundingRectangle;
