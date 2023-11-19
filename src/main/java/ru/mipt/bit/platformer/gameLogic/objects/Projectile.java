@@ -1,16 +1,13 @@
 package ru.mipt.bit.platformer.gameLogic.objects;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
-import ru.mipt.bit.platformer.gameLogic.objects.tank.Hittable;
-import ru.mipt.bit.platformer.graphics.objects.Renderable;
-import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
 import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import ru.mipt.bit.platformer.gameLogic.objects.tank.Hittable;
+import ru.mipt.bit.platformer.graphics.objects.Renderable;
 
 import static com.badlogic.gdx.math.MathUtils.*;
 import static ru.mipt.bit.platformer.graphics.util.GdxGameUtils.continueProgress;

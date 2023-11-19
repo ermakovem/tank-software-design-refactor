@@ -3,9 +3,9 @@ package ru.mipt.bit.platformer.gameLogic.levelGenerators;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.gameLogic.GameLevel;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
-import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
 import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
 import ru.mipt.bit.platformer.gameLogic.objects.Obstacle;
 import ru.mipt.bit.platformer.gameLogic.objects.tank.Tank;
 

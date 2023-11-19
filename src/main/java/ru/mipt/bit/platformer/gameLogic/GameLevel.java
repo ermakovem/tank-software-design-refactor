@@ -52,9 +52,7 @@ public class GameLevel {
     }
 
     private void getNewObjects(CanCreateGameObjects gameObject) {
-        for (GameObject createdGameObject : gameObject.getCreatedGameObjects()) {
-            toBeAdded.add(createdGameObject);
-        }
+        toBeAdded.addAll(gameObject.getCreatedGameObjects());
         gameObject.getCreatedGameObjects().clear();
     }
 

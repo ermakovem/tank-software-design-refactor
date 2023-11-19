@@ -30,7 +30,7 @@ public class GraphicsHandler implements Graphics, Toggleable {
 
     public GraphicsHandler(String pathGameField,
                            Map<Map.Entry<Class<?>, RenderableState>, String> classStateToTexturePath,
-                           Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics){
+                           Map<Class<?>, HashSet<Class<? extends Graphics>>> classToGraphics) {
         this.batch = new SpriteBatch();
         this.level = new TmxMapLoader().load(pathGameField);
         this.levelRenderer = createSingleLayerMapRenderer(level, batch);
@@ -77,7 +77,7 @@ public class GraphicsHandler implements Graphics, Toggleable {
         if (graphicsClass.equals(GameObjectGraphics.class)) {
             graphics = new GameObjectGraphics(path, renderable, tileMovement, batch);
         } else if (graphicsClass.equals(HealthBarGraphics.class)) {
-            graphics = new HealthBarGraphics((HasHP) renderable, renderable,tileMovement, batch);
+            graphics = new HealthBarGraphics((HasHP) renderable, renderable, tileMovement, batch);
         } else {
             throw new IllegalArgumentException("unknown Class<? extends Graphics>");
         }
@@ -87,7 +87,7 @@ public class GraphicsHandler implements Graphics, Toggleable {
     public void parseState(Renderable renderable, RenderableState state) {
         switch (state) {
             case INACTIVE: {
-                for(Graphics graphics : objectToGraphics.get(renderable)) {
+                for (Graphics graphics : objectToGraphics.get(renderable)) {
                     graphicsObjects.remove(graphics);
                 }
                 objectToGraphics.remove(renderable);

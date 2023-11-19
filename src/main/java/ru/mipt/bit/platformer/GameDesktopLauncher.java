@@ -4,25 +4,28 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import ru.mipt.bit.platformer.actionGenerators.*;
-import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.ActionGenerator;
-import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.GeneralActionGenerator;
-import ru.mipt.bit.platformer.actionGenerators.predicates.*;
+import ru.mipt.bit.platformer.actionGenerators.ActionGeneratorDecorator;
+import ru.mipt.bit.platformer.actionGenerators.ActionGeneratorsHandler;
 import ru.mipt.bit.platformer.actionGenerators.actions.MoveAction;
 import ru.mipt.bit.platformer.actionGenerators.actions.ShootAction;
 import ru.mipt.bit.platformer.actionGenerators.actions.ToggleAction;
+import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.ActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.generalActionGenerator.GeneralActionGenerator;
+import ru.mipt.bit.platformer.actionGenerators.predicates.InputIsKeyJustPressedPredicate;
+import ru.mipt.bit.platformer.actionGenerators.predicates.InputIsKeyPressedPredicate;
+import ru.mipt.bit.platformer.actionGenerators.predicates.RandomPredicate;
 import ru.mipt.bit.platformer.gameLogic.GameLevel;
-import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
-import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerActionGenerator;
-import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerGraphics;
-import ru.mipt.bit.platformer.graphics.GraphicsHandler;
+import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
 import ru.mipt.bit.platformer.gameLogic.levelGenerators.LevelGenerateStrategy;
 import ru.mipt.bit.platformer.gameLogic.levelGenerators.RandomWithEnemiesLevelGenerator;
-import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerActionGenerator;
 import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerCollisionHandler;
+import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListenerGraphics;
 import ru.mipt.bit.platformer.gameLogic.objects.Obstacle;
 import ru.mipt.bit.platformer.gameLogic.objects.Projectile;
 import ru.mipt.bit.platformer.gameLogic.objects.tank.Tank;
+import ru.mipt.bit.platformer.graphics.GraphicsHandler;
 import ru.mipt.bit.platformer.graphics.RenderableState;
 import ru.mipt.bit.platformer.graphics.objects.GameObjectGraphics;
 import ru.mipt.bit.platformer.graphics.objects.Graphics;
@@ -44,16 +47,16 @@ public class GameDesktopLauncher implements ApplicationListener {
     public GameDesktopLauncher() {
     }
 
-    private void clearScreen() {
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
-        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
-    }
-
     public static void main(String[] args) {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         // level width: 10 tiles x 128px, height: 8 tiles x 128px
         config.setWindowedMode(1280, 1024);
         new Lwjgl3Application(new GameDesktopLauncher(), config);
+    }
+
+    private void clearScreen() {
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f);
+        Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
     }
 
     @Override

@@ -8,9 +8,10 @@ import java.util.Collections;
 
 //somewhat decorator
 public class ActionGeneratorDecorator implements ActionGenerator {
-    private Object object;
     private final Collection<ActionGenerator> actionGenerators = new ArrayList<>();
-    public ActionGeneratorDecorator(ActionGenerator ... actionGenerators) {
+    private Object object;
+
+    public ActionGeneratorDecorator(ActionGenerator... actionGenerators) {
         Collections.addAll(this.actionGenerators, actionGenerators);
     }
 

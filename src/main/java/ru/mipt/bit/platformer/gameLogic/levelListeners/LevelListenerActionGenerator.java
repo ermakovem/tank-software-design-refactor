@@ -4,7 +4,6 @@ import ru.mipt.bit.platformer.actionGenerators.ActionGeneratorsHandler;
 import ru.mipt.bit.platformer.actionGenerators.ObjectState;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
-import ru.mipt.bit.platformer.gameLogic.levelListeners.LevelListener;
 
 public class LevelListenerActionGenerator implements LevelListener {
     // assigns new GameObject with first suitable controller.

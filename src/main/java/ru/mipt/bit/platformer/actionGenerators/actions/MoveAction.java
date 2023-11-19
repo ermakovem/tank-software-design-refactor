@@ -17,7 +17,7 @@ public enum MoveAction implements Action<CanMove> {
 
     @Override
     public void apply(CanMove canMove) {
-            canMove.moveTo(vector);
+        canMove.moveTo(vector);
     }
 
     @Override

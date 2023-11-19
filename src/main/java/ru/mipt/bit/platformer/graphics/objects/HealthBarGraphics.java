@@ -16,12 +16,12 @@ public class HealthBarGraphics implements Graphics, Toggleable {
     private final Texture textureRedBar;
     private final TextureRegion graphicsRedBar;
     private final Rectangle rectangle;
-    private Texture textureGreenBar;
-    private TextureRegion graphicsGreenBar;
     private final Renderable renderable;
     private final HasHP hasHP;
     private final TileMovement tileMovement;
     private final Batch batch;
+    private Texture textureGreenBar;
+    private TextureRegion graphicsGreenBar;
     private boolean toggle = true;
 
     public HealthBarGraphics(HasHP hasHP, Renderable renderable, TileMovement tileMovement, Batch batch) {

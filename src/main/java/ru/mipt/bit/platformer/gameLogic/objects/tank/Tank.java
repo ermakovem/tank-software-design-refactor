@@ -1,16 +1,16 @@
 package ru.mipt.bit.platformer.gameLogic.objects.tank;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
 import ru.mipt.bit.platformer.actionGenerators.actions.CanShoot;
 import ru.mipt.bit.platformer.gameLogic.CanCreateGameObjects;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
+import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
+import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
 import ru.mipt.bit.platformer.gameLogic.objects.Projectile;
 import ru.mipt.bit.platformer.graphics.objects.HasHP;
 import ru.mipt.bit.platformer.graphics.objects.Renderable;
-import ru.mipt.bit.platformer.actionGenerators.actions.CanMove;
-import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
-import ru.mipt.bit.platformer.gameLogic.helpers.CollisionHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +30,7 @@ public class Tank implements GameObject, CanCreateGameObjects, CanMove, Collidab
     private int currentReload = reloadInTicks;
     private GameObjectState state;
     private int hp = 100;
-    private TankInternalStatesHandler modifiersHandler = new TankInternalStatesHandler(this);
+    private final TankInternalStatesHandler modifiersHandler = new TankInternalStatesHandler(this);
     private CollisionHandler collisionHandler = new CollisionHandler(10, 8);
 
     public Tank(GridPoint2 coordinates, float movementSpeed, boolean isPlayer) {

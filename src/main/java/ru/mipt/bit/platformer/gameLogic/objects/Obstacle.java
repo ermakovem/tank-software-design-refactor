@@ -3,11 +3,8 @@ package ru.mipt.bit.platformer.gameLogic.objects;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.gameLogic.GameObject;
 import ru.mipt.bit.platformer.gameLogic.GameObjectState;
-import ru.mipt.bit.platformer.graphics.objects.Renderable;
 import ru.mipt.bit.platformer.gameLogic.helpers.Collidable;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import ru.mipt.bit.platformer.graphics.objects.Renderable;
 
 public class Obstacle implements GameObject, Collidable, Renderable {
     private final GridPoint2 coordinates;

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ActionGeneratorsHandler {
     private Collection<ActionGenerator> actionGenerators = new ArrayList<>();
-    private Map<Object, Collection<ActionGenerator>> ownerToActionGenerator = new HashMap<>();
+    private final Map<Object, Collection<ActionGenerator>> ownerToActionGenerator = new HashMap<>();
 
     public ActionGeneratorsHandler(Collection<ActionGenerator> actionGenerators) {
         this.actionGenerators = actionGenerators;

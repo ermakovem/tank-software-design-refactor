@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 public class InputIsKeyPressedPredicate implements Predicate<Object> {
     private final int key;
+
     public InputIsKeyPressedPredicate(int key) {
         this.key = key;
     }
